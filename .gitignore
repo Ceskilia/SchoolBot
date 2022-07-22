@@ -1,0 +1,18 @@
+*.log
+*.xml
+*.json
+*.png
+!logback.xml
+
+#idea
+/.idea
+
+#gradle
+/.gradle
+
+#build
+/build
+
+#other folders
+/pics
+
