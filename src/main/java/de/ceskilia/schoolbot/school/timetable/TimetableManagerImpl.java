@@ -55,7 +55,7 @@ public class TimetableManagerImpl implements TimetableManager {
                     try {
                         final DataObject data = JsonUtil.convertXmlToJson(response.body().string());
 
-                        setupAbsentDays(data);
+                        fetchAbsentDays(data);
                         cacheTimetable(data);
                         return data;
                     } catch (final IOException e) {
@@ -69,6 +69,7 @@ public class TimetableManagerImpl implements TimetableManager {
     @CheckReturnValue
     public @NotNull CompletableAction<Timetable> tryUpdateTimetable(@NotNull LocalDate date) {
         final Timetable timetable = getTimetable(date);
+        // when there is no timetable, or we can update it -> new request
         return retrieveTimetable(date, timetable == null || timetable.isUpdatable() ? null : timetable);
     }
 
@@ -88,7 +89,7 @@ public class TimetableManagerImpl implements TimetableManager {
                     try {
                         final Timetable timetable = new TimetableImpl(response.body().string());
 
-                        setupAbsentDays(timetable.toData());
+                        fetchAbsentDays(timetable.toData());
                         return cacheTimetable(timetable);
                     } catch (final IOException e) {
                         throw new IllegalStateException("Could parse xml to json correctly.", e);
@@ -121,7 +122,7 @@ public class TimetableManagerImpl implements TimetableManager {
         return !DateUtil.isWeekend(date) && !isAbsentDate(date);
     }
 
-    private void setupAbsentDays(@NotNull DataObject data) {
+    private void fetchAbsentDays(@NotNull DataObject data) {
         if(absentDates == null || absentDates.isEmpty()) {
             this.absentDates = SchoolUtil.fetchAbsentDates(data);
             LOGGER.debug("Fetched absent days successfully.");
