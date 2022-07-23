@@ -14,8 +14,6 @@ import org.slf4j.LoggerFactory;
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,7 +49,7 @@ public class TimetableImpl implements Timetable {
         final DataArray main = JsonUtil.safeToArray(data.optObject("haupt").orElse(null),"aktion", DataArray::empty);
 
         this.date = head.getString("titel");
-        this.formattedDate = DateUtil.toDate(this.date);
+        this.formattedDate = DateUtil.timetableTitleToDate(this.date);
         this.lastChange = head.getString("datum");
         this.formattedLastChange = DateUtil.toDateTime(this.lastChange);
         this.absentClasses = JsonUtil.safeToList(headInfo,"abwesendk");
