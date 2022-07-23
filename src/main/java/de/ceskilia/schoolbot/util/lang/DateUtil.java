@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 
 public final class DateUtil {
 
+    public static final int MAX_MINUTES_OF_DAY = 1439; // a day can have 1439 minutes which means 23:59
+
     private static final String TIME_REGEX = "([0-1]\\d|2[0-3]):([0-5]\\d)";
     private static final Pattern DATE_TIME_PATTERN = Pattern.compile("([0-3]\\d).([0-1]\\d).\\d{4}, " + TIME_REGEX);
     private static final Pattern TIME_PATTERN = Pattern.compile(TIME_REGEX);

@@ -121,13 +121,13 @@ public class TimetablePostManagerImpl implements TimetablePostManager {
     private void startScheduling() {
         LOGGER.debug("Starting timetable posting scheduler.");
         scheduler.scheduleAtFixedRate(() -> {
-            this.time++;
+            this.time = (time == DateUtil.MAX_MINUTES_OF_DAY) ? 0 : time + 1;
             bot.getChannelManager().streamValidEntries()
                     .filter(entry -> entry.getUpdateTimes().stream()
                             .map(DateUtil::minutesOfDay)
                             .anyMatch(minutes -> minutes == this.time))
                     .forEach(entry -> upsertPost(LocalDate.now(), entry.getGuildId()));
-        },60 - LocalTime.now().getSecond(),60, TimeUnit.SECONDS);
+        },60 - LocalTime.now().getSecond(),60,TimeUnit.SECONDS);
     }
 
 }
