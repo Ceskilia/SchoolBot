@@ -10,12 +10,12 @@ import de.ceskilia.schoolbot.school.channel.BroadcastChannelManager;
 import de.ceskilia.schoolbot.school.channel.ChannelEntry;
 import de.ceskilia.schoolbot.school.channel.TimeModifyResult;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
-import de.ceskilia.schoolbot.util.embed.EmbedResponseBuilder;
-import de.ceskilia.schoolbot.util.embed.EmbedResponseType;
+import de.ceskilia.schoolbot.util.embed.EmbedUtil;
 import de.ceskilia.schoolbot.util.lang.ConfigUtil;
 import de.ceskilia.schoolbot.util.Emote;
 import de.ceskilia.schoolbot.util.lang.DateUtil;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -85,7 +85,7 @@ public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
                                                @NotNull OptionMapping channelOption,
                                                @NotNull OptionMapping timeOption,
                                                long guildId) {
-        return EmbedResponseBuilder.combineFields(channelRespond(channelManager, channelOption, guildId), timeRespond(channelManager, timeOption, guildId))
+        return EmbedUtil.combineFields(channelRespond(channelManager, channelOption, guildId), timeRespond(channelManager, timeOption, guildId))
                 .build();
         // currently, this is doing two I/O operations -> optimize this later
         // if both fail -> do nothing
@@ -96,35 +96,42 @@ public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
     private @NotNull MessageEmbed channelRespond(@NotNull BroadcastChannelManager channelManager, @NotNull OptionMapping option, long guildId) {
 
         final GuildChannel channel = option.getAsGuildChannel();
-        final EmbedResponseBuilder builder = new EmbedResponseBuilder().addInput(channel.getAsMention());
+        final EmbedBuilder builder = new EmbedBuilder();
+
+        EmbedUtil.addInput(builder,channel.getAsMention());
 
         if(!channel.getType().isMessage()) {
-            return builder.addResponse(MarkdownUtil.codeblock("Falscher Channeltype"), EmbedResponseType.WARN)
+            return EmbedUtil.addResponse(builder,MarkdownUtil.codeblock("Falscher Channeltype"),EmbedColor.WARNING)
                     .build();
         }
 
-        channelManager.modifyEntry(guildId, channel.getIdLong());
-        return builder.addResponse(MarkdownUtil.codeblock("Geändert"), EmbedResponseType.SUCCESS)
+        channelManager.modifyEntry(guildId,channel.getIdLong());
+        return EmbedUtil.addResponse(builder,MarkdownUtil.codeblock("Geändert"),EmbedColor.SUCCESS)
                 .build();
     }
 
     private @NotNull MessageEmbed timeRespond(@NotNull BroadcastChannelManager channelManager, @NotNull OptionMapping option, long guildId) {
 
         final LocalTime time = DateUtil.toTime(option.getAsString());
-        final EmbedResponseBuilder builder = new EmbedResponseBuilder().addInput(option.getAsString());
+        final EmbedBuilder builder = new EmbedBuilder();
+
+        EmbedUtil.addInput(builder,option.getAsString());
 
         if(time == null) {
-            return builder.addResponse(MarkdownUtil.codeblock("Falsches Format"), EmbedResponseType.WARN)
+            return EmbedUtil.addResponse(builder,MarkdownUtil.codeblock("Invalides Format"),EmbedColor.FAILURE)
                     .build();
         }
 
         final TimeModifyResult result = channelManager.modifyEntry(guildId, time);
-
-        return builder.addResponse(MarkdownUtil.codeblock(switch(result) {
+        final EmbedColor color = result != TimeModifyResult.FAILED ? EmbedColor.SUCCESS : EmbedColor.WARNING;
+        final String response = switch(result) {
             case TIME_ADDED -> "Hinzugefügt";
             case TIME_REMOVED -> "Entfernt";
-            case FAILED -> "Zu nah (" + TimeUnit.MILLISECONDS.toMinutes(ChannelEntry.MINIMUM_TIME_INTERVAL) + "m)";
-        }), result != TimeModifyResult.FAILED ? EmbedResponseType.SUCCESS : EmbedResponseType.WARN).build();
+            case FAILED -> "Zu nah (" + TimeUnit.MILLISECONDS.toMinutes(ChannelEntry.MINIMUM_TIME_INTERVAL) + "min)";
+        };
+
+        return EmbedUtil.addResponse(builder,MarkdownUtil.codeblock(response), color)
+                .build();
     }
 
 }

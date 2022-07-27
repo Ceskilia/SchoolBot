@@ -5,13 +5,15 @@ import de.ceskilia.cutils.command.Configuration;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
 import de.ceskilia.cutils.event.command.GuildSlashCommandExecuteEvent;
 import de.ceskilia.cutils.event.command.SlashCommandExecuteEvent;
+import de.ceskilia.cutils.utils.util.ObjectUtil;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.action.ErrorResponseException;
-import de.ceskilia.schoolbot.util.embed.EmbedResponseBuilder;
-import de.ceskilia.schoolbot.util.embed.EmbedResponseType;
+import de.ceskilia.schoolbot.util.embed.EmbedColor;
+import de.ceskilia.schoolbot.util.embed.EmbedUtil;
 import de.ceskilia.schoolbot.util.lang.DateUtil;
 import de.ceskilia.schoolbot.util.lang.SchoolUtil;
 import de.ceskilia.schoolbot.school.verification.VerificationManager;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -27,7 +29,7 @@ public class TimetableCommand implements CommandDiscriptor<GuildSlashCommandExec
     @Override
     public @NotNull Configuration<GuildSlashCommandExecuteEvent> buildConfiguration() {
         return SlashCommandConfiguration.guildOnly("timetable","Zeigt den Vertretungsplan an")
-                .option(OptionType.INTEGER,"day","Das Datum des Vertretungsplans")
+                .option(OptionType.STRING,"date","Das Datum des Vertretungsplans")
                 .option(OptionType.BOOLEAN,"update","Den angefragten Vertretungsplan aktualisieren")
                 .build(this);
     }
@@ -40,42 +42,52 @@ public class TimetableCommand implements CommandDiscriptor<GuildSlashCommandExec
         final User user = event.getUser();
 
         if(verificationManager.isBlacklisted(user.getIdLong())) {
-            respondFailure(event,null,null,"Du wurdest geschwarzelistet.",EmbedResponseType.FAIL);
+            respondFailure(event,null,"Du wurdest geschwarzelistet.",EmbedColor.FAILURE);
             return;
         }
 
         if(!verificationManager.isVerified(user.getIdLong())) {
-            respondFailure(event,null,null,"Bitte verifiziere dich zuerst.",EmbedResponseType.WARN);
+            respondFailure(event,null,"Bitte verifiziere dich zuerst.",EmbedColor.WARNING);
             return;
         }
 
         if(!verificationManager.canRequest()) {
-            respondFailure(event,null,null,"Die letzte Anfrage konnte nicht autorisiert werden.",EmbedResponseType.FAIL);
+            respondFailure(event,null,"Die letzte Anfrage konnte nicht autorisiert werden.",EmbedColor.FAILURE);
             return;
         }
 
-        final OptionMapping dayOption = event.getOption("day");
-        final LocalDate requestDate = event.checkOption(dayOption, LocalDate.now(), mapping -> {
-            long option = mapping.getAsLong();
-            return DateUtil.isValidDay(option) ? DateUtil.assumeDate((int) option) : null;
-        });
+        final OptionMapping dateOption = event.getOption("date");
+        final LocalDate date = event.checkOption(dateOption,LocalDate.now(),mapping -> DateUtil.toDate(mapping.getAsString()));
 
-        final boolean weekend = DateUtil.isWeekend(requestDate);
-
-        if(requestDate == null || weekend) {
-            respondFailure(event,dayOption,weekend ? requestDate : null,"Wird nicht existieren",EmbedResponseType.WARN);
+        if(date == null) {
+            final String input = ObjectUtil.requireNonNullOrElse(dateOption,null,OptionMapping::getAsString);
+            respondFailure(event, input,"Invalides Format",EmbedColor.WARNING);
             return;
         }
 
-        if(bot.getTimetableManager().isAbsentDate(requestDate)) {
-            respondFailure(event,dayOption, requestDate,"Freier Tag",EmbedResponseType.WARN);
+        final String formattedDate = DateUtil.formatDate(date);
+
+        if(!DateUtil.isInRange(date)) {
+            respondFailure(event,formattedDate,"Veraltetes Datum",EmbedColor.WARNING);
             return;
         }
 
-        final boolean update = event.getOption("update",false, OptionMapping::getAsBoolean);
+        final boolean weekend = DateUtil.isWeekend(date);
+
+        if(weekend) {
+            respondFailure(event,formattedDate,"Wochenendtag",EmbedColor.WARNING);
+            return;
+        }
+
+        if(bot.getTimetableManager().isAbsentDate(date)) {
+            respondFailure(event,formattedDate,"Freier Tag",EmbedColor.WARNING);
+            return;
+        }
+
+        final boolean update = event.getOption("update",false,OptionMapping::getAsBoolean);
 
         event.deferReply().queue(hook -> bot.getTimetableManager()
-                .retrieveTimetable(requestDate, update)
+                .retrieveTimetable(date, update)
                 .queue(timetable -> {
                             SchoolUtil.sendTimetable(hook, timetable, user);
                             verificationManager.authorized(true);
@@ -96,7 +108,7 @@ public class TimetableCommand implements CommandDiscriptor<GuildSlashCommandExec
                                     default -> "Fehler: %s".formatted(code);
                                 };
 
-                                final MessageEmbed embed = failureEmbed(dayOption, requestDate, response,EmbedResponseType.FAIL);
+                                final MessageEmbed embed = failureEmbed(formattedDate, response,EmbedColor.FAILURE);
 
                                 hook.sendMessageEmbeds(embed).queue();
                             } else {
@@ -110,27 +122,24 @@ public class TimetableCommand implements CommandDiscriptor<GuildSlashCommandExec
     }
 
     private void respondFailure(@NotNull SlashCommandExecuteEvent event,
-                                @Nullable OptionMapping input,
-                                @Nullable LocalDate date,
+                                @Nullable String input,
                                 @NotNull String response,
-                                @NotNull EmbedResponseType type) {
-        event.replyEmbeds(failureEmbed(input, date, response, type))
+                                @NotNull EmbedColor color) {
+        event.replyEmbeds(failureEmbed(input, response, color))
                 .setEphemeral(true)
                 .queue();
     }
 
-    private @NotNull MessageEmbed failureEmbed(@Nullable OptionMapping input,
-                                                @Nullable LocalDate date,
+    private @NotNull MessageEmbed failureEmbed(@Nullable String input,
                                                 @NotNull String response,
-                                                @NotNull EmbedResponseType type) {
-        final EmbedResponseBuilder builder = new EmbedResponseBuilder();
+                                                @NotNull EmbedColor color) {
+        final EmbedBuilder builder = color.withEmbedBuilder();
 
-        if(input != null)
-            builder.addInput(MarkdownUtil.monospace(input.getAsLong() + "."));
-        if(date != null)
-            builder.addField("Datum", MarkdownUtil.monospace(DateUtil.formatDate(date)),false);
+        if(input != null) {
+            builder.addField("Datum",MarkdownUtil.monospace(input),false);
+        }
 
-        return builder.addResponse(MarkdownUtil.codeblock(response), type)
+        return EmbedUtil.addResponse(builder,MarkdownUtil.codeblock(response))
                 .build();
     }
 

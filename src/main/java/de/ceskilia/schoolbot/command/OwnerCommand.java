@@ -9,10 +9,10 @@ import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.school.verification.VerificationManager;
 import de.ceskilia.schoolbot.util.Emote;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
-import de.ceskilia.schoolbot.util.embed.EmbedResponseBuilder;
-import de.ceskilia.schoolbot.util.embed.EmbedResponseType;
+import de.ceskilia.schoolbot.util.embed.EmbedUtil;
 import de.ceskilia.schoolbot.util.lang.ConfigUtil;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -67,14 +67,14 @@ public class OwnerCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
             ).setEphemeral(true).queue();
             case "permission" -> {
 
+                final EmbedBuilder builder = EmbedColor.SUCCESS.withEmbedBuilder();
                 final VerificationManager verificationManager = bot.getVerificationManager();
-                final User target = event.getOption("target",null, OptionMapping::getAsUser);
+                final User target = event.getRequiredOption("target",OptionMapping::getAsUser);
 
-                event.replyEmbeds(new EmbedResponseBuilder()
-                        .addInput(target.getAsMention())
-                        .addResponse(MarkdownUtil.codeblock(verificationManager.updateUserBlacklist(target.getIdLong()) ? "Hinzugefügt" : "Entfernt"), EmbedResponseType.SUCCESS)
-                        .build()
-                ).setEphemeral(true).queue();
+                EmbedUtil.addInput(builder,target.getAsMention());
+                EmbedUtil.addResponse(builder,MarkdownUtil.codeblock(verificationManager.updateUserBlacklist(target.getIdLong()) ? "Hinzugefügt" : "Entfernt"));
+
+                event.replyEmbeds(builder.build()).setEphemeral(true).queue();
             }
         }
 
