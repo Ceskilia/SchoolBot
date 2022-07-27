@@ -11,6 +11,7 @@ import de.ceskilia.schoolbot.school.verification.VerificationResult;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.jetbrains.annotations.NotNull;
@@ -29,8 +30,8 @@ public class VerifyCommand implements CommandDiscriptor<GuildSlashCommandExecute
     public void execute(@NotNull GuildSlashCommandExecuteEvent event) {
 
         final SchoolBot bot = event.getBot().cast(SchoolBot.class);
-        final String username = event.getOption("username").getAsString();
-        final String password = event.getOption("password").getAsString();
+        final String username = event.getRequiredOption("username",OptionMapping::getAsString);
+        final String password = event.getRequiredOption("password",OptionMapping::getAsString);
         final VerificationResult result = bot.getVerificationManager().tryVerify(event.getUser().getIdLong(), username, password);
 
         event.replyEmbeds(buildInformation(bot, username, password, result, event.getGuild().getIdLong()))
