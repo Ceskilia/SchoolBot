@@ -87,6 +87,13 @@ public class BroadcastChannelManager {
         return modifyEntry(guildId, entry -> entry.updateTime(time));
     }
 
+    public @NotNull TimeModifyResult modifyEntry(long guildId, long channelId, @Nullable LocalTime time) {
+        return modifyEntry(guildId, entry -> {
+            entry.setChannelId(channelId);
+            return entry.updateTime(time);
+        });
+    }
+
     public <T> @NotNull T modifyEntry(long guildId, @NotNull Function<? super ChannelEntry, ? extends T> function) {
         ChannelEntry entry = getEntry(guildId);
 
