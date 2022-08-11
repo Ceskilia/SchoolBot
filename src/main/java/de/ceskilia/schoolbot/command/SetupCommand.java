@@ -3,6 +3,7 @@ package de.ceskilia.schoolbot.command;
 import de.ceskilia.cutils.command.CommandDiscriptor;
 import de.ceskilia.cutils.command.Configuration;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
+import de.ceskilia.cutils.command.slashcommand.option.Option;
 import de.ceskilia.cutils.event.command.GuildSlashCommandExecuteEvent;
 import de.ceskilia.cutils.utils.util.ObjectUtil;
 import de.ceskilia.schoolbot.SchoolBot;
@@ -22,7 +23,6 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,8 +34,8 @@ public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
     @Override
     public @NotNull Configuration<GuildSlashCommandExecuteEvent> buildConfiguration() {
         return SlashCommandConfiguration.guildOnly("setup","Einstellungen für den Broadcast-Channel")
-                .option(OptionType.CHANNEL,"channel","Der neue Broadcast-Channel")
-                .option(OptionType.STRING,"time","Die Zeit zum Updaten der Nachricht")
+                .option(Option.ofChannel("channel","Der neue Broadcast-Channel"))
+                .option(Option.ofString("time","Die Zeit zum Updaten der Nachricht"))
                 .setPermissions(DefaultMemberPermissions.DISABLED)
                 .build(this);
     }
@@ -95,7 +95,7 @@ public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
 
     private @NotNull MessageEmbed channelRespond(@NotNull BroadcastChannelManager channelManager, @NotNull OptionMapping option, long guildId) {
 
-        final GuildChannel channel = option.getAsGuildChannel();
+        final GuildChannel channel = option.getAsChannel().asGuildMessageChannel();
         final EmbedBuilder builder = new EmbedBuilder();
 
         EmbedUtil.addInput(builder,channel.getAsMention());

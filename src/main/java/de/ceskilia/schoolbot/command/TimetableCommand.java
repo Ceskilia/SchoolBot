@@ -3,6 +3,7 @@ package de.ceskilia.schoolbot.command;
 import de.ceskilia.cutils.command.CommandDiscriptor;
 import de.ceskilia.cutils.command.Configuration;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
+import de.ceskilia.cutils.command.slashcommand.option.Option;
 import de.ceskilia.cutils.event.command.GuildSlashCommandExecuteEvent;
 import de.ceskilia.cutils.event.command.SlashCommandExecuteEvent;
 import de.ceskilia.cutils.utils.util.ObjectUtil;
@@ -17,7 +18,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,8 +29,8 @@ public class TimetableCommand implements CommandDiscriptor<GuildSlashCommandExec
     @Override
     public @NotNull Configuration<GuildSlashCommandExecuteEvent> buildConfiguration() {
         return SlashCommandConfiguration.guildOnly("timetable","Zeigt den Vertretungsplan an")
-                .option(OptionType.STRING,"date","Das Datum des Vertretungsplans")
-                .option(OptionType.BOOLEAN,"update","Den angefragten Vertretungsplan aktualisieren")
+                .option(Option.ofString("date","Das Datum des Vertretungsplans"))
+                .option(Option.ofBoolean("update","Den angefragten Vertretungsplan aktualisieren"))
                 .build(this);
     }
 
@@ -75,7 +75,7 @@ public class TimetableCommand implements CommandDiscriptor<GuildSlashCommandExec
         final boolean weekend = DateUtil.isWeekend(date);
 
         if(weekend) {
-            respondFailure(event,formattedDate,"Wochenendtag",EmbedColor.WARNING);
+            respondFailure(event,formattedDate,"Wochenende",EmbedColor.WARNING);
             return;
         }
 

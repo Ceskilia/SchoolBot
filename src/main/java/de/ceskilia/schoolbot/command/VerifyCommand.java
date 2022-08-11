@@ -3,16 +3,17 @@ package de.ceskilia.schoolbot.command;
 import de.ceskilia.cutils.command.CommandDiscriptor;
 import de.ceskilia.cutils.command.Configuration;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
+import de.ceskilia.cutils.command.slashcommand.option.Option;
 import de.ceskilia.cutils.event.command.GuildSlashCommandExecuteEvent;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
+import de.ceskilia.schoolbot.util.embed.EmbedUtil;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
 import de.ceskilia.schoolbot.school.verification.VerificationResult;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,8 +22,8 @@ public class VerifyCommand implements CommandDiscriptor<GuildSlashCommandExecute
     @Override
     public @NotNull Configuration<GuildSlashCommandExecuteEvent> buildConfiguration() {
         return SlashCommandConfiguration.guildOnly("verify","Verifiziert den aktuellen Account")
-                .option(OptionType.STRING,"username","Der Benutzername fuer den Login",true)
-                .option(OptionType.STRING,"password","Das Password fuer den Login",true)
+                .option(Option.ofString("username","Der Benutzername fuer den Login").setRequired(true))
+                .option(Option.ofString("password","Das Password fuer den Login").setRequired(true))
                 .build(this);
     }
 
@@ -51,7 +52,7 @@ public class VerifyCommand implements CommandDiscriptor<GuildSlashCommandExecute
                     .addField("Password", MarkdownUtil.spoiler(MarkdownUtil.monospace(password)),false);
         }
 
-        builder.addField("Antwort", MarkdownUtil.codeblock(result.name()),false);
+        EmbedUtil.addResponse(builder,MarkdownUtil.codeblock(result.getTranslation()));
 
         if(!result.isFail()) {
 
