@@ -1,20 +1,25 @@
 package de.ceskilia.schoolbot.school.verification;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum VerificationResult {
 
-    // todo: translation?
+    SUCCEED("Erfolgreich",false),
+    ALREADY_VERIFIED("Bereits verifiziert",false),
+    WRONG_USERNAME("Falscher Name",true),
+    WRONG_PASSWORD("Falsches Password",true),
+    WRONG_DATA("Falsche Daten",true);
 
-    SUCCEED(false),
-    ALREADY_VERIFIED(false),
-    CANNOT_VERIFY(true),
-    FAILED_USERNAME(true),
-    FAILED_PASSWORD(true),
-    FAILED(true);
-
+    private final String translation;
     private final boolean fail;
 
-    VerificationResult(boolean fail) {
+    VerificationResult(@NotNull String translation, boolean fail) {
+        this.translation = translation;
         this.fail = fail;
+    }
+
+    public @NotNull String getTranslation() {
+        return translation;
     }
 
     public boolean isFail() {
