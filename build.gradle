@@ -12,21 +12,17 @@ mainClassName = "de.ceskilia.schoolbot.Launcher"
 compileJava.options.encoding = 'UTF-8'
 
 repositories {
-    maven {
-        name 'm2-dv8tion'
-        url 'https://m2.dv8tion.net/releases'
-    }
     mavenCentral()
     mavenLocal()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.3'
     implementation 'ch.qos.logback:logback-classic:1.2.11'
-    implementation 'net.dv8tion:JDA:5.0.0-alpha.13'
+    implementation 'net.dv8tion:JDA:5.0.0-alpha.16'
     implementation 'de.ceskilia:JDA-CUtils:1.0'
     implementation 'com.jakewharton.picnic:picnic:0.6.0'
 }
