@@ -74,12 +74,7 @@ public class TimetableImpl implements Timetable {
     }
 
     @Override
-    public @NotNull String getLastChange() {
-        return lastChange;
-    }
-
-    @Override
-    public @NotNull LocalDateTime getFormattedLastChange() {
+    public @NotNull LocalDateTime getLastChange() {
         return formattedLastChange;
     }
 

@@ -1,14 +1,12 @@
 package de.ceskilia.schoolbot.school.timetable;
 
 import de.ceskilia.schoolbot.util.lang.JsonUtil;
-import de.ceskilia.schoolbot.util.lang.SchoolUtil;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.api.utils.data.DataType;
 import net.dv8tion.jda.api.utils.data.SerializableData;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,9 +22,7 @@ public interface Timetable extends SerializableData {
 
     @NotNull LocalDate getFormattedDate();
 
-    @NotNull String getLastChange();
-
-    @NotNull LocalDateTime getFormattedLastChange();
+    @NotNull LocalDateTime getLastChange();
 
     long getCreationTime();
 
