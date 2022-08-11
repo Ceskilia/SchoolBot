@@ -51,10 +51,6 @@ public class VerificationManager {
 
     public @NotNull VerificationResult tryVerify(long userId, @NotNull String username, @NotNull String password) {
 
-        if(!canRequest()) {
-            return VerificationResult.CANNOT_VERIFY;
-        }
-
         if(verifiedUsers.contains(userId)) {
             return VerificationResult.ALREADY_VERIFIED;
         }
@@ -70,7 +66,7 @@ public class VerificationManager {
             return VerificationResult.SUCCEED;
         }
 
-        return !rightUsername ? !rightPassword ? VerificationResult.FAILED : VerificationResult.FAILED_USERNAME : VerificationResult.FAILED_PASSWORD;
+        return !rightUsername ? !rightPassword ? VerificationResult.WRONG_DATA : VerificationResult.WRONG_USERNAME : VerificationResult.WRONG_PASSWORD;
     }
 
     public @NotNull Set<Long> getBlacklistedUsers() {

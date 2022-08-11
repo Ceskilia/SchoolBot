@@ -27,8 +27,8 @@ public final class DateUtil {
     private static final Pattern GERMAN_DATE_PATTERN = Pattern.compile(GERMAN_DATE_REGEX + "(\\.\\d{4})?");
     private static final Pattern GERMAN_DATE_TIME_PATTERN = Pattern.compile(GERMAN_DATE_REGEX + ", " + TIME_REGEX);
 
-    private static final DateTimeFormatter GERMAN_DATE_FORMATTER = DateTimeFormatter.ofPattern("d.M.u", Locale.GERMAN);
     private static final DateTimeFormatter TITLE_DATE_FORMATTER = DateTimeFormatter.ofPattern("EEEE, d. MMMM yyyy",Locale.GERMAN);
+    private static final DateTimeFormatter GERMAN_DATE_FORMATTER = DateTimeFormatter.ofPattern("d.M.u", Locale.GERMAN);
 
     private DateUtil() {
         throw new UnsupportedOperationException("Instantiation of this utility class is unsupported.");

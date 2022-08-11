@@ -84,7 +84,7 @@ public class CompletableActionImpl<T> implements CompletableAction<T> {
 
     @Override
     public @NotNull T complete() {
-        logAttempt(Action.COMPLETION);
+        logAttempt(Action.COMPLETE);
 
         if(defaultValue != null) {
             return defaultValue;
@@ -94,7 +94,7 @@ public class CompletableActionImpl<T> implements CompletableAction<T> {
                .url(url)
                .build()
        ).execute()) {
-           logResponse(Action.COMPLETION, response);
+           logResponse(Action.COMPLETE, response);
            if(!response.isSuccessful()) throw new ErrorResponseException(response);
            return mapper.apply(response);
        } catch (final IOException exception) {
@@ -136,7 +136,7 @@ public class CompletableActionImpl<T> implements CompletableAction<T> {
     private enum Action {
 
         QUEUE("queue","queued"),
-        COMPLETION("complete","completed");
+        COMPLETE("complete","completed");
 
         private final String name;
         private final String meaning;

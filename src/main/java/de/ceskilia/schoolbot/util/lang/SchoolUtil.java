@@ -20,8 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -99,7 +97,7 @@ public final class SchoolUtil {
 
         final EmbedBuilder builder = EmbedColor.INFORMATION.withEmbedBuilder()
                 .setTitle(timetable.getDate())
-                .setDescription(TimeFormat.DATE_TIME_LONG.format(timetable.getFormattedLastChange().toInstant(ZoneOffset.UTC)))
+                .setDescription(TimeFormat.DATE_TIME_LONG.format(timetable.getLastChange().toInstant(ZoneOffset.UTC)))
                 .setFooter("letztes Update", requester.getAvatarUrl())
                 .setTimestamp(Instant.ofEpochMilli(timetable.getCreationTime()));
         final List<String> absentClasses = timetable.getAbsentClasses();
