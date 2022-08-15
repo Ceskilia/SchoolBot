@@ -105,9 +105,9 @@ public final class SchoolUtil {
         final List<String> extraInformation = timetable.getExtraInformation();
 
         if(!absentClasses.isEmpty())
-            builder.addField("Abwesende Klassen",compromiseData(absentClasses),false);
+            builder.addField("Abwesende Klassen", compromiseClassData(absentClasses),false);
         if(!changedClasses.isEmpty())
-            builder.addField("Klassen mit Änderung",compromiseData(changedClasses),false);
+            builder.addField("Klassen mit Änderung", compromiseClassData(changedClasses),false);
         if(!extraInformation.isEmpty())
             builder.addField("Zusätzliche Informationen",String.join("\n",extraInformation),false);
         if(timetable.hasLessons())
@@ -115,7 +115,7 @@ public final class SchoolUtil {
         return builder.build();
     }
 
-    private static @NotNull String compromiseData(@NotNull List<String> data) {
+    private static @NotNull String compromiseClassData(@NotNull List<String> data) {
         return IntStream.range(7, 13).mapToObj(String::valueOf).map(grade -> { // go through 7-12 (all classes)
             if(data.stream().filter(c -> c.startsWith(grade)).count() > 3) // if more than 3 values are present, just add the class itself
                 return grade;
@@ -147,7 +147,7 @@ public final class SchoolUtil {
         final DataObject absentDays = data.getObject("freietage");
 
         return absentDays.getArray("ft").stream(DataArray::getString)
-                .map(date -> LocalDate.parse(SystemInfo.currentCentury() + date, DateTimeFormatter.BASIC_ISO_DATE))
+                .map(date -> LocalDate.parse(SystemInfo.currentYearsPrefix() + date, DateTimeFormatter.BASIC_ISO_DATE))
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 

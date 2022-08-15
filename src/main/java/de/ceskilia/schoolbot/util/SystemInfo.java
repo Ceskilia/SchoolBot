@@ -27,9 +27,9 @@ public final class SystemInfo {
     public static String getOperatingSystemName() {
         return System.getProperty("os.name");
     }
-
-    public static int currentCentury() {
-        return (Calendar.getInstance().get(Calendar.YEAR) / 100) + 1;
+    
+    public static int currentYearsPrefix() {
+        return Calendar.getInstance().get(Calendar.YEAR) / 100;
     }
 
 }
