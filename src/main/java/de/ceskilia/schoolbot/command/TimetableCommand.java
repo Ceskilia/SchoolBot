@@ -4,8 +4,8 @@ import de.ceskilia.cutils.command.CommandDiscriptor;
 import de.ceskilia.cutils.command.Configuration;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
 import de.ceskilia.cutils.command.slashcommand.option.Option;
-import de.ceskilia.cutils.event.command.GuildSlashCommandExecuteEvent;
-import de.ceskilia.cutils.event.command.SlashCommandExecuteEvent;
+import de.ceskilia.cutils.event.command.slash.GuildSlashCommandExecuteEvent;
+import de.ceskilia.cutils.event.command.slash.SlashCommandExecuteEvent;
 import de.ceskilia.cutils.utils.util.ObjectUtil;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.action.ErrorResponseException;
@@ -67,7 +67,7 @@ public class TimetableCommand implements CommandDiscriptor<GuildSlashCommandExec
 
         final String formattedDate = DateUtil.formatDate(date);
 
-        if(!DateUtil.isInRange(date)) {
+        if(!DateUtil.inMinimumRange(date)) {
             respondFailure(event,formattedDate,"Veraltetes Datum",EmbedColor.WARNING);
             return;
         }

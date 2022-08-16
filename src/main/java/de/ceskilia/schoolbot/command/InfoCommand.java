@@ -4,7 +4,7 @@ import de.ceskilia.cutils.DiscordBot;
 import de.ceskilia.cutils.command.CommandDiscriptor;
 import de.ceskilia.cutils.command.Configuration;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
-import de.ceskilia.cutils.event.command.GuildSlashCommandExecuteEvent;
+import de.ceskilia.cutils.event.command.slash.GuildSlashCommandExecuteEvent;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.Emote;
 import org.jetbrains.annotations.NotNull;

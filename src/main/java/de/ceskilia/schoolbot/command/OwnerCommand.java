@@ -3,7 +3,7 @@ package de.ceskilia.schoolbot.command;
 import de.ceskilia.cutils.command.CommandDiscriptor;
 import de.ceskilia.cutils.command.Configuration;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
-import de.ceskilia.cutils.event.command.GuildSlashCommandExecuteEvent;
+import de.ceskilia.cutils.event.command.slash.GuildSlashCommandExecuteEvent;
 import de.ceskilia.cutils.interaction.impl.Interactions;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.school.verification.VerificationManager;
