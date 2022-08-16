@@ -20,11 +20,12 @@ public final class DateUtil {
     public static final int MAX_MINUTES_OF_DAY = 1439; // a day can have 1439 minutes which means 23:59
 
     private static final String TIME_REGEX = "([0-1]?\\d|2[0-3]):([0-5]\\d)";
-    private static final Pattern TIME_PATTERN = Pattern.compile(TIME_REGEX);
+    private static final String SHORT_GERMAN_DATE_REGEX = "(0?[1-9]|[1-2]\\d|3[0-1])\\.(0?[1-9]|1[0-2])";
+    private static final String GERMAN_DATE_REGEX = SHORT_GERMAN_DATE_REGEX + "(\\.\\d{4})?";
 
-    private static final String GERMAN_DATE_REGEX = "(0?[1-9]|[1-2]\\d|3[0-1]).(0?[1-9]|1[0-2])";
-    private static final Pattern SHORT_GERMAN_DATE_PATTERN = Pattern.compile(GERMAN_DATE_REGEX);
-    private static final Pattern GERMAN_DATE_PATTERN = Pattern.compile(GERMAN_DATE_REGEX + "(\\.\\d{4})?");
+    private static final Pattern TIME_PATTERN = Pattern.compile(TIME_REGEX);
+    private static final Pattern SHORT_GERMAN_DATE_PATTERN = Pattern.compile(SHORT_GERMAN_DATE_REGEX);
+    private static final Pattern GERMAN_DATE_PATTERN = Pattern.compile(GERMAN_DATE_REGEX);
     private static final Pattern GERMAN_DATE_TIME_PATTERN = Pattern.compile(GERMAN_DATE_REGEX + ", " + TIME_REGEX);
 
     private static final DateTimeFormatter TITLE_DATE_FORMATTER = DateTimeFormatter.ofPattern("EEEE, d. MMMM yyyy",Locale.GERMAN);
@@ -46,10 +47,10 @@ public final class DateUtil {
         return NumberUtil.inRange(day,1,31);
     }
 
-    public static boolean isInRange(@NotNull LocalDate date) {
+    public static boolean inMinimumRange(@Nullable LocalDate date) {
         // timetables are still available 2 weeks from the current date
         // if the provided date is before that, it is invalid
-        return !date.isBefore(LocalDate.now().minusWeeks(2));
+        return date != null && !date.isBefore(LocalDate.now().minusWeeks(2));
     }
 
     public static @NotNull String formatDate(@NotNull LocalDate date) {
