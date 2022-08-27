@@ -109,18 +109,10 @@ public final class SchoolUtil {
         if(!changedClasses.isEmpty())
             builder.addField("Klassen mit Änderung", compromiseClassData(changedClasses),false);
         if(!extraInformation.isEmpty())
-            builder.addField("Zusätzliche Informationen",String.join("\n",extraInformation),false);
+            builder.addField("Zusätzliche Informationen",formatExtraInformation(extraInformation),false);
         if(timetable.hasLessons())
             builder.setImage("attachment://" + IMAGE_NAME);
         return builder.build();
-    }
-
-    private static @NotNull String compromiseClassData(@NotNull List<String> data) {
-        return IntStream.range(7, 13).mapToObj(String::valueOf).map(grade -> { // go through 7-12 (all classes)
-            if(data.stream().filter(c -> c.startsWith(grade)).count() > 3) // if more than 3 values are present, just add the class itself
-                return grade;
-            return data.stream().filter(c -> c.startsWith(grade)).collect(Collectors.joining(", ")); // join up to 3 classes
-        }).filter(c -> !c.isBlank()).collect(Collectors.joining(", "));
     }
 
     public static @NotNull List<String> fetchExtraInformation(@Nullable DataObject data) {
@@ -129,7 +121,7 @@ public final class SchoolUtil {
             return Collections.emptyList();
         }
 
-        final DataArray footer = data.getObject("fuss").getArray("fusszeile");
+        final DataArray footer = JsonUtil.safeToArray(data.getObject("fuss"), "fusszeile");
 
         return footer.stream(DataArray::getObject)
                 .map(info -> info.getString("fussinfo"))
@@ -138,17 +130,56 @@ public final class SchoolUtil {
                 .toList();
     }
 
-    public static @NotNull List<LocalDate> fetchAbsentDates(@NotNull DataObject data) {
+    private static @NotNull String formatExtraInformation(@NotNull List<String> information) {
+        return information.stream()
+                .map(SchoolUtil::lineInformation)
+                .collect(Collectors.joining("\n"));
+    }
 
-        if(!data.hasKey("freietage")) {
-            return Collections.emptyList();
+    private static @NotNull String lineInformation(@NotNull String entry) {
+
+        final StringBuilder result = new StringBuilder();
+        int currentIndex;
+
+        for(int i = 0; i < entry.length(); i++) {
+
+            char currentSymbol = entry.charAt(i);
+            result.append(currentSymbol);
+
+            if(nextLineBreak(i)) {
+
+                // starting at the next index
+                for(currentIndex = i + 1; currentIndex < entry.length(); currentIndex++) {
+                    currentSymbol = entry.charAt(currentIndex);
+
+                    // if the character is a whitespace -> add linebreak
+                    if(Character.isWhitespace(currentSymbol)) {
+                        break;
+                    }
+
+                    result.append(currentSymbol);
+                }
+
+                result.append("\n");
+                i = currentIndex;
+            }
+
         }
 
-        final DataObject absentDays = data.getObject("freietage");
+        return result.toString();
+    }
 
-        return absentDays.getArray("ft").stream(DataArray::getString)
-                .map(date -> LocalDate.parse(SystemInfo.currentYearsPrefix() + date, DateTimeFormatter.BASIC_ISO_DATE))
-                .collect(Collectors.toCollection(LinkedList::new));
+    private static boolean nextLineBreak(int index) {
+        // new linebreak every 40 chars (index starts at 0)
+        return index != 0 && index % 39 == 0;
+    }
+
+    private static @NotNull String compromiseClassData(@NotNull List<String> data) {
+        return IntStream.range(7, 13).mapToObj(String::valueOf).map(grade -> { // go through 7-12 (all classes)
+            if(data.stream().filter(c -> c.startsWith(grade)).count() > 3) // if more than 3 values are present, just add the class itself
+                return grade;
+            return data.stream().filter(c -> c.startsWith(grade)).collect(Collectors.joining(", ")); // join up to 3 classes
+        }).filter(c -> !c.isBlank()).collect(Collectors.joining(", "));
     }
 
 }
