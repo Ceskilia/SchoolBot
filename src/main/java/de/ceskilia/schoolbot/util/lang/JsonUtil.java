@@ -101,6 +101,23 @@ public final class JsonUtil {
         return data == null ? Collections.emptyList() : data.hasKey(key) ? Arrays.asList(data.getString(key).split(", ")) : Collections.emptyList();
     }
 
+    public static @NotNull DataArray safeToArray(@NotNull DataObject data, @NotNull String key) {
+
+        if(!data.hasKey(key)) {
+            return DataArray.empty();
+        }
+
+        if(data.isType(key, DataType.OBJECT)) {
+            return DataArray.fromCollection(Collections.singleton(data.getObject(key)));
+        }
+
+        if(data.isType(key, DataType.ARRAY)) {
+            return data.getArray(key);
+        }
+
+        return DataArray.empty();
+    }
+
     public static DataObject safeToObject(@Nullable DataObject data, @NotNull String key, @Nullable Supplier<DataObject> fallback) {
         return data == null ? fallback != null ? fallback.get() : null : data.hasKey(key) ? data.getObject(key) : fallback != null ? fallback.get() : null;
     }
