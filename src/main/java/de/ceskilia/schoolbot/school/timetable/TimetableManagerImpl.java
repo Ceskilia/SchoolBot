@@ -3,9 +3,8 @@ package de.ceskilia.schoolbot.school.timetable;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.action.CompletableAction;
 import de.ceskilia.schoolbot.action.CompletableActionImpl;
-import de.ceskilia.schoolbot.util.lang.DateUtil;
+import de.ceskilia.schoolbot.school.timetable.util.AbsentDateInformation;
 import de.ceskilia.schoolbot.util.lang.JsonUtil;
-import de.ceskilia.schoolbot.util.lang.SchoolUtil;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.internal.utils.Checks;
 import org.jetbrains.annotations.NotNull;
@@ -23,14 +22,14 @@ public class TimetableManagerImpl implements TimetableManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(TimetableManagerImpl.class);
 
     private final SchoolBot bot;
+    private final AbsentDateInformation absentDateInformation;
     private final Set<Timetable> timetables;
-
-    private List<LocalDate> absentDates;
 
     private final TimetablePostManager postManager;
 
     public TimetableManagerImpl(@NotNull SchoolBot bot) {
         this.bot = bot;
+        this.absentDateInformation = AbsentDateInformation.empty();
         this.timetables = new HashSet<>();
         this.postManager = new TimetablePostManagerImpl(bot);
     }
@@ -47,7 +46,7 @@ public class TimetableManagerImpl implements TimetableManager {
     @Override
     @CheckReturnValue
     public @NotNull CompletableAction<DataObject> retrieveData(@NotNull LocalDate date) {
-        Checks.check(isValid(date), "The provided date is invalid. (%s)".formatted(date));
+        Checks.check(isValidRequestDate(date), "The provided date is invalid. (%s)".formatted(date));
         return new CompletableActionImpl<>(bot.getHttpClient(),
                 formatUrl(date),
                 null,
@@ -55,7 +54,7 @@ public class TimetableManagerImpl implements TimetableManager {
                     try {
                         final DataObject data = JsonUtil.convertXmlToJson(response.body().string());
 
-                        fetchAbsentDays(data);
+                        updateAbsentDates(data);
                         cacheTimetable(data);
                         return data;
                     } catch (final IOException e) {
@@ -81,7 +80,7 @@ public class TimetableManagerImpl implements TimetableManager {
 
     @CheckReturnValue
     private @NotNull CompletableAction<Timetable> retrieveTimetable(@NotNull LocalDate date, @Nullable Timetable defaultValue) {
-        Checks.check(isValid(date), "The provided date is invalid. (%s)".formatted(date));
+        Checks.check(isValidRequestDate(date), "The provided date is invalid. (%s)".formatted(date));
         return new CompletableActionImpl<>(bot.getHttpClient(),
                 formatUrl(date),
                 defaultValue,
@@ -89,7 +88,7 @@ public class TimetableManagerImpl implements TimetableManager {
                     try {
                         final Timetable timetable = new TimetableImpl(response.body().string());
 
-                        fetchAbsentDays(timetable.toData());
+                        updateAbsentDates(timetable.toData());
                         return cacheTimetable(timetable);
                     } catch (final IOException e) {
                         throw new IllegalStateException("Could parse xml to json correctly.", e);
@@ -99,8 +98,12 @@ public class TimetableManagerImpl implements TimetableManager {
     }
 
     @Override
-    public @NotNull List<LocalDate> getAbsentDates() {
-        return this.absentDates != null ? Collections.unmodifiableList(this.absentDates) : Collections.emptyList();
+    public @NotNull AbsentDateInformation getAbsentDateInformation() {
+        return absentDateInformation;
+    }
+
+    private @NotNull Timetable cacheTimetable(@NotNull DataObject object) {
+        return cacheTimetable(new TimetableImpl(object));
     }
 
     private @NotNull Timetable cacheTimetable(@NotNull Timetable timetable) {
@@ -110,22 +113,13 @@ public class TimetableManagerImpl implements TimetableManager {
         return timetable;
     }
 
-    private @NotNull Timetable cacheTimetable(@NotNull DataObject object) {
-        return cacheTimetable(new TimetableImpl(object));
-    }
-
     private @NotNull String formatUrl(@NotNull LocalDate date) {
         return String.format(bot.getConfig().retrieveData().getString("timetableURL"), date);
     }
 
-    private boolean isValid(@Nullable LocalDate date) {
-        return !DateUtil.isWeekend(date) && !isAbsentDate(date);
-    }
-
-    private void fetchAbsentDays(@NotNull DataObject data) {
-        if(absentDates == null || absentDates.isEmpty()) {
-            this.absentDates = SchoolUtil.fetchAbsentDates(data);
-            LOGGER.debug("Fetched absent days successfully.");
+    private void updateAbsentDates(@NotNull DataObject data) {
+        if(absentDateInformation.loadData(data)) {
+            LOGGER.debug("Updated absent dates successfully.");
         }
     }
 

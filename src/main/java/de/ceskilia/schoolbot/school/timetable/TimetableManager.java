@@ -1,13 +1,14 @@
 package de.ceskilia.schoolbot.school.timetable;
 
 import de.ceskilia.schoolbot.action.CompletableAction;
+import de.ceskilia.schoolbot.school.timetable.util.AbsentDateInformation;
+import de.ceskilia.schoolbot.util.lang.DateUtil;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.CheckReturnValue;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,10 +45,21 @@ public interface TimetableManager {
         return update ? tryUpdateTimetable(date) : retrieveTimetable(date);
     }
 
-    @NotNull List<LocalDate> getAbsentDates();
+    @NotNull AbsentDateInformation getAbsentDateInformation();
 
     default boolean isAbsentDate(@Nullable LocalDate date) {
-        return date != null && getAbsentDates().contains(date);
+
+        if(date == null) {
+            return false;
+        }
+
+        final AbsentDateInformation information = getAbsentDateInformation();
+
+        return information.isPresent() && information.getDates().contains(date);
+    }
+
+    default boolean isValidRequestDate(@Nullable LocalDate date) {
+        return !DateUtil.isWeekend(date) && DateUtil.inMinimumRange(date) && !isAbsentDate(date);
     }
 
 }
