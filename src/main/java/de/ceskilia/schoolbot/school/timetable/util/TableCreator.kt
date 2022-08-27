@@ -1,6 +1,7 @@
-package de.ceskilia.schoolbot.school.timetable
+package de.ceskilia.schoolbot.school.timetable.util
 
 import com.jakewharton.picnic.*
+import de.ceskilia.schoolbot.school.timetable.Timetable
 
 fun createTable(lessons: List<Timetable.Lesson>): String {
     val builder = TableSection.Builder()

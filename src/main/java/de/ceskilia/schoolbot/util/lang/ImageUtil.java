@@ -1,8 +1,8 @@
 package de.ceskilia.schoolbot.util.lang;
 
 import de.ceskilia.cutils.utils.util.NumberUtil;
-import de.ceskilia.schoolbot.school.timetable.TableCreatorKt;
 import de.ceskilia.schoolbot.school.timetable.Timetable;
+import de.ceskilia.schoolbot.school.timetable.util.TableCreatorKt;
 import net.dv8tion.jda.internal.utils.Checks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
