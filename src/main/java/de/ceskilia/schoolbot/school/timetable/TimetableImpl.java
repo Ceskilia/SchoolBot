@@ -25,7 +25,6 @@ public class TimetableImpl implements Timetable {
 
     private final String date;
     private final LocalDate formattedDate;
-    private final String lastChange;
     private final LocalDateTime formattedLastChange;
 
     private final List<String> absentClasses;
@@ -50,8 +49,7 @@ public class TimetableImpl implements Timetable {
 
         this.date = head.getString("titel");
         this.formattedDate = DateUtil.timetableTitleToDate(this.date);
-        this.lastChange = head.getString("datum");
-        this.formattedLastChange = DateUtil.toDateTime(this.lastChange);
+        this.formattedLastChange = DateUtil.toDateTime(head.getString("datum"));
         this.absentClasses = JsonUtil.safeToList(headInfo,"abwesendk");
         this.changedClasses = JsonUtil.safeToList(headInfo,"aenderungk");
         this.extraInformation = SchoolUtil.fetchExtraInformation(data);
@@ -122,7 +120,6 @@ public class TimetableImpl implements Timetable {
                 && data.equals(timetable.data)
                 && date.equals(timetable.date)
                 && formattedDate.equals(timetable.formattedDate)
-                && lastChange.equals(timetable.lastChange)
                 && Objects.equals(changedClasses, timetable.changedClasses)
                 && extraInformation.equals(timetable.extraInformation)
                 && lessons.equals(timetable.lessons);
@@ -130,7 +127,7 @@ public class TimetableImpl implements Timetable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(data, date, formattedDate, lastChange, changedClasses, extraInformation, lessons, creationTime);
+        return Objects.hash(data, date, formattedDate, changedClasses, extraInformation, lessons, creationTime);
     }
 
 }
