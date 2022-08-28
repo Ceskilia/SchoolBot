@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class AbsentDateInformation {
 
-    private DataArray data;
+    private List<Object> data;
     private List<LocalDate> dates;
 
     public static @NotNull AbsentDateInformation empty() {
@@ -33,11 +33,6 @@ public class AbsentDateInformation {
         return dates != null && !data.isEmpty();
     }
 
-    public @NotNull DataArray getData() {
-        checkPresence();
-        return data;
-    }
-
     public @NotNull List<LocalDate> getDates() {
         checkPresence();
         return dates;
@@ -52,11 +47,11 @@ public class AbsentDateInformation {
         final DataArray absentDates = data.getObject("freietage").getArray("ft");
 
         // if the data did not change, we don't want to do anything
-        if(absentDates.equals(this.data)) {
+        if(absentDates.toList().equals(this.data)) {
             return false;
         }
 
-        this.data = absentDates;
+        this.data = absentDates.toList();
         this.dates = absentDates.stream(DataArray::getString)
                 .map(date -> LocalDate.parse(SystemInfo.currentYearsPrefix() + date, DateTimeFormatter.BASIC_ISO_DATE))
                 .collect(Collectors.toCollection(LinkedList::new));
@@ -64,7 +59,7 @@ public class AbsentDateInformation {
     }
 
     private void checkPresence() {
-        if(data == null) {
+        if(dates == null) {
             throw new IllegalStateException("The date information need to be loaded first.");
         }
     }
