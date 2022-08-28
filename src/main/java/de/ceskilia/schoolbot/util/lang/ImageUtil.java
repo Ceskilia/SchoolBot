@@ -30,16 +30,6 @@ public final class ImageUtil {
         return colorValue;
     }
 
-    public static @NotNull Color brightestColor(@NotNull Color first, @NotNull Color... colors) {
-
-        Color brightest = first;
-
-        for(final Color color : colors)
-            if(isBrighterColor(color, brightest))
-                brightest = color;
-        return brightest;
-    }
-
     public static boolean isBrighterColor(@NotNull Color first, @Nullable Color second) {
         return second == null || first.getRGB() < second.getRGB();
     }
@@ -62,6 +52,8 @@ public final class ImageUtil {
 
     public static @NotNull BufferedImage createTimetableImage(@NotNull List<Timetable.Lesson> lessons) {
         Checks.notEmpty(lessons,"Lessons");
+
+        System.out.println(TableCreatorKt.createTable(lessons));
 
         final String[] text = TableCreatorKt.createTable(lessons).split("\n");
         final BufferedImage image = new BufferedImage(text[0].length() * 17 - 14, text.length * 18 - 15, BufferedImage.TYPE_INT_ARGB);
