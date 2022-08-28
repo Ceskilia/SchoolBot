@@ -22,7 +22,7 @@ dependencies {
 
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.3'
     implementation 'ch.qos.logback:logback-classic:1.2.11'
-    implementation 'net.dv8tion:JDA:5.0.0-alpha.17'
+    implementation 'net.dv8tion:JDA:5.0.0-alpha.18'
     implementation 'de.ceskilia:JDA-CUtils:1.0'
     implementation 'com.jakewharton.picnic:picnic:0.6.0'
 }

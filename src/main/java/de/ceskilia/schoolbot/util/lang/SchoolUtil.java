@@ -1,19 +1,20 @@
 package de.ceskilia.schoolbot.util.lang;
 
 import de.ceskilia.schoolbot.school.timetable.Timetable;
-import de.ceskilia.schoolbot.util.SystemInfo;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
-import net.dv8tion.jda.api.requests.restaction.WebhookMessageAction;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
+import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
+import net.dv8tion.jda.api.requests.restaction.WebhookMessageCreateAction;
+import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.api.utils.TimeFormat;
 import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
+import net.dv8tion.jda.api.utils.messages.MessageCreateRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -21,9 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -35,7 +34,9 @@ public final class SchoolUtil {
 
     private static final String IMAGE_NAME = "timetable.png";
     private static final String DEFAULT_IMAGE_NAME = "failure.png";
+    private static final String FAILED_IMAGE_CREATION = "Ein Fehler ist bei der Bilderstellung aufgetreten.";
     private static final File DEFAULT_IMAGE = new File("pics/" + DEFAULT_IMAGE_NAME);
+    private static final FileUpload DEFAULT_IMAGE_UPLOAD = FileUpload.fromData(DEFAULT_IMAGE, IMAGE_NAME);
 
     static {
 
@@ -56,40 +57,37 @@ public final class SchoolUtil {
     }
 
     public static void sendTimetable(@NotNull InteractionHook hook, @NotNull Timetable timetable, @NotNull User requester) {
-        final WebhookMessageAction<Message> action = hook.sendMessageEmbeds(toEmbed(timetable, requester));
-
-        if(!timetable.hasLessons()) {
-            action.queue();
-            return;
-        }
-
-        ImageUtil.createImageInput(timetable)
-                .thenApply(inputStream -> action.addFile(inputStream, IMAGE_NAME))
-                .exceptionally(throwable -> {
-                    if(!DEFAULT_IMAGE.exists())
-                        return action.setContent("Ein Fehler ist bei der Bilderstellung aufgetreten.");
-                    return action.addFile(DEFAULT_IMAGE, IMAGE_NAME);
-                })
-                .thenAccept(WebhookMessageAction::queue);
+        sendTimetable(hook.sendMessageEmbeds(toEmbed(timetable, requester)), timetable)
+                .thenAccept(WebhookMessageCreateAction::queue);
     }
 
-    public static @NotNull CompletableFuture<MessageAction> sendTimetable(@NotNull MessageChannel channel, @NotNull Timetable timetable, @NotNull User requester) {
-        return performTimetableAction(channel.sendMessageEmbeds(toEmbed(timetable, requester)), timetable);
+    public static @NotNull CompletableFuture<MessageCreateAction> sendTimetable(@NotNull MessageChannel channel, @NotNull Timetable timetable, @NotNull User requester) {
+        return sendTimetable(channel.sendMessageEmbeds(toEmbed(timetable, requester)), timetable);
     }
 
-    public static @NotNull CompletableFuture<MessageAction> editTimetable(@NotNull MessageChannel channel, long messageId, @NotNull Timetable timetable, @NotNull User requester) {
-        return performTimetableAction(channel.editMessageEmbedsById(messageId, toEmbed(timetable, requester)), timetable);
-    }
-
-    private static @NotNull CompletableFuture<MessageAction> performTimetableAction(@NotNull MessageAction action, @NotNull Timetable timetable) {
+    private static <T extends MessageCreateRequest<T>> @NotNull CompletableFuture<T> sendTimetable(@NotNull T action, @NotNull Timetable timetable) {
         if(!timetable.hasLessons())
             return CompletableFuture.completedFuture(action);
         return ImageUtil.createImageInput(timetable)
-                .thenApply(inputStream -> action.addFile(inputStream, IMAGE_NAME))
+                .thenApply(inputStream -> action.addFiles(FileUpload.fromData(inputStream, IMAGE_NAME)))
                 .exceptionally(throwable -> {
                     if(!DEFAULT_IMAGE.exists())
-                        return action.content("Ein Fehler ist bei der Bilderstellung aufgetreten.");
-                    return action.addFile(DEFAULT_IMAGE, IMAGE_NAME);
+                        return action.setContent(FAILED_IMAGE_CREATION);
+                    return action.addFiles(DEFAULT_IMAGE_UPLOAD);
+                });
+    }
+
+    public static @NotNull CompletableFuture<MessageEditAction> editTimetable(@NotNull MessageChannel channel, long messageId, @NotNull Timetable timetable, @NotNull User requester) {
+        final MessageEditAction action = channel.editMessageEmbedsById(messageId, toEmbed(timetable, requester));
+
+        if(!timetable.hasLessons())
+            return CompletableFuture.completedFuture(action);
+        return ImageUtil.createImageInput(timetable)
+                .thenApply(inputStream -> action.setFiles(FileUpload.fromData(inputStream, IMAGE_NAME)))
+                .exceptionally(throwable -> {
+                    if (!DEFAULT_IMAGE.exists())
+                        return action.setContent(FAILED_IMAGE_CREATION);
+                    return action.setFiles(DEFAULT_IMAGE_UPLOAD);
                 });
     }
 
