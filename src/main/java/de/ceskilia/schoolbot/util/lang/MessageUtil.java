@@ -4,6 +4,7 @@ import de.ceskilia.cutils.DiscordBot;
 import de.ceskilia.schoolbot.config.DefaultConfig;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.Emote;
+import de.ceskilia.schoolbot.util.embed.EmbedUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.Member;
@@ -60,7 +61,7 @@ public final class MessageUtil {
     }
 
     public static @NotNull MessageEmbed embed(@NotNull EmbedColor color, @NotNull String title, @NotNull String description) {
-        return color.withEmbedBuilder()
+        return EmbedUtil.withColor(color)
                 .setTitle((color.getDefaultEmote() != null) ? color.getDefaultEmote().append(title) : title)
                 .setDescription(description)
                 .build();

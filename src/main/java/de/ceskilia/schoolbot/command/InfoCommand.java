@@ -7,6 +7,7 @@ import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
 import de.ceskilia.cutils.event.command.slash.GuildSlashCommandExecuteEvent;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.Emote;
+import de.ceskilia.schoolbot.util.embed.EmbedUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class InfoCommand implements CommandDiscriptor<GuildSlashCommandExecuteEvent> {
@@ -24,7 +25,7 @@ public class InfoCommand implements CommandDiscriptor<GuildSlashCommandExecuteEv
 
         // TODO: do this fancy with inline: true and things like that
 
-        event.replyEmbeds(EmbedColor.INFORMATION.withEmbedBuilder()
+        event.replyEmbeds(EmbedUtil.withColor(EmbedColor.INFORMATION)
                         .setTitle(Emote.INFORMATION.append("| Informationen"))
                         .addField("Version", bot.getVersion(),false)
                         .addField("Autoren",null,false) // todo: Autor#getAsHyperlink

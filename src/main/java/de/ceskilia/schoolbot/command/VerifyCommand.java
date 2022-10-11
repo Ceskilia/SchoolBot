@@ -45,7 +45,7 @@ public class VerifyCommand implements CommandDiscriptor<GuildSlashCommandExecute
                                                    @NotNull String password,
                                                    @NotNull VerificationResult result,
                                                    long guildId) {
-        final EmbedBuilder builder = (result.isFail() ? EmbedColor.FAILURE : EmbedColor.SUCCESS).withEmbedBuilder();
+        final EmbedBuilder builder = EmbedUtil.withColor(result.isFail() ? EmbedColor.FAILURE : EmbedColor.SUCCESS);
 
         if(result != VerificationResult.ALREADY_VERIFIED) {
             builder.addField("Benutzername", MarkdownUtil.monospace(username),false)

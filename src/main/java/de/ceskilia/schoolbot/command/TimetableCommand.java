@@ -111,6 +111,7 @@ public class TimetableCommand implements CommandDiscriptor<GuildSlashCommandExec
                                 final MessageEmbed embed = failureEmbed(formattedDate, response,EmbedColor.FAILURE);
 
                                 hook.sendMessageEmbeds(embed).queue();
+                                return true;
                             } else {
                                 hook.sendMessage("Something bad happened. Please redirect this incidence.").queue();
                             }
@@ -133,7 +134,7 @@ public class TimetableCommand implements CommandDiscriptor<GuildSlashCommandExec
     private @NotNull MessageEmbed failureEmbed(@Nullable String input,
                                                 @NotNull String response,
                                                 @NotNull EmbedColor color) {
-        final EmbedBuilder builder = color.withEmbedBuilder();
+        final EmbedBuilder builder = EmbedUtil.withColor(color);
 
         if(input != null) {
             builder.addField("Datum",MarkdownUtil.monospace(input),false);

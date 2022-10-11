@@ -60,14 +60,14 @@ public class OwnerCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
                     Emote.OPEN_FOLDER.append("| Einstellungen"),
                     ConfigUtil.formatInformation(bot))
             ).addActionRow(Interactions.button(ButtonStyle.PRIMARY,event.getUser().getId(),"Daten anfordern", Emote.ENVELOPE_ARROW.asEmoji())
-                    .onClick(clickEvent -> clickEvent.replyEmbeds(ConfigUtil.buildWithInformation(EmbedColor.INFORMATION.withEmbedBuilder(), bot))
+                    .onClick(clickEvent -> clickEvent.replyEmbeds(ConfigUtil.buildWithInformation(EmbedUtil.withColor(EmbedColor.INFORMATION), bot))
                             .setEphemeral(true)
                             .queue())
                     .queueBuild(bot)
             ).setEphemeral(true).queue();
             case "permission" -> {
 
-                final EmbedBuilder builder = EmbedColor.SUCCESS.withEmbedBuilder();
+                final EmbedBuilder builder = EmbedUtil.withColor(EmbedColor.SUCCESS);
                 final VerificationManager verificationManager = bot.getVerificationManager();
                 final User target = event.getRequiredOption("target",OptionMapping::getAsUser);
 

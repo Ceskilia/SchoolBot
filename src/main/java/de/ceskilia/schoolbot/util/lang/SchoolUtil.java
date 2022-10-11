@@ -2,6 +2,7 @@ package de.ceskilia.schoolbot.util.lang;
 
 import de.ceskilia.schoolbot.school.timetable.Timetable;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
+import de.ceskilia.schoolbot.util.embed.EmbedUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -91,12 +92,12 @@ public final class SchoolUtil {
                 });
     }
 
-    private static @NotNull MessageEmbed toEmbed(@NotNull Timetable timetable, @NotNull User requester) {
+    public static @NotNull MessageEmbed toEmbed(@NotNull Timetable timetable, @NotNull User requester) {
 
-        final EmbedBuilder builder = EmbedColor.INFORMATION.withEmbedBuilder()
+        final EmbedBuilder builder = EmbedUtil.withColor(timetable.isOld() ? EmbedColor.DEPRECATED : EmbedColor.INFORMATION)
                 .setTitle(timetable.getDate())
                 .setDescription(TimeFormat.DATE_TIME_LONG.format(timetable.getLastChange().toInstant(ZoneOffset.UTC)))
-                .setFooter("letztes Update", requester.getAvatarUrl())
+                .setFooter("letztes Update", requester.getEffectiveAvatarUrl())
                 .setTimestamp(Instant.ofEpochMilli(timetable.getCreationTime()));
         final List<String> absentClasses = timetable.getAbsentClasses();
         final List<String> changedClasses = timetable.getChangedClasses();

@@ -13,6 +13,10 @@ public final class EmbedUtil {
         throw new UnsupportedOperationException("Instantiation of this utility class is unsupported.");
     }
 
+    public static @NotNull EmbedBuilder withColor(@NotNull EmbedColor color) {
+        return new EmbedBuilder().setColor(color.getColor());
+    }
+
     public static @NotNull EmbedBuilder combineFields(@NotNull MessageEmbed... embeds) {
 
         final EmbedBuilder builder = new EmbedBuilder();
