@@ -3,6 +3,8 @@ package de.ceskilia.schoolbot.school.timetable;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.action.CompletableAction;
 import de.ceskilia.schoolbot.action.CompletableActionImpl;
+import de.ceskilia.schoolbot.school.timetable.post.TimetablePostManager;
+import de.ceskilia.schoolbot.school.timetable.post.TimetablePostManagerImpl;
 import de.ceskilia.schoolbot.school.timetable.util.AbsentDateInformation;
 import de.ceskilia.schoolbot.util.lang.JsonUtil;
 import net.dv8tion.jda.api.utils.data.DataObject;
@@ -27,6 +29,8 @@ public class TimetableManagerImpl implements TimetableManager {
 
     private final TimetablePostManager postManager;
 
+    private int totalRequests;
+
     public TimetableManagerImpl(@NotNull SchoolBot bot) {
         this.bot = bot;
         this.absentDateInformation = AbsentDateInformation.empty();
@@ -34,6 +38,12 @@ public class TimetableManagerImpl implements TimetableManager {
         this.postManager = new TimetablePostManagerImpl(bot);
     }
 
+    @Override
+    public int getTotalRequests() {
+        return totalRequests;
+    }
+
+    @Override
     public @NotNull TimetablePostManager getPostingManager() {
         return postManager;
     }
@@ -47,6 +57,7 @@ public class TimetableManagerImpl implements TimetableManager {
     @CheckReturnValue
     public @NotNull CompletableAction<DataObject> retrieveData(@NotNull LocalDate date) {
         Checks.check(isValidRequestDate(date), "The provided date is invalid. (%s)".formatted(date));
+        this.totalRequests++;
         return new CompletableActionImpl<>(bot.getHttpClient(),
                 formatUrl(date),
                 null,
@@ -81,6 +92,7 @@ public class TimetableManagerImpl implements TimetableManager {
     @CheckReturnValue
     private @NotNull CompletableAction<Timetable> retrieveTimetable(@NotNull LocalDate date, @Nullable Timetable defaultValue) {
         Checks.check(isValidRequestDate(date), "The provided date is invalid. (%s)".formatted(date));
+        this.totalRequests++;
         return new CompletableActionImpl<>(bot.getHttpClient(),
                 formatUrl(date),
                 defaultValue,
@@ -118,7 +130,7 @@ public class TimetableManagerImpl implements TimetableManager {
     }
 
     private void updateAbsentDates(@NotNull DataObject data) {
-        if(absentDateInformation.loadData(data)) {
+        if (absentDateInformation.loadData(data)) {
             LOGGER.debug("Updated absent dates successfully.");
         }
     }

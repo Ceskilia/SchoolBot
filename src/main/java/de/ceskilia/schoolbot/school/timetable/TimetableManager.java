@@ -1,6 +1,7 @@
 package de.ceskilia.schoolbot.school.timetable;
 
 import de.ceskilia.schoolbot.action.CompletableAction;
+import de.ceskilia.schoolbot.school.timetable.post.TimetablePostManager;
 import de.ceskilia.schoolbot.school.timetable.util.AbsentDateInformation;
 import de.ceskilia.schoolbot.util.lang.DateUtil;
 import net.dv8tion.jda.api.utils.data.DataObject;
@@ -13,6 +14,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public interface TimetableManager {
+
+    int getTotalRequests();
 
     @NotNull TimetablePostManager getPostingManager();
 
