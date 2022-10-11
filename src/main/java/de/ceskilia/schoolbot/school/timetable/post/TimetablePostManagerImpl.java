@@ -1,7 +1,8 @@
-package de.ceskilia.schoolbot.school.timetable;
+package de.ceskilia.schoolbot.school.timetable.post;
 
 import de.ceskilia.cutils.utils.util.ThreadUtil;
 import de.ceskilia.schoolbot.SchoolBot;
+import de.ceskilia.schoolbot.school.timetable.Timetable;
 import de.ceskilia.schoolbot.util.lang.DateUtil;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
 import de.ceskilia.schoolbot.util.lang.SchoolUtil;
@@ -25,13 +26,14 @@ public class TimetablePostManagerImpl implements TimetablePostManager {
     private final SchoolBot bot;
     private final List<TimetablePost> timetablePosts;
 
-    private int time;
+    private int minutes;
+    private int days;
     private final ScheduledExecutorService scheduler;
 
     public TimetablePostManagerImpl(@NotNull SchoolBot bot) {
         this.bot = bot;
         this.timetablePosts = new ArrayList<>();
-        this.time = DateUtil.minutesOfDay(LocalTime.now());
+        this.minutes = DateUtil.minutesOfDay(LocalTime.now());
         this.scheduler = Executors.newSingleThreadScheduledExecutor(runnable -> ThreadUtil.toDaemon(new Thread(runnable,"Timetable-Post-Manager")));
         startScheduling();
     }
@@ -121,11 +123,18 @@ public class TimetablePostManagerImpl implements TimetablePostManager {
     private void startScheduling() {
         LOGGER.debug("Starting timetable posting scheduler.");
         scheduler.scheduleAtFixedRate(() -> {
-            this.time = (time == DateUtil.MAX_MINUTES_OF_DAY) ? 0 : time + 1;
+
+            if(minutes == DateUtil.MAX_MINUTES_OF_DAY) {
+                LOGGER.debug("Resetting time. Now {} days.", ++days);
+                minutes = 0;
+            } else {
+                minutes++;
+            }
+
             bot.getChannelManager().streamValidEntries()
                     .filter(entry -> entry.getUpdateTimes().stream()
                             .map(DateUtil::minutesOfDay)
-                            .anyMatch(minutes -> minutes == this.time))
+                            .anyMatch(minutes -> minutes == this.minutes))
                     .forEach(entry -> upsertPost(LocalDate.now(), entry.getGuildId()));
         },60 - LocalTime.now().getSecond(),60,TimeUnit.SECONDS);
     }
