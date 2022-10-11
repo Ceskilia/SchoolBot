@@ -20,9 +20,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.3'
-    implementation 'ch.qos.logback:logback-classic:1.2.11'
-    implementation 'net.dv8tion:JDA:5.0.0-alpha.18'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.4'
+    implementation 'ch.qos.logback:logback-classic:1.4.3'
+    implementation 'net.dv8tion:JDA:5.0.0-alpha.21'
     implementation 'de.ceskilia:JDA-CUtils:1.0'
     implementation 'com.jakewharton.picnic:picnic:0.6.0'
 }
