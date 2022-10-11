@@ -1,8 +1,5 @@
 package de.ceskilia.schoolbot.school.timetable;
 
-import de.ceskilia.schoolbot.util.lang.JsonUtil;
-import net.dv8tion.jda.api.utils.data.DataObject;
-import net.dv8tion.jda.api.utils.data.DataType;
 import net.dv8tion.jda.api.utils.data.SerializableData;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,62 +45,21 @@ public interface Timetable extends SerializableData {
         return getFormattedDate().isBefore(LocalDate.now());
     }
 
-    class Lesson {
+    interface Lesson {
 
-        public static final String CANCELLED = "---";
-        public static final String CHANGED_VALUE = "ae";
+        @NotNull String getCourse();
 
-        private final String course;
-        private final String hours;
-        private final String information;
-        private final String subject;
-        private final String teacher;
-        private final String room;
+        @NotNull String getHours();
 
-        public Lesson(@NotNull DataObject json) {
-            this.course = json.getString("klasse");
-            this.hours = json.getString("stunde");
-            this.information = JsonUtil.safeToText(json,"info");
-            this.subject = json.isType("fach", DataType.OBJECT) ? fetchValue(json.getObject("fach"),"fageaendert") : json.getString("fach");
-            this.teacher = json.isType("lehrer", DataType.OBJECT) ? fetchValue(json.getObject("lehrer"),"legeaendert") : json.getString("lehrer");
-            this.room = json.isType("raum", DataType.OBJECT) ? fetchValue(json.getObject("raum"),"rageaendert") : json.getString("raum");
-        }
+        @NotNull String getInformation();
 
-        public @NotNull String getCourse() {
-            return course;
-        }
+        @NotNull String getSubject();
 
-        public @NotNull String getHours() {
-            return hours;
-        }
+        @NotNull String getTeacher();
 
-        public @NotNull String getInformation() {
-            return information;
-        }
+        @NotNull String getRoom();
 
-        public @NotNull String getSubject() {
-            return subject;
-        }
-
-        public @NotNull String getTeacher() {
-            return teacher;
-        }
-
-        public @NotNull String getRoom() {
-            return room;
-        }
-
-        public boolean isCancelled() {
-            return subject.equals(CANCELLED);
-        }
-
-        private @NotNull String fetchValue(@NotNull DataObject data, @NotNull String changedKey) {
-            return data.getString(changedKey).equals(CHANGED_VALUE) ? data.values().stream() // do this, because you can't parse "" as a key
-                    .filter(o -> !o.equals(CHANGED_VALUE))
-                    .findAny()
-                    .orElse("")
-                    .toString() : "ERROR";
-        }
+        boolean isCancelled();
 
     }
 

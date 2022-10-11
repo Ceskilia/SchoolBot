@@ -55,7 +55,7 @@ public class TimetableImpl implements Timetable {
         this.extraInformation = SchoolUtil.fetchExtraInformation(data);
 
         this.lessons = main.stream(DataArray::getObject)
-                .map(Lesson::new)
+                .map(LessonImpl::create)
                 .toList();
         this.image = ImageUtil.createTimetableImage(lessons);
         this.creationTime = System.currentTimeMillis();
