@@ -1,5 +1,6 @@
-package de.ceskilia.schoolbot.school.timetable;
+package de.ceskilia.schoolbot.school.timetable.post;
 
+import de.ceskilia.schoolbot.school.timetable.Timetable;
 import net.dv8tion.jda.api.entities.Message;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
