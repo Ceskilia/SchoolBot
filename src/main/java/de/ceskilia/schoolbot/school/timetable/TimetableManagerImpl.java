@@ -5,7 +5,9 @@ import de.ceskilia.schoolbot.action.CompletableAction;
 import de.ceskilia.schoolbot.action.CompletableActionImpl;
 import de.ceskilia.schoolbot.school.timetable.post.TimetablePostManager;
 import de.ceskilia.schoolbot.school.timetable.post.TimetablePostManagerImpl;
+import de.ceskilia.schoolbot.school.timetable.ratelimit.RateLimitException;
 import de.ceskilia.schoolbot.school.timetable.util.AbsentDateInformation;
+import de.ceskilia.schoolbot.school.timetable.ratelimit.RateLimit;
 import de.ceskilia.schoolbot.util.lang.JsonUtil;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.internal.utils.Checks;
@@ -18,6 +20,7 @@ import javax.annotation.CheckReturnValue;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class TimetableManagerImpl implements TimetableManager {
 
@@ -25,6 +28,7 @@ public class TimetableManagerImpl implements TimetableManager {
 
     private final SchoolBot bot;
     private final AbsentDateInformation absentDateInformation;
+    private final RateLimit rateLimit;
     private final Set<Timetable> timetables;
 
     private final TimetablePostManager postManager;
@@ -34,6 +38,7 @@ public class TimetableManagerImpl implements TimetableManager {
     public TimetableManagerImpl(@NotNull SchoolBot bot) {
         this.bot = bot;
         this.absentDateInformation = AbsentDateInformation.empty();
+        this.rateLimit = new RateLimit(5, 1, TimeUnit.MINUTES);
         this.timetables = new HashSet<>();
         this.postManager = new TimetablePostManagerImpl(bot);
     }
@@ -57,6 +62,7 @@ public class TimetableManagerImpl implements TimetableManager {
     @CheckReturnValue
     public @NotNull CompletableAction<DataObject> retrieveData(@NotNull LocalDate date) {
         Checks.check(isValidRequestDate(date), "The provided date is invalid. (%s)".formatted(date));
+        checkRateLimit();
         this.totalRequests++;
         return new CompletableActionImpl<>(bot.getHttpClient(),
                 formatUrl(date),
@@ -92,6 +98,7 @@ public class TimetableManagerImpl implements TimetableManager {
     @CheckReturnValue
     private @NotNull CompletableAction<Timetable> retrieveTimetable(@NotNull LocalDate date, @Nullable Timetable defaultValue) {
         Checks.check(isValidRequestDate(date), "The provided date is invalid. (%s)".formatted(date));
+        checkRateLimit();
         this.totalRequests++;
         return new CompletableActionImpl<>(bot.getHttpClient(),
                 formatUrl(date),
@@ -110,6 +117,11 @@ public class TimetableManagerImpl implements TimetableManager {
     }
 
     @Override
+    public @NotNull RateLimit getGlobalRateLimit() {
+        return rateLimit;
+    }
+
+    @Override
     public @NotNull AbsentDateInformation getAbsentDateInformation() {
         return absentDateInformation;
     }
@@ -119,6 +131,7 @@ public class TimetableManagerImpl implements TimetableManager {
     }
 
     private @NotNull Timetable cacheTimetable(@NotNull Timetable timetable) {
+        this.rateLimit.performRequest();
         this.timetables.removeIf(cachedTimetable -> cachedTimetable.getFormattedDate().equals(timetable.getFormattedDate()));
         this.timetables.add(timetable);
         LOGGER.debug("Cached one timetable with date {}.", timetable.getFormattedDate());
@@ -132,6 +145,12 @@ public class TimetableManagerImpl implements TimetableManager {
     private void updateAbsentDates(@NotNull DataObject data) {
         if (absentDateInformation.loadData(data)) {
             LOGGER.debug("Updated absent dates successfully.");
+        }
+    }
+
+    private void checkRateLimit() {
+        if (rateLimit.isReached()) {
+            throw new RateLimitException(String.format("Too many requests in %sms (%s)", rateLimit.getTimeInterval(), rateLimit.getMaxRequests()));
         }
     }
 

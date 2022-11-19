@@ -56,6 +56,11 @@ public class TimetableCommand implements CommandDiscriptor<GuildSlashCommandExec
             return;
         }
 
+        if(bot.getTimetableManager().getGlobalRateLimit().isReached()) {
+            respondFailure(event, null, "Das globale Ratelimit wurde erreicht.", EmbedColor.FAILURE);
+            return;
+        }
+
         final OptionMapping dateOption = event.getOption("date");
         final LocalDate date = event.checkOption(dateOption,LocalDate.now(),mapping -> DateUtil.toDate(mapping.getAsString()));
 
