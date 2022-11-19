@@ -17,8 +17,6 @@ import java.util.concurrent.TimeUnit;
 
 public class DefaultConfig implements Config<DataObject> {
 
-    public static final long DEFAULT_UPDATE_INTERVAL = 20_000; //20sec
-
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConfig.class);
     private static final Scanner SCANNER = new Scanner(System.in);
 
@@ -34,7 +32,7 @@ public class DefaultConfig implements Config<DataObject> {
     }
 
     public DefaultConfig(@NotNull String path, @Nullable DataObject defaultData) {
-        this(path, defaultData,DEFAULT_UPDATE_INTERVAL,null);
+        this(path, defaultData, DEFAULT_UPDATE_INTERVAL, null);
     }
 
     public DefaultConfig(@NotNull String path,
@@ -90,7 +88,7 @@ public class DefaultConfig implements Config<DataObject> {
 
                 final String parent = file.getParent();
 
-                if(parent != null) {
+                if (parent != null) {
                     Files.createDirectories(Paths.get(parent));
                 }
 
@@ -104,27 +102,33 @@ public class DefaultConfig implements Config<DataObject> {
 
     public boolean isSet(@NotNull String key) {
 
-        if(defaultData == null) {
+        if (defaultData == null) {
             return data.hasKey(key);
         }
 
-        if(!data.hasKey(key)) {
+        if (!data.hasKey(key)) {
             return false;
         }
 
         final String value = retrieveData().getString(key);
 
-        for(final Map.Entry<String, Object> entry : defaultData.toMap().entrySet())
-            if(entry.getKey().equals(key))
+        for (final Map.Entry<String, Object> entry : defaultData.toMap().entrySet())
+            if (entry.getKey().equals(key))
                 return !value.equals(entry.getValue());
         return false;
     }
 
-    public @NotNull String requestIfNotSet(@NotNull String key) {
+    public void requestValues() {
+        defaultData.toMap()
+                .keySet()
+                .forEach(this::requestValue);
+    }
+
+    public @NotNull String requestValue(@NotNull String key) {
         return !isSet(key) ? request(key) : getData().hasKey(key) ? getData().getString(key) : "";
     }
 
-    public @NotNull String request(@NotNull String key) {
+    private @NotNull String request(@NotNull String key) {
         LOGGER.warn("There is no {} set in the config ({}). Please enter a value:", key, file.getPath());
 
         final String value = SCANNER.nextLine();
@@ -142,18 +146,18 @@ public class DefaultConfig implements Config<DataObject> {
 
     private void setupDefaultEntries(@Nullable DataObject data) {
 
-        if(data == null) {
+        if (data == null) {
             save();
             return;
         }
 
-        if(data.keys().isEmpty()) {
+        if (data.keys().isEmpty()) {
             return;
         }
 
         defaultData.toMap().forEach((key, value) -> {
 
-            if(this.data.hasKey(key) && !this.data.isNull(key)) {
+            if (this.data.hasKey(key) && !this.data.isNull(key)) {
                 return;
             }
 

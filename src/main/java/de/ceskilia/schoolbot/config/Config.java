@@ -6,7 +6,7 @@ import java.io.File;
 
 public interface Config<T> {
 
-    long DEFAULT_UPDATE_INTERVAL = 20_000;
+    long DEFAULT_UPDATE_INTERVAL = 20_000; //20sec
 
     @NotNull File getFile();
 
