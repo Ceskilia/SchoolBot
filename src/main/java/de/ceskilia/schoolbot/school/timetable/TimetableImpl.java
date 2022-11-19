@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,14 +46,17 @@ public class TimetableImpl implements Timetable {
 
         final DataObject head = data.getObject("kopf");
         final DataObject headInfo = head.optObject("kopfinfo").orElse(null);
-        final DataArray main = JsonUtil.safeToArray(data.optObject("haupt").orElse(null),"aktion", DataArray::empty);
+        final DataArray main = JsonUtil.safeToArray(data.optObject("haupt").orElse(null),"aktion");
 
-        this.date = head.getString("titel");
+        this.date = head.getString("titel").trim();
         this.formattedDate = DateUtil.timetableTitleToDate(this.date);
         this.formattedLastChange = DateUtil.toDateTime(head.getString("datum"));
         this.absentClasses = JsonUtil.safeToList(headInfo,"abwesendk");
         this.changedClasses = JsonUtil.safeToList(headInfo,"aenderungk");
         this.extraInformation = SchoolUtil.fetchExtraInformation(data);
+
+        Collections.sort(absentClasses);
+        Collections.sort(changedClasses);
 
         this.lessons = main.stream(DataArray::getObject)
                 .map(LessonImpl::create)
