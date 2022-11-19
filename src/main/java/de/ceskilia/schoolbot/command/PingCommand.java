@@ -3,20 +3,20 @@ package de.ceskilia.schoolbot.command;
 import de.ceskilia.cutils.command.CommandDiscriptor;
 import de.ceskilia.cutils.command.Configuration;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
-import de.ceskilia.cutils.event.command.slash.GuildSlashCommandExecuteEvent;
+import de.ceskilia.cutils.event.command.slash.SlashCommandExecuteEvent;
 import de.ceskilia.schoolbot.util.Emote;
 import org.jetbrains.annotations.NotNull;
 
-public class PingCommand implements CommandDiscriptor<GuildSlashCommandExecuteEvent> {
+public class PingCommand implements CommandDiscriptor<SlashCommandExecuteEvent> {
 
     @Override
-    public @NotNull Configuration<GuildSlashCommandExecuteEvent> buildConfiguration() {
-        return SlashCommandConfiguration.guildOnly("ping","Zeit zwischen Request und Antwort")
+    public @NotNull Configuration<SlashCommandExecuteEvent> buildConfiguration() {
+        return SlashCommandConfiguration.global("ping","Zeit zwischen Request und Antwort")
                 .build(this);
     }
 
     @Override
-    public void execute(@NotNull GuildSlashCommandExecuteEvent event) {
+    public void execute(@NotNull SlashCommandExecuteEvent event) {
         event.deferReply(true)
                 .flatMap(hook -> event.getJDA().getRestPing()
                         .flatMap(ping -> hook.sendMessageFormat(Emote.TABLE_TENNIS_PADDLE.append("%dms"), ping)))
