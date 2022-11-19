@@ -85,9 +85,10 @@ public class SchoolBot extends DiscordBot {
         );
 
         updateSlashCommands();
+        setStatus(OnlineStatus.ONLINE);
         setActivity(Activity.watching("den Vertretungsplan an."));
-        getVerificationManager().getConfig().requestIfNotSet("username");
-        getVerificationManager().getConfig().requestIfNotSet("password");
+        getVerificationManager().getConfig().requestValue("username");
+        getVerificationManager().getConfig().requestValue("password");
         logStartInformation();
     }
 

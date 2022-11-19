@@ -20,7 +20,7 @@ public class Launcher {
                 .put("timetableURL", "https://ffg-dbr.de/plaene/vertretungsplan/vplan%s.xml")
         );
 
-        config.requestIfNotSet("token");
+        config.requestValue("token");
         Action.create(() -> new SchoolBot(config))
                 .onSuccess(bot -> LOGGER.info("Successfully built {} @ {}", bot.getName(), new Date()))
                 .onFailure(throwable -> {

@@ -94,8 +94,8 @@ public class VerificationManager {
 
         final DataObject data = config.retrieveData();
 
-        config.requestIfNotSet(USERNAME);
-        config.requestIfNotSet(PASSWORD);
+        config.requestValue(USERNAME);
+        config.requestValue(PASSWORD);
 
         return Credentials.basic(data.getString(USERNAME), data.getString(PASSWORD));
     }
