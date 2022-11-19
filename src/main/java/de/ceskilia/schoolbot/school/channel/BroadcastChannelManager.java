@@ -4,7 +4,7 @@ import de.ceskilia.cutils.utils.util.ObjectUtil;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.config.ArrayConfig;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.NotNull;

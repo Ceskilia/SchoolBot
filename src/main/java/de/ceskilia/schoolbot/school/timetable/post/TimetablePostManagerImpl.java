@@ -6,7 +6,7 @@ import de.ceskilia.schoolbot.school.timetable.Timetable;
 import de.ceskilia.schoolbot.util.lang.DateUtil;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
 import de.ceskilia.schoolbot.util.lang.SchoolUtil;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

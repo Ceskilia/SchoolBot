@@ -12,7 +12,7 @@ import de.ceskilia.schoolbot.util.lang.MessageUtil;
 import de.ceskilia.schoolbot.school.verification.VerificationResult;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.jetbrains.annotations.NotNull;

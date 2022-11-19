@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
 import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
@@ -30,8 +30,8 @@ public final class ConfigUtil {
         final DefaultConfig config = verificationManager.getConfig();
         final BroadcastChannelManager channelManager = bot.getChannelManager();
 
-        return MarkdownUtil.quoteBlock(MessageUtil.isSet(settings,"token").append("Token") + "\n" +
-                MessageUtil.isNotBlank(settings,"timetableURL").append("Website-URL") + "\n" +
+        return MarkdownUtil.quoteBlock(MessageUtil.isSet(settings, "token").append("Token") + "\n" +
+                MessageUtil.isNotBlank(settings, "timetableURL").append("Website-URL") + "\n" +
                 (!verificationManager.isAuthorized() ? Emote.WARNING : MessageUtil.isSet(config, VerificationManager.USERNAME)).append("Username") + "\n" +
                 (!verificationManager.isAuthorized() ? Emote.WARNING : MessageUtil.isSet(config, VerificationManager.PASSWORD)).append("Password") + "\n" +
                 MarkdownUtil.monospace(String.valueOf(config.retrieveData().getArray(VerificationManager.VERIFIED_USERS).length())) + " Verified User" + "\n" +
@@ -44,7 +44,7 @@ public final class ConfigUtil {
         final StringBuilder builder = new StringBuilder()
                 .append(MarkdownUtil.quote("Channel - "));
 
-        if(channel != null) {
+        if (channel != null) {
 
             final Member selfMember = channel.getGuild().getSelfMember();
 
@@ -60,7 +60,7 @@ public final class ConfigUtil {
 
         builder.append("\n").append(MarkdownUtil.quote("Update Zeiten - "));
 
-        if(entry != null && !entry.getUpdateTimes().isEmpty()) {
+        if (entry != null && !entry.getUpdateTimes().isEmpty()) {
             builder.append(String.join(", ", entry.streamUpdateTimes()
                     .map(MarkdownUtil::monospace)
                     .toList())
@@ -78,10 +78,11 @@ public final class ConfigUtil {
         final DataObject verification = bot.getVerificationManager().getConfig().retrieveData();
         final DataArray channels = bot.getChannelManager().getConfig().retrieveData();
 
-        return builder.addField("Website-URL", settings.getString("timetableURL"),false)
-                .addField("Blacklisted Users", JsonUtil.toPrettyText(verification.getArray(VerificationManager.BLACKLISTED_USERS)),false)
-                .addField("Verified Users", JsonUtil.toPrettyText(verification.getArray(VerificationManager.VERIFIED_USERS)),false)
-                .addField("Broadcast-Channels", JsonUtil.toPrettyText(channels),false)
+        return builder.addField("Website-URL", settings.getString("timetableURL"), false)
+                .addField("Total Requests", String.valueOf(bot.getTimetableManager().getTotalRequests()), false)
+                .addField("Blacklisted Users", JsonUtil.toPrettyText(verification.getArray(VerificationManager.BLACKLISTED_USERS)), false)
+                .addField("Verified Users", JsonUtil.toPrettyText(verification.getArray(VerificationManager.VERIFIED_USERS)), false)
+                .addField("Broadcast-Channels", JsonUtil.toPrettyText(channels), false)
                 .build();
     }
 

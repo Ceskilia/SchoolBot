@@ -4,9 +4,9 @@ import de.ceskilia.schoolbot.school.timetable.Timetable;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.embed.EmbedUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
@@ -125,7 +125,7 @@ public final class SchoolUtil {
         return footer.stream(DataArray::getObject)
                 .map(info -> info.getString("fussinfo"))
                 .filter(text -> !text.isBlank())
-                .filter(text -> !text.startsWith("Achtung!")) // this is usually the heading which should be omitted
+                .filter(text -> !text.startsWith("Achtung!")) // this is usually the heading which may be omitted
                 .toList();
     }
 
@@ -174,7 +174,7 @@ public final class SchoolUtil {
     }
 
     private static @NotNull String compromiseClassData(@NotNull List<String> data) {
-        return IntStream.range(7, 13).mapToObj(String::valueOf).map(grade -> { // go through 7-12 (all classes)
+        return IntStream.range(7, 13).mapToObj(String::valueOf).map(grade -> { // go through all classes (7-12)
             if(data.stream().filter(c -> c.startsWith(grade)).count() > 3) // if more than 3 values are present, just add the class itself
                 return grade;
             return data.stream().filter(c -> c.startsWith(grade)).collect(Collectors.joining(", ")); // join up to 3 classes
