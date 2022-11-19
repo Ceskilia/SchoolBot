@@ -14,7 +14,7 @@ public class ErrorResponseException extends RuntimeException {
     private final int code;
 
     public ErrorResponseException(@NotNull Response response) {
-        super(String.format("Received an unsuccessful response: %s", response));
+        super("Received an unsuccessful response:" + response);
         this.response = response;
         this.meaning = response.message();
         this.code = response.code();
