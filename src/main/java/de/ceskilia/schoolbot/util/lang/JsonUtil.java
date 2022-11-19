@@ -37,10 +37,10 @@ public final class JsonUtil {
     public static @NotNull DataObject tryReadObject(@NotNull File file,
                                                     @NotNull Supplier<? extends DataObject> fallback,
                                                     @Nullable Consumer<Exception> failure) {
-        try(final FileInputStream inputStream = new FileInputStream(file)) {
+        try (final FileInputStream inputStream = new FileInputStream(file)) {
             return DataObject.fromJson(inputStream);
         } catch (final IOException | ParsingException exception) {
-            if(failure != null)
+            if (failure != null)
                 failure.accept(exception);
             return fallback.get();
         }
@@ -49,10 +49,10 @@ public final class JsonUtil {
     public static @NotNull DataArray tryReadArray(@NotNull File file,
                                                   @NotNull Supplier<? extends DataArray> fallback,
                                                   @Nullable Consumer<Exception> failure) {
-        try(final FileInputStream inputStream = new FileInputStream(file)) {
+        try (final FileInputStream inputStream = new FileInputStream(file)) {
             return DataArray.fromJson(inputStream);
         } catch (final IOException | ParsingException exception) {
-            if(failure != null)
+            if (failure != null)
                 failure.accept(exception);
             return fallback.get();
         }
@@ -60,37 +60,30 @@ public final class JsonUtil {
 
     public static boolean containsElement(@NotNull DataArray array, @Nullable Object element) {
 
-        if(element == null) {
+        if (element == null) {
             return false;
         }
 
-        for(final Object entry : array)
-            if(entry.equals(element))
+        for (final Object entry : array)
+            if (entry.equals(element))
                 return true;
         return false;
     }
 
     public static void saveToFile(@Nullable File file, @Nullable String value) throws IOException {
-        if(file == null || value == null)
+        if (file == null || value == null)
             return;
         Files.writeString(file.toPath(), value);
     }
 
     public static @NotNull String toPrettyText(@NotNull Object object) {
-
-        final StringBuilder builder = new StringBuilder();
-
-        if(object instanceof SerializableData data) {
-            builder.append(data.toData());
-        } else if(object instanceof SerializableArray array) {
-            builder.append(array.toDataArray().stream(DataArray::getString)
-                    .collect(Collectors.joining(", "))
-            );
-        } else {
-            builder.append(object);
-        }
-
-        return builder.toString();
+        String result =
+                (object instanceof SerializableData data) ? data.toData().toString() :
+                        (object instanceof SerializableArray array) ? array.toDataArray().stream(DataArray::getString)
+                                .collect(Collectors.joining(", "))
+                                :
+                                object.toString();
+        return result.isBlank() ? "-" : result;
     }
 
     public static @NotNull String safeToText(@Nullable DataObject data, @NotNull String key) {
@@ -101,29 +94,35 @@ public final class JsonUtil {
         return data == null ? Collections.emptyList() : data.hasKey(key) ? Arrays.asList(data.getString(key).split(", ")) : Collections.emptyList();
     }
 
-    public static @NotNull DataArray safeToArray(@NotNull DataObject data, @NotNull String key) {
-
-        if(!data.hasKey(key)) {
-            return DataArray.empty();
-        }
-
-        if(data.isType(key, DataType.OBJECT)) {
-            return DataArray.fromCollection(Collections.singleton(data.getObject(key)));
-        }
-
-        if(data.isType(key, DataType.ARRAY)) {
-            return data.getArray(key);
-        }
-
-        return DataArray.empty();
-    }
-
-    public static DataObject safeToObject(@Nullable DataObject data, @NotNull String key, @Nullable Supplier<DataObject> fallback) {
-        return data == null ? fallback != null ? fallback.get() : null : data.hasKey(key) ? data.getObject(key) : fallback != null ? fallback.get() : null;
+    public static @NotNull DataArray safeToArray(@Nullable DataObject data, @NotNull String key) {
+        return safeToArray(data, key,null);
     }
 
     public static DataArray safeToArray(@Nullable DataObject data, @NotNull String key, @Nullable Supplier<DataArray> fallback) {
-        return data == null ? fallback != null ? fallback.get() : null : data.hasKey(key) && data.isType(key, DataType.ARRAY) ? data.getArray(key) : fallback != null ? fallback.get() : null;
+
+        if (data == null || !data.hasKey(key)) {
+            return fallback != null ? fallback.get() : DataArray.empty();
+        }
+
+        if (data.isType(key, DataType.OBJECT)) {
+            return DataArray.fromCollection(Collections.singleton(data.getObject(key)));
+        }
+
+        if (data.isType(key, DataType.ARRAY)) {
+            return data.getArray(key);
+        }
+
+        return fallback != null ? fallback.get() : DataArray.empty();
+    }
+
+    public static DataObject safeToObject(@Nullable DataObject data, @NotNull String key, @Nullable Supplier<DataObject> fallback) {
+        return data == null ?
+                fallback != null ? fallback.get() : null
+                :
+                data.hasKey(key) ?
+                        data.getObject(key)
+                        :
+                        fallback != null ? fallback.get() : null;
     }
 
 }
