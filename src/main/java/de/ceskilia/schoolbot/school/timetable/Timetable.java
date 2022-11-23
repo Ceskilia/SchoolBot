@@ -101,13 +101,15 @@ public interface Timetable extends SerializableData {
 
     /**
      * Returns the rendered picture with the {@link #getLessons() lessons} of this timetable instance.
+     * If this timetable has no lessons, this returns null.
      *
      * @see Lesson
      * @see ImageUtil#createTimetableImage(List)
+     * @see #hasLessons()
      *
      * @return a picture of the lessons
      */
-    @NotNull BufferedImage getImage();
+    BufferedImage getImage();
 
     /**
      * Returns true, if this timetable instance can be updated. {@link #isOld() Old} timetables cannot be updated. It also can

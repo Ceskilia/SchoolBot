@@ -46,13 +46,13 @@ public class TimetableImpl implements Timetable {
 
         final DataObject head = data.getObject("kopf");
         final DataObject headInfo = head.optObject("kopfinfo").orElse(null);
-        final DataArray main = JsonUtil.safeToArray(data.optObject("haupt").orElse(null),"aktion");
+        final DataArray main = JsonUtil.safeToArray(data.optObject("haupt").orElse(null), "aktion");
 
         this.date = head.getString("titel").trim();
         this.formattedDate = DateUtil.timetableTitleToDate(this.date);
         this.formattedLastChange = DateUtil.toDateTime(head.getString("datum"));
-        this.absentClasses = JsonUtil.safeToList(headInfo,"abwesendk");
-        this.changedClasses = JsonUtil.safeToList(headInfo,"aenderungk");
+        this.absentClasses = JsonUtil.safeToList(headInfo, "abwesendk");
+        this.changedClasses = JsonUtil.safeToList(headInfo, "aenderungk");
         this.extraInformation = SchoolUtil.fetchExtraInformation(data);
 
         Collections.sort(absentClasses);
@@ -61,7 +61,7 @@ public class TimetableImpl implements Timetable {
         this.lessons = main.stream(DataArray::getObject)
                 .map(LessonImpl::create)
                 .toList();
-        this.image = ImageUtil.createTimetableImage(lessons);
+        this.image = hasLessons() ? ImageUtil.createTimetableImage(lessons) : null;
         this.creationTime = System.currentTimeMillis();
     }
 
@@ -106,7 +106,7 @@ public class TimetableImpl implements Timetable {
     }
 
     @Override
-    public @NotNull BufferedImage getImage() {
+    public BufferedImage getImage() {
         return image;
     }
 

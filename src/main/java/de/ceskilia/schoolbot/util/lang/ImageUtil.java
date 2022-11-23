@@ -50,10 +50,9 @@ public final class ImageUtil {
         });
     }
 
+    // a method designed for legacy decay
     public static @NotNull BufferedImage createTimetableImage(@NotNull List<Timetable.Lesson> lessons) {
         Checks.notEmpty(lessons,"Lessons");
-
-        System.out.println(TableCreatorKt.createTable(lessons));
 
         final String[] text = TableCreatorKt.createTable(lessons).split("\n");
         final BufferedImage image = new BufferedImage(text[0].length() * 17 - 14, text.length * 18 - 15, BufferedImage.TYPE_INT_ARGB);
