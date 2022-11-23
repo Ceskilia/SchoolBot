@@ -1,6 +1,7 @@
 package de.ceskilia.schoolbot.school.timetable;
 
 import de.ceskilia.schoolbot.util.lang.ImageUtil;
+import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.api.utils.data.SerializableData;
 import org.jetbrains.annotations.NotNull;
 
@@ -131,6 +132,16 @@ public interface Timetable extends SerializableData {
     }
 
     interface Lesson {
+
+        /**
+         * Creates a new {@link LessonImpl lesson} based on the provided data.
+         *
+         * @param data the data to build the lesson with
+         * @return a new lesson implementation
+         */
+        static @NotNull Timetable.Lesson create(@NotNull DataObject data) {
+            return new LessonImpl(data);
+        }
 
         /**
          * Returns the course/class of this lesson.

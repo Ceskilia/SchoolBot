@@ -20,8 +20,6 @@ import java.util.Objects;
 
 public class TimetableImpl implements Timetable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TimetableImpl.class);
-
     private final DataObject data;
 
     private final String date;
@@ -59,7 +57,7 @@ public class TimetableImpl implements Timetable {
         Collections.sort(changedClasses);
 
         this.lessons = main.stream(DataArray::getObject)
-                .map(LessonImpl::create)
+                .map(Lesson::create)
                 .toList();
         this.image = hasLessons() ? ImageUtil.createTimetableImage(lessons) : null;
         this.creationTime = System.currentTimeMillis();

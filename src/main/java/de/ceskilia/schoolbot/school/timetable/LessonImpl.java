@@ -7,10 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class LessonImpl implements Timetable.Lesson {
 
-    public static @NotNull Timetable.Lesson create(@NotNull DataObject data) {
-        return new LessonImpl(data);
-    }
-
     public static final String CANCELLED = "---";
     public static final String CHANGED_VALUE = "ae";
 
