@@ -20,10 +20,6 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 
-    implementation 'org.jetbrains:annotations:23.0.0'
-    implementation 'com.google.code.findbugs:jsr305:3.0.2'
-    implementation 'net.dv8tion:JDA:5.0.0-alpha.21'
-
     implementation 'de.ceskilia:JDA-CUtils:1.0'
     implementation 'ch.qos.logback:logback-classic:1.4.4'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0'
