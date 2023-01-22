@@ -4,6 +4,7 @@ import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.config.DefaultConfig;
 import de.ceskilia.schoolbot.school.channel.BroadcastChannelManager;
 import de.ceskilia.schoolbot.school.channel.ChannelEntry;
+import de.ceskilia.schoolbot.school.timetable.TimetableManager;
 import de.ceskilia.schoolbot.util.Emote;
 import de.ceskilia.schoolbot.school.verification.VerificationManager;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -77,9 +78,11 @@ public final class ConfigUtil {
         final DataObject settings = bot.getConfig().retrieveData();
         final DataObject verification = bot.getVerificationManager().getConfig().retrieveData();
         final DataArray channels = bot.getChannelManager().getConfig().retrieveData();
+        final TimetableManager timetableManager = bot.getTimetableManager();
 
         return builder.addField("Website-URL", settings.getString("timetableURL"), false)
-                .addField("Total Requests", String.valueOf(bot.getTimetableManager().getTotalRequests()), false)
+                .addField("Total Requests", String.valueOf(timetableManager.getTotalRequests()), false)
+                .addField("Ratelimit", timetableManager.getGlobalRateLimit().toString(), false)
                 .addField("Blacklisted Users", JsonUtil.toPrettyText(verification.getArray(VerificationManager.BLACKLISTED_USERS)), false)
                 .addField("Verified Users", JsonUtil.toPrettyText(verification.getArray(VerificationManager.VERIFIED_USERS)), false)
                 .addField("Broadcast-Channels", JsonUtil.toPrettyText(channels), false)
