@@ -150,7 +150,7 @@ public class TimetableManagerImpl implements TimetableManager {
 
     private void checkRateLimit() {
         if (rateLimit.isReached()) {
-            throw new RateLimitException(String.format("Too many requests in %sms (%s)", rateLimit.getTimeInterval(), rateLimit.getMaxRequests()));
+            throw new RateLimitException(String.format("Too many requests in %sms (%s)", rateLimit.getDuration(), rateLimit.getMaxRequests()));
         }
     }
 
