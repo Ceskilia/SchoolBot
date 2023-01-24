@@ -102,7 +102,7 @@ public class TimetablePostManagerImpl implements TimetablePostManager {
     private void broadcast(@NotNull Timetable timetable, @NotNull TextChannel channel) {
         SchoolUtil.sendTimetable(channel, timetable, bot.getJDA().getSelfUser())
                 .thenAccept(action -> action.queue(message -> {
-                    LOGGER.debug("Broadcast a timetable with date {} to one guild: {}", timetable.getFormattedDate(), message.getGuild().getIdLong());
+                    LOGGER.debug("Broadcasting a timetable with date {} to one guild: {}", timetable.getFormattedDate(), message.getGuild().getIdLong());
                     findPostOfTimetable(timetable).addMessageId(message);
                 }));
     }
