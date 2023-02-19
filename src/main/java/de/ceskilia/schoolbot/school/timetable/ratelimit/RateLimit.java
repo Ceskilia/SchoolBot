@@ -64,9 +64,11 @@ public class RateLimit {
 
     @Override
     public @NotNull String toString() {
-        return "Requests: " + requests +
-                ", max. Requests: " + maxRequests +
-                ", Duration: " + duration;
+        return String.format("Requests: %s, max. Requests: %s, Duration: %sms",
+                requests,
+                maxRequests,
+                duration
+        );
     }
 
 }
