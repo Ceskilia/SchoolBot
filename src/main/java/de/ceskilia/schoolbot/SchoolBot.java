@@ -10,8 +10,8 @@ import de.ceskilia.schoolbot.config.DefaultConfig;
 import de.ceskilia.schoolbot.school.channel.BroadcastChannelManager;
 import de.ceskilia.schoolbot.school.timetable.TimetableManager;
 import de.ceskilia.schoolbot.school.timetable.TimetableManagerImpl;
-import de.ceskilia.schoolbot.util.SystemInfo;
 import de.ceskilia.schoolbot.school.verification.VerificationManager;
+import de.ceskilia.schoolbot.util.SystemInfo;
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -139,7 +139,7 @@ public class SchoolBot extends DiscordBot {
         LOGGER.info("Java Vendor:           " + SystemInfo.getVendorName());
         LOGGER.info("Java Home:             " + SystemInfo.getJavaHome());
         LOGGER.info("JDA-CUtils Info:       " + CUtilsInfo.VERSION_DESCRIPTION);
-        LOGGER.info("Startup Time:          " + (System.currentTimeMillis() - getStartTime())  + " ms");
+        LOGGER.info("Startup Time:          " + (System.currentTimeMillis() - getStartTime()) + " ms");
     }
 
 }

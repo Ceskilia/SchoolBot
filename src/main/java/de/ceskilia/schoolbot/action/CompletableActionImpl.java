@@ -27,7 +27,7 @@ public class CompletableActionImpl<T> implements CompletableAction<T> {
     }
 
     public static void setDefaultFailure(@Nullable Consumer<Throwable> failure) {
-        if(failure != null) {
+        if (failure != null) {
             DEFAULT_FAILURE = failure;
         }
     }
@@ -46,8 +46,8 @@ public class CompletableActionImpl<T> implements CompletableAction<T> {
     public void queue(@Nullable Consumer<? super T> success, @Nullable Predicate<? super Throwable> failure) {
         logAttempt(Action.QUEUE);
 
-        if(defaultValue != null) {
-            if(success != null)
+        if (defaultValue != null) {
+            if (success != null)
                 success.accept(defaultValue);
             return;
         }
@@ -67,12 +67,12 @@ public class CompletableActionImpl<T> implements CompletableAction<T> {
                 try (response) {
                     logResponse(Action.QUEUE, response);
 
-                    if(!response.isSuccessful()) {
+                    if (!response.isSuccessful()) {
                         acceptFailure(failure, new ErrorResponseException(response));
                         return;
                     }
 
-                    if(success != null) {
+                    if (success != null) {
                         success.accept(mapper.apply(response));
                     }
 
@@ -86,20 +86,20 @@ public class CompletableActionImpl<T> implements CompletableAction<T> {
     public @NotNull T complete() {
         logAttempt(Action.COMPLETE);
 
-        if(defaultValue != null) {
+        if (defaultValue != null) {
             return defaultValue;
         }
 
-       try (final Response response = client.newCall(new Request.Builder()
-               .url(url)
-               .build()
-       ).execute()) {
-           logResponse(Action.COMPLETE, response);
-           if(!response.isSuccessful()) throw new ErrorResponseException(response);
-           return mapper.apply(response);
-       } catch (final IOException exception) {
-           throw new CompletionException("Could not complete action.", exception);
-       }
+        try (final Response response = client.newCall(new Request.Builder()
+                .url(url)
+                .build()
+        ).execute()) {
+            logResponse(Action.COMPLETE, response);
+            if (!response.isSuccessful()) throw new ErrorResponseException(response);
+            return mapper.apply(response);
+        } catch (final IOException exception) {
+            throw new CompletionException("Could not complete action.", exception);
+        }
 
     }
 
@@ -120,7 +120,7 @@ public class CompletableActionImpl<T> implements CompletableAction<T> {
     }
 
     public void acceptFailure(@Nullable Predicate<? super Throwable> failure, @NotNull Throwable throwable) {
-        if(failure == null || failure.negate().test(throwable)) {
+        if (failure == null || failure.negate().test(throwable)) {
             DEFAULT_FAILURE.accept(throwable);
         }
     }
@@ -135,8 +135,8 @@ public class CompletableActionImpl<T> implements CompletableAction<T> {
 
     private enum Action {
 
-        QUEUE("queue","queued"),
-        COMPLETE("complete","completed");
+        QUEUE("queue", "queued"),
+        COMPLETE("complete", "completed");
 
         private final String name;
         private final String meaning;

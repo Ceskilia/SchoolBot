@@ -20,7 +20,7 @@ public class MapAction<I, O> implements CompletableAction<O> {
     @Override
     public void queue(@Nullable Consumer<? super O> success, @Nullable Predicate<? super Throwable> failure) {
         action.queue(result -> {
-            if(success != null)
+            if (success != null)
                 success.accept(mapper.apply(result));
         }, failure);
     }

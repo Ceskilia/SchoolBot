@@ -20,11 +20,11 @@ public interface CompletableAction<T> {
     void queue(@Nullable Consumer<? super T> success, @Nullable Predicate<? super Throwable> failure);
 
     default void queue(@Nullable Consumer<? super T> success) {
-        queue(success,null);
+        queue(success, null);
     }
 
     default void queue() {
-        queue(null,null);
+        queue(null, null);
     }
 
     @NotNull T complete();

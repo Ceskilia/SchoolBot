@@ -14,7 +14,10 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +37,7 @@ public class TimetablePostManagerImpl implements TimetablePostManager {
         this.bot = bot;
         this.timetablePosts = new ArrayList<>();
         this.minutes = DateUtil.minutesOfDay(LocalTime.now());
-        this.scheduler = Executors.newSingleThreadScheduledExecutor(runnable -> ThreadUtil.toDaemon(new Thread(runnable,"Timetable-Post-Manager")));
+        this.scheduler = Executors.newSingleThreadScheduledExecutor(runnable -> ThreadUtil.toDaemon(new Thread(runnable, "Timetable-Post-Manager")));
         startScheduling();
     }
 
@@ -48,7 +51,7 @@ public class TimetablePostManagerImpl implements TimetablePostManager {
 
         final TextChannel channel = bot.getChannelManager().getChannelOf(guildId);
 
-        if(!MessageUtil.canSendMessage(channel)) {
+        if (!MessageUtil.canSendMessage(channel)) {
             return;
         }
 
@@ -56,7 +59,7 @@ public class TimetablePostManagerImpl implements TimetablePostManager {
 
             final Optional<Long> messageId = getMessageId(date, guildId);
 
-            if(messageId.isEmpty()) {
+            if (messageId.isEmpty()) {
                 broadcast(timetable, channel);
                 return;
             }
@@ -70,18 +73,18 @@ public class TimetablePostManagerImpl implements TimetablePostManager {
     @Override
     public void broadcastTimetable(@Nullable Timetable timetable, long guildId) {
 
-        if(timetable == null) {
+        if (timetable == null) {
             return;
         }
 
         final TextChannel channel = bot.getChannelManager().getChannelOf(guildId);
 
-        if(channel == null) {
+        if (channel == null) {
             LOGGER.debug("Could not broadcast the timetable with date {} to the guild: {} (INVALID ID)", timetable.getFormattedDate(), guildId);
             return;
         }
 
-        if(!MessageUtil.canSendMessage(channel)) {
+        if (!MessageUtil.canSendMessage(channel)) {
             LOGGER.debug("Could not broadcast the timetable with date {} to the guild: {} (NO PERMISSION)", timetable.getFormattedDate(), guildId);
             return;
         }
@@ -92,7 +95,7 @@ public class TimetablePostManagerImpl implements TimetablePostManager {
     @Override
     public void broadcastTimetable(@Nullable Timetable timetable) {
 
-        if(timetable == null) {
+        if (timetable == null) {
             return;
         }
 
@@ -124,7 +127,7 @@ public class TimetablePostManagerImpl implements TimetablePostManager {
         LOGGER.debug("Starting timetable posting scheduler.");
         scheduler.scheduleAtFixedRate(() -> {
 
-            if(minutes == DateUtil.MAX_MINUTES_OF_DAY) {
+            if (minutes == DateUtil.MAX_MINUTES_OF_DAY) {
                 LOGGER.debug("Resetting time. Now {} days.", ++days);
                 minutes = 0;
             } else {
@@ -136,7 +139,7 @@ public class TimetablePostManagerImpl implements TimetablePostManager {
                             .map(DateUtil::minutesOfDay)
                             .anyMatch(minutes -> minutes == this.minutes))
                     .forEach(entry -> upsertPost(LocalDate.now(), entry.getGuildId()));
-        },60 - LocalTime.now().getSecond(),60,TimeUnit.SECONDS);
+        }, 60 - LocalTime.now().getSecond(), 60, TimeUnit.SECONDS);
     }
 
 }

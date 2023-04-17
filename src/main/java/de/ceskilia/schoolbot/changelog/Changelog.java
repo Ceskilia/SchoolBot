@@ -26,21 +26,21 @@ public class Changelog {
     @Override
     public @NotNull String toString() {
 
-        if(features.isEmpty()) {
+        if (features.isEmpty()) {
             return "No changes yet.";
         }
 
         final StringBuilder builder = new StringBuilder();
         Feature.Type lastType = null;
 
-        for(final Feature feature : features.stream()
+        for (final Feature feature : features.stream()
                 .sorted(Comparator.comparingInt(o -> o.getType().getKey()))
                 .toList()) {
             final Feature.Type type = feature.getType();
 
-            if(lastType == null || lastType != type) {
+            if (lastType == null || lastType != type) {
 
-                if(lastType != null) {
+                if (lastType != null) {
                     builder.append("\n");
                 }
 

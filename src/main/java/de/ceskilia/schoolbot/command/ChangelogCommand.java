@@ -14,7 +14,7 @@ public class ChangelogCommand implements CommandDiscriptor<GuildSlashCommandExec
 
     @Override
     public @NotNull Configuration<GuildSlashCommandExecuteEvent> buildConfiguration() {
-        return SlashCommandConfiguration.guildOnly("changelog","Zeigt die letzten Änderungen an")
+        return SlashCommandConfiguration.guildOnly("changelog", "Zeigt die letzten Änderungen an")
                 .build(this);
     }
 

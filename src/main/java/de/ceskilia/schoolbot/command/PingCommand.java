@@ -11,7 +11,7 @@ public class PingCommand implements CommandDiscriptor<SlashCommandExecuteEvent> 
 
     @Override
     public @NotNull Configuration<SlashCommandExecuteEvent> buildConfiguration() {
-        return SlashCommandConfiguration.global("ping","Zeit zwischen Request und Antwort")
+        return SlashCommandConfiguration.global("ping", "Zeit zwischen Request und Antwort")
                 .build(this);
     }
 

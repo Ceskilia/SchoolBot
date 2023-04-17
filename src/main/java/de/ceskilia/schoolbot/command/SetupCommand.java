@@ -10,10 +10,10 @@ import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.school.channel.BroadcastChannelManager;
 import de.ceskilia.schoolbot.school.channel.ChannelEntry;
 import de.ceskilia.schoolbot.school.channel.TimeModifyResult;
+import de.ceskilia.schoolbot.util.Emote;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.embed.EmbedUtil;
 import de.ceskilia.schoolbot.util.lang.ConfigUtil;
-import de.ceskilia.schoolbot.util.Emote;
 import de.ceskilia.schoolbot.util.lang.DateUtil;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -33,9 +33,9 @@ public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
 
     @Override
     public @NotNull Configuration<GuildSlashCommandExecuteEvent> buildConfiguration() {
-        return SlashCommandConfiguration.guildOnly("setup","Einstellungen für den Broadcast-Channel")
-                .option(Option.ofChannel("channel","Der neue Broadcast-Channel"))
-                .option(Option.ofString("time","Die Zeit zum Updaten der Nachricht"))
+        return SlashCommandConfiguration.guildOnly("setup", "Einstellungen für den Broadcast-Channel")
+                .option(Option.ofChannel("channel", "Der neue Broadcast-Channel"))
+                .option(Option.ofString("time", "Die Zeit zum Updaten der Nachricht"))
                 .setPermissions(DefaultMemberPermissions.DISABLED)
                 .build(this);
     }
@@ -50,21 +50,21 @@ public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
         final OptionMapping timeOption = event.getOption("time");
         final OptionMapping channelOption = event.getOption("channel");
 
-        if(timeOption != null && channelOption != null) {
+        if (timeOption != null && channelOption != null) {
             event.replyEmbeds(entryRespond(channelManager, channelOption, timeOption, guild.getIdLong()))
                     .setEphemeral(true)
                     .queue();
             return;
         }
 
-        if(timeOption != null) {
+        if (timeOption != null) {
             event.replyEmbeds(timeRespond(channelManager, timeOption, guild.getIdLong()))
                     .setEphemeral(true)
                     .queue();
             return;
         }
 
-        if(channelOption != null) {
+        if (channelOption != null) {
             event.replyEmbeds(channelRespond(channelManager, channelOption, guild.getIdLong()))
                     .setEphemeral(true)
                     .queue();
@@ -72,7 +72,7 @@ public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
         }
 
         final ChannelEntry entry = channelManager.getEntry(guild.getIdLong());
-        final TextChannel channel = ObjectUtil.requireNonNullOrElse(entry,null, safeEntry -> guild.getTextChannelById(safeEntry.getChannelId()));
+        final TextChannel channel = ObjectUtil.requireNonNullOrElse(entry, null, safeEntry -> guild.getTextChannelById(safeEntry.getChannelId()));
 
         event.replyEmbeds(MessageUtil.embed(
                 EmbedColor.INFORMATION,
@@ -98,15 +98,15 @@ public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
         final GuildChannel channel = option.getAsChannel().asGuildMessageChannel();
         final EmbedBuilder builder = new EmbedBuilder();
 
-        EmbedUtil.addInput(builder,channel.getAsMention());
+        EmbedUtil.addInput(builder, channel.getAsMention());
 
-        if(!channel.getType().isMessage()) {
-            return EmbedUtil.addResponse(builder,MarkdownUtil.codeblock("Falscher Channeltype"),EmbedColor.WARNING)
+        if (!channel.getType().isMessage()) {
+            return EmbedUtil.addResponse(builder, MarkdownUtil.codeblock("Falscher Channeltype"), EmbedColor.WARNING)
                     .build();
         }
 
-        channelManager.modifyEntry(guildId,channel.getIdLong());
-        return EmbedUtil.addResponse(builder,MarkdownUtil.codeblock("Geändert"),EmbedColor.SUCCESS)
+        channelManager.modifyEntry(guildId, channel.getIdLong());
+        return EmbedUtil.addResponse(builder, MarkdownUtil.codeblock("Geändert"), EmbedColor.SUCCESS)
                 .build();
     }
 
@@ -115,22 +115,22 @@ public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
         final LocalTime time = DateUtil.toTime(option.getAsString());
         final EmbedBuilder builder = new EmbedBuilder();
 
-        EmbedUtil.addInput(builder,option.getAsString());
+        EmbedUtil.addInput(builder, option.getAsString());
 
-        if(time == null) {
-            return EmbedUtil.addResponse(builder,MarkdownUtil.codeblock("Invalides Format"),EmbedColor.FAILURE)
+        if (time == null) {
+            return EmbedUtil.addResponse(builder, MarkdownUtil.codeblock("Invalides Format"), EmbedColor.FAILURE)
                     .build();
         }
 
         final TimeModifyResult result = channelManager.modifyEntry(guildId, time);
         final EmbedColor color = result != TimeModifyResult.FAILED ? EmbedColor.SUCCESS : EmbedColor.WARNING;
-        final String response = switch(result) {
+        final String response = switch (result) {
             case TIME_ADDED -> "Hinzugefügt";
             case TIME_REMOVED -> "Entfernt";
             case FAILED -> "Zu nah (" + TimeUnit.MILLISECONDS.toMinutes(ChannelEntry.MINIMUM_TIME_INTERVAL) + "min)";
         };
 
-        return EmbedUtil.addResponse(builder,MarkdownUtil.codeblock(response), color)
+        return EmbedUtil.addResponse(builder, MarkdownUtil.codeblock(response), color)
                 .build();
     }
 

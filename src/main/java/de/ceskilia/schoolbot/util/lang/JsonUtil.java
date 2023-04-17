@@ -95,7 +95,7 @@ public final class JsonUtil {
     }
 
     public static @NotNull DataArray safeToArray(@Nullable DataObject data, @NotNull String key) {
-        return safeToArray(data, key,null);
+        return safeToArray(data, key, null);
     }
 
     public static DataArray safeToArray(@Nullable DataObject data, @NotNull String key, @Nullable Supplier<DataArray> fallback) {

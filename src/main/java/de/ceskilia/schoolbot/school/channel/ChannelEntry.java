@@ -13,7 +13,10 @@ import org.jetbrains.annotations.Nullable;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,12 +33,12 @@ public class ChannelEntry implements SerializableData {
     private final Set<LocalTime> updateTimes;
 
     public ChannelEntry(long guildId) {
-        this(guildId,0,null);
+        this(guildId, 0, null);
     }
 
     public ChannelEntry(long guildId, long channelId, @Nullable Set<LocalTime> updateTimes) {
-        Checks.isSnowflake(String.valueOf(guildId),"GuildID");
-        if(channelId != 0) Checks.isSnowflake(String.valueOf(channelId),"ChannelID");
+        Checks.isSnowflake(String.valueOf(guildId), "GuildID");
+        if (channelId != 0) Checks.isSnowflake(String.valueOf(channelId), "ChannelID");
         this.guildId = guildId;
         this.channelId = channelId;
         this.updateTimes = updateTimes != null ? new HashSet<>(updateTimes) : new HashSet<>();
@@ -59,7 +62,7 @@ public class ChannelEntry implements SerializableData {
     }
 
     protected void setChannelId(long channelId) {
-        Checks.isSnowflake(String.valueOf(channelId),"Channel Id");
+        Checks.isSnowflake(String.valueOf(channelId), "Channel Id");
         this.channelId = channelId;
     }
 
@@ -77,12 +80,12 @@ public class ChannelEntry implements SerializableData {
 
     protected @NotNull TimeModifyResult updateTime(@Nullable LocalTime updateTime) {
 
-        if(updateTime == null) {
+        if (updateTime == null) {
             return TimeModifyResult.FAILED;
         }
 
-        for(final LocalTime time : this.updateTimes) {
-            if(time.equals(updateTime)) {
+        for (final LocalTime time : this.updateTimes) {
+            if (time.equals(updateTime)) {
                 this.updateTimes.remove(time);
                 return TimeModifyResult.TIME_REMOVED;
             }
@@ -93,12 +96,12 @@ public class ChannelEntry implements SerializableData {
 
     private boolean canAdd(@Nullable LocalTime time) {
 
-        if(time == null) {
+        if (time == null) {
             return false;
         }
 
-        for(final LocalTime updateTime : updateTimes)
-            if(Math.abs(updateTime.until(time, ChronoUnit.MILLIS)) < MINIMUM_TIME_INTERVAL)
+        for (final LocalTime updateTime : updateTimes)
+            if (Math.abs(updateTime.until(time, ChronoUnit.MILLIS)) < MINIMUM_TIME_INTERVAL)
                 return false;
         return true;
     }
@@ -109,7 +112,7 @@ public class ChannelEntry implements SerializableData {
 
     protected @NotNull DataObject fillObject(@NotNull DataObject object) {
 
-        if(object.hasKey(UPDATE_TIMES)) {
+        if (object.hasKey(UPDATE_TIMES)) {
 
             final DataArray array = object.getArray(UPDATE_TIMES);
 

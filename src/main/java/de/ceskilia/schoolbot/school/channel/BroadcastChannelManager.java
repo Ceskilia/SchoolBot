@@ -60,7 +60,7 @@ public class BroadcastChannelManager {
     }
 
     public @Nullable TextChannel getChannelOf(long guildId) {
-        return ObjectUtil.requireNonNullOrElse(getEntry(guildId),null, entry -> bot.getJDA().getTextChannelById(entry.getChannelId()));
+        return ObjectUtil.requireNonNullOrElse(getEntry(guildId), null, entry -> bot.getJDA().getTextChannelById(entry.getChannelId()));
     }
 
     public int countInvalidChannels() {
@@ -70,9 +70,9 @@ public class BroadcastChannelManager {
     }
 
     public void addEntry(@Nullable ChannelEntry entry) {
-        if(entry == null)
+        if (entry == null)
             return;
-        if(this.channelEntries.add(entry))
+        if (this.channelEntries.add(entry))
             saveConfig(entry);
     }
 
@@ -97,7 +97,7 @@ public class BroadcastChannelManager {
     public <T> @NotNull T modifyEntry(long guildId, @NotNull Function<? super ChannelEntry, ? extends T> function) {
         ChannelEntry entry = getEntry(guildId);
 
-        if(entry == null) {
+        if (entry == null) {
             final ChannelEntry newEntry = new ChannelEntry(guildId);
             final T result = function.apply(newEntry);
             addEntry(newEntry);
@@ -131,7 +131,7 @@ public class BroadcastChannelManager {
 
     private void saveConfig(@Nullable ChannelEntry entry) {
 
-        if(entry != null) {
+        if (entry != null) {
             optConfigEntry(entry.getGuildId()).ifPresentOrElse(
                     entry::fillObject,
                     () -> config.getData().add(entry.toData())

@@ -28,10 +28,10 @@ public class OwnerCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
 
     @Override
     public @NotNull Configuration<GuildSlashCommandExecuteEvent> buildConfiguration() {
-        return SlashCommandConfiguration.guildOnly("owner","Einstellungen für den Bot")
-                .subcommand(new SubcommandData("info","Zeigt Informationen über aktuelle Einstellungen"))
-                .subcommand(new SubcommandData("permission","Verändert die Interaktionsrechte eines Benutzer")
-                        .addOption(OptionType.USER,"target","Der auszuwählende Benutzer",true))
+        return SlashCommandConfiguration.guildOnly("owner", "Einstellungen für den Bot")
+                .subcommand(new SubcommandData("info", "Zeigt Informationen über aktuelle Einstellungen"))
+                .subcommand(new SubcommandData("permission", "Verändert die Interaktionsrechte eines Benutzer")
+                        .addOption(OptionType.USER, "target", "Der auszuwählende Benutzer", true))
                 .setPermissions(DefaultMemberPermissions.DISABLED)
                 .build(this);
     }
@@ -41,7 +41,7 @@ public class OwnerCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
 
         final SchoolBot bot = event.getBot().cast(SchoolBot.class);
 
-        if(Arrays.stream(bot.getAuthors()).noneMatch(author -> author.getId() == event.getUser().getIdLong())) {
+        if (Arrays.stream(bot.getAuthors()).noneMatch(author -> author.getId() == event.getUser().getIdLong())) {
             event.reply(MarkdownUtil.quote("Dafür hast du keine Berechtigung."))
                     .setEphemeral(true)
                     .queue();
@@ -50,7 +50,7 @@ public class OwnerCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
 
         final String subcommand = event.getSubcommandName();
 
-        if(subcommand == null) {
+        if (subcommand == null) {
             return;
         }
 
@@ -59,7 +59,7 @@ public class OwnerCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
                     EmbedColor.INFORMATION,
                     Emote.OPEN_FOLDER.append("| Einstellungen"),
                     ConfigUtil.formatInformation(bot))
-            ).addActionRow(Interactions.button(ButtonStyle.PRIMARY,event.getUser().getId(),"Daten anfordern", Emote.ENVELOPE_ARROW.asEmoji())
+            ).addActionRow(Interactions.button(ButtonStyle.PRIMARY, event.getUser().getId(), "Daten anfordern", Emote.ENVELOPE_ARROW.asEmoji())
                     .onClick(clickEvent -> clickEvent.replyEmbeds(ConfigUtil.buildWithInformation(EmbedUtil.withColor(EmbedColor.INFORMATION), bot))
                             .setEphemeral(true)
                             .queue())
@@ -69,10 +69,10 @@ public class OwnerCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
 
                 final EmbedBuilder builder = EmbedUtil.withColor(EmbedColor.SUCCESS);
                 final VerificationManager verificationManager = bot.getVerificationManager();
-                final User target = event.getRequiredOption("target",OptionMapping::getAsUser);
+                final User target = event.getRequiredOption("target", OptionMapping::getAsUser);
 
-                EmbedUtil.addInput(builder,target.getAsMention());
-                EmbedUtil.addResponse(builder,MarkdownUtil.codeblock(verificationManager.updateUserBlacklist(target.getIdLong()) ? "Hinzugefügt" : "Entfernt"));
+                EmbedUtil.addInput(builder, target.getAsMention());
+                EmbedUtil.addResponse(builder, MarkdownUtil.codeblock(verificationManager.updateUserBlacklist(target.getIdLong()) ? "Hinzugefügt" : "Entfernt"));
 
                 event.replyEmbeds(builder.build()).setEphemeral(true).queue();
             }

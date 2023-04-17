@@ -34,7 +34,7 @@ public class RateLimit {
 
     public void performRequest() {
 
-        if(requests == 0) {
+        if (requests == 0) {
             queueReset();
         }
 

@@ -33,19 +33,19 @@ public class ErrorResponseException extends RuntimeException {
     }
 
     public boolean isInformational() {
-        return NumberUtil.inRange(code,100,199);
+        return NumberUtil.inRange(code, 100, 199);
     }
 
     public boolean isRedirection() {
-        return NumberUtil.inRange(code,300,399);
+        return NumberUtil.inRange(code, 300, 399);
     }
 
     public boolean isClientError() {
-        return NumberUtil.inRange(code,400,499);
+        return NumberUtil.inRange(code, 400, 499);
     }
 
     public boolean isServerError() {
-        return NumberUtil.inRange(code,500,5599);
+        return NumberUtil.inRange(code, 500, 5599);
     }
 
 }

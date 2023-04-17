@@ -24,11 +24,11 @@ public interface TimetablePostManager {
      * Returns the message id of the {@link TimetablePost timetable post} with the provided date in the provided guild.
      * The value is not present when no timetable with the date and the guild id exists.
      *
-     * @param date the date of the timetable
+     * @param date    the date of the timetable
      * @param guildId the guild id the timetable was sent to
      * @return the message id of the timetable post
      */
-   default @NotNull Optional<Long> getMessageId(@NotNull LocalDate date, long guildId) {
+    default @NotNull Optional<Long> getMessageId(@NotNull LocalDate date, long guildId) {
         return getPosts().stream()
                 .filter(post -> post.getTimetable().getFormattedDate().equals(date))
                 .flatMap(post -> post.getGuildMessageIds().entrySet().stream()
@@ -44,10 +44,9 @@ public interface TimetablePostManager {
      * <br> Note that the {@link BroadcastChannelManager#getChannelOf(long)} must be valid and that the bot has permission
      * <br> to send messages in it.
      *
-     * @see #getMessageId(LocalDate, long)
-     *
-     * @param date the date of the timetable
+     * @param date    the date of the timetable
      * @param guildId the guild id the timetable should be sent to
+     * @see #getMessageId(LocalDate, long)
      */
     void upsertPost(@NotNull LocalDate date, long guildId);
 
@@ -58,7 +57,7 @@ public interface TimetablePostManager {
      * <br> to send messages in it.
      *
      * @param timetable the timetable to send to the guild
-     * @param guildId the guild id the timetable should be sent to
+     * @param guildId   the guild id the timetable should be sent to
      */
     void broadcastTimetable(@Nullable Timetable timetable, long guildId);
 

@@ -9,7 +9,9 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class VerificationManager {
@@ -29,7 +31,7 @@ public class VerificationManager {
     private final Set<Long> blacklistedUsers;
 
     public VerificationManager() {
-        this.config = new DefaultConfig("config/verification.json",DataObject.empty()
+        this.config = new DefaultConfig("config/verification.json", DataObject.empty()
                 .put("username", "<USERNAME HERE>")
                 .put("password", "<PASSWORD HERE>")
         );
@@ -51,7 +53,7 @@ public class VerificationManager {
 
     public @NotNull VerificationResult tryVerify(long userId, @NotNull String username, @NotNull String password) {
 
-        if(verifiedUsers.contains(userId)) {
+        if (verifiedUsers.contains(userId)) {
             return VerificationResult.ALREADY_VERIFIED;
         }
 
@@ -59,7 +61,7 @@ public class VerificationManager {
         final boolean rightUsername = username.equals(data.getString(USERNAME));
         final boolean rightPassword = password.equals(data.getString(PASSWORD));
 
-        if(rightUsername && rightPassword) {
+        if (rightUsername && rightPassword) {
             verifiedUsers.add(userId);
             data.put(VERIFIED_USERS, DataArray.fromCollection(verifiedUsers));
             config.save();
@@ -81,7 +83,7 @@ public class VerificationManager {
 
         boolean blacklist = false;
 
-        if(!this.blacklistedUsers.remove(userId)) {
+        if (!this.blacklistedUsers.remove(userId)) {
             blacklist = this.blacklistedUsers.add(userId);
         }
 
@@ -111,7 +113,7 @@ public class VerificationManager {
     public void authorized(boolean authorized) {
         this.authorized = authorized;
 
-        if(!authorized) {
+        if (!authorized) {
             this.invalidCredentials = getCredentials();
         }
 
@@ -125,7 +127,7 @@ public class VerificationManager {
 
         final DataObject data = config.getData();
 
-        if(!data.hasKey(key))
+        if (!data.hasKey(key))
             return new HashSet<>();
         return data.getArray(key)
                 .stream(DataArray::getLong)

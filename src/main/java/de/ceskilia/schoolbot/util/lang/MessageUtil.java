@@ -2,8 +2,8 @@ package de.ceskilia.schoolbot.util.lang;
 
 import de.ceskilia.cutils.DiscordBot;
 import de.ceskilia.schoolbot.config.DefaultConfig;
-import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.Emote;
+import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.embed.EmbedUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -51,7 +51,7 @@ public final class MessageUtil {
 
     public static boolean canSendMessage(@Nullable GuildChannel channel) {
 
-        if(channel == null) {
+        if (channel == null) {
             return false;
         }
 

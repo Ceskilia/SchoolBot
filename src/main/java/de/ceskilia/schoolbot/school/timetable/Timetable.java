@@ -92,9 +92,8 @@ public interface Timetable extends SerializableData {
     /**
      * Returns true, if this timetable instance has at least one {@link Lesson}.
      *
-     * @see #getLessons()
-     *
      * @return true if the timetable has lessons
+     * @see #getLessons()
      */
     default boolean hasLessons() {
         return !getLessons().isEmpty();
@@ -104,11 +103,10 @@ public interface Timetable extends SerializableData {
      * Returns the rendered picture with the {@link #getLessons() lessons} of this timetable instance.
      * If this timetable has no lessons, this returns null.
      *
+     * @return a picture of the lessons
      * @see Lesson
      * @see ImageUtil#createTimetableImage(List)
      * @see #hasLessons()
-     *
-     * @return a picture of the lessons
      */
     BufferedImage getImage();
 

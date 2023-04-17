@@ -24,7 +24,7 @@ public class ArrayConfig implements Config<DataArray> {
     private long lastUpdate;
 
     public ArrayConfig(@NotNull String path) {
-        this(path, DEFAULT_UPDATE_INTERVAL,null);
+        this(path, DEFAULT_UPDATE_INTERVAL, null);
     }
 
     public ArrayConfig(@NotNull String path, long updateInterval, @Nullable TimeUnit updateUnit) {
@@ -75,7 +75,7 @@ public class ArrayConfig implements Config<DataArray> {
 
                 final String parent = file.getParent();
 
-                if(parent != null) {
+                if (parent != null) {
                     Files.createDirectories(Paths.get(parent));
                 }
 
@@ -89,7 +89,7 @@ public class ArrayConfig implements Config<DataArray> {
 
     public boolean contains(@NotNull Object value) {
         for (final Object element : data)
-            if(element.equals(value))
+            if (element.equals(value))
                 return true;
         return false;
     }

@@ -28,7 +28,7 @@ public final class DateUtil {
     private static final Pattern GERMAN_DATE_PATTERN = Pattern.compile(GERMAN_DATE_REGEX);
     private static final Pattern GERMAN_DATE_TIME_PATTERN = Pattern.compile(GERMAN_DATE_REGEX + ", " + TIME_REGEX);
 
-    private static final DateTimeFormatter TITLE_DATE_FORMATTER = DateTimeFormatter.ofPattern("EEEE, d. MMMM yyyy",Locale.GERMAN);
+    private static final DateTimeFormatter TITLE_DATE_FORMATTER = DateTimeFormatter.ofPattern("EEEE, d. MMMM yyyy", Locale.GERMAN);
     private static final DateTimeFormatter GERMAN_DATE_FORMATTER = DateTimeFormatter.ofPattern("d.M.u", Locale.GERMAN);
 
     private DateUtil() {
@@ -44,7 +44,7 @@ public final class DateUtil {
     }
 
     public static boolean isValidDay(long day) {
-        return NumberUtil.inRange(day,1,31);
+        return NumberUtil.inRange(day, 1, 31);
     }
 
     public static boolean inMinimumRange(@Nullable LocalDate date) {
@@ -59,7 +59,7 @@ public final class DateUtil {
 
     public static @Nullable LocalDate assumeDate(int day) {
 
-        if(!isValidDay(day)) {
+        if (!isValidDay(day)) {
             return null;
         }
 
@@ -68,7 +68,7 @@ public final class DateUtil {
         int year = now.getYear();
         int currentDay = now.getDayOfMonth();
 
-        if(currentDay == day) {
+        if (currentDay == day) {
             return now;
         }
 
@@ -78,7 +78,7 @@ public final class DateUtil {
         boolean lowerBound = min < 0;
         boolean upperBound = currentDay > month.maxLength();
 
-        if(lowerBound && upperBound) {
+        if (lowerBound && upperBound) {
             throw new IllegalStateException(String.format("The range between the current day is invalid. (day=%s) (mix=%s) (max=%s)",
                     currentDay,
                     min,
@@ -86,7 +86,7 @@ public final class DateUtil {
             ));
         }
 
-        if(lowerBound && day >= month.minus(1).maxLength() + min) {
+        if (lowerBound && day >= month.minus(1).maxLength() + min) {
             return LocalDate.of(year - (month == Month.JANUARY ? 1 : 0), month.minus(1), day);
         }
 
@@ -101,7 +101,7 @@ public final class DateUtil {
 
     public static @NotNull LocalDate timetableTitleToDate(@NotNull String title) {
 
-        if(!Timetable.TITLE_PATTERN.matcher(title.trim()).matches()) {
+        if (!Timetable.TITLE_PATTERN.matcher(title.trim()).matches()) {
             throw new IllegalArgumentException("The provided title is formatted incorrectly: " + title);
         }
 
@@ -111,19 +111,19 @@ public final class DateUtil {
     public static @Nullable LocalDate toDate(@NotNull String input) {
 
         // check if it is a date
-        if(!GERMAN_DATE_PATTERN.matcher(input).matches()) {
+        if (!GERMAN_DATE_PATTERN.matcher(input).matches()) {
             return null;
         }
 
         // check if it is a short date -> append current year
-        if(SHORT_GERMAN_DATE_PATTERN.matcher(input).matches()) {
+        if (SHORT_GERMAN_DATE_PATTERN.matcher(input).matches()) {
             input = appendCurrentYear(input);
         }
 
         final String[] data = input.split("\\.");
 
         // check if day is valid according to month
-        if(Month.of(Integer.parseInt(data[1])).maxLength() < Integer.parseInt(data[0])) {
+        if (Month.of(Integer.parseInt(data[1])).maxLength() < Integer.parseInt(data[0])) {
             return null;
         }
 
@@ -136,7 +136,7 @@ public final class DateUtil {
 
     public static @NotNull LocalDateTime toDateTime(@NotNull String text) {
 
-        if(!GERMAN_DATE_TIME_PATTERN.matcher(text.trim()).matches()) {
+        if (!GERMAN_DATE_TIME_PATTERN.matcher(text.trim()).matches()) {
             throw new IllegalArgumentException("The provided text is formatted incorrectly: " + text);
         }
 

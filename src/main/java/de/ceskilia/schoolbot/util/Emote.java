@@ -9,7 +9,7 @@ public enum Emote {
     WARNING("\u26A0"),
     NO_ENTRY("\uD83D\uDEAB"),
     RED_CROSS("\u274C"),
-    GREEN_CHECK( "\u2705"),
+    GREEN_CHECK("\u2705"),
     INFORMATION("\u2139"),
     TABLE_TENNIS_PADDLE("\uD83C\uDFD3"),
     OPEN_FOLDER("\uD83D\uDCC2"),

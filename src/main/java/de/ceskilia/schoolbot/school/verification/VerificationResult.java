@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 
 public enum VerificationResult {
 
-    SUCCEED("Erfolgreich",false),
-    ALREADY_VERIFIED("Bereits verifiziert",false),
-    WRONG_USERNAME("Falscher Name",true),
-    WRONG_PASSWORD("Falsches Password",true),
-    WRONG_DATA("Falsche Daten",true);
+    SUCCEED("Erfolgreich", false),
+    ALREADY_VERIFIED("Bereits verifiziert", false),
+    WRONG_USERNAME("Falscher Name", true),
+    WRONG_PASSWORD("Falsches Password", true),
+    WRONG_DATA("Falsche Daten", true);
 
     private final String translation;
     private final boolean fail;

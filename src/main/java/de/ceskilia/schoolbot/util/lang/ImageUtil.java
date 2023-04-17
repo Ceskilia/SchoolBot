@@ -25,7 +25,7 @@ public final class ImageUtil {
     }
 
     public static int validateColorValue(int colorValue, @NotNull String name) {
-        if(!NumberUtil.inRange(colorValue, 0, 255))
+        if (!NumberUtil.inRange(colorValue, 0, 255))
             throw new IllegalArgumentException(String.format("%s may be greater than 0 and lower than 255.", name));
         return colorValue;
     }
@@ -35,12 +35,12 @@ public final class ImageUtil {
     }
 
     public static @NotNull CompletableFuture<InputStream> createImageInput(@NotNull Timetable timetable) {
-        Checks.check(timetable.hasLessons(),"Cannot create an image input stream with no lessons.");
+        Checks.check(timetable.hasLessons(), "Cannot create an image input stream with no lessons.");
         return CompletableFuture.supplyAsync(() -> {
-            try(final ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-                ImageIO.write(timetable.getImage(),"png", outputStream);
+            try (final ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                ImageIO.write(timetable.getImage(), "png", outputStream);
 
-                try(final InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray())) {
+                try (final InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray())) {
                     return inputStream;
                 }
 
@@ -52,7 +52,7 @@ public final class ImageUtil {
 
     // a method designed for legacy decay
     public static @NotNull BufferedImage createTimetableImage(@NotNull List<Timetable.Lesson> lessons) {
-        Checks.notEmpty(lessons,"Lessons");
+        Checks.notEmpty(lessons, "Lessons");
 
         final String[] text = TableCreatorKt.createTable(lessons).split("\n");
         final BufferedImage image = new BufferedImage(text[0].length() * 17 - 14, text.length * 18 - 15, BufferedImage.TYPE_INT_ARGB);
@@ -62,8 +62,8 @@ public final class ImageUtil {
         fillArea(graphics, image.getWidth(), image.getHeight(), Color.WHITE);
         graphics.setColor(Color.BLACK);
 
-        for(int i = 0; i < text.length; i++) {
-            graphics.drawString(text[i],-7,18 * i + 10); // random magic numbers through testing
+        for (int i = 0; i < text.length; i++) {
+            graphics.drawString(text[i], -7, 18 * i + 10); // random magic numbers through testing
         }
 
         graphics.dispose();

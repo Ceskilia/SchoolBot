@@ -34,7 +34,7 @@ public class TimetablePost {
 
     public void addMessageId(@Nullable Message message) {
 
-        if(message == null) {
+        if (message == null) {
             return;
         }
 
@@ -43,11 +43,11 @@ public class TimetablePost {
 
     public void addMessageIds(@Nullable Collection<Message> messages) {
 
-        if(messages == null) {
+        if (messages == null) {
             return;
         }
 
-        for(final Message message : messages) {
+        for (final Message message : messages) {
             addMessageId(message.getGuild().getIdLong(), message.getIdLong());
         }
 

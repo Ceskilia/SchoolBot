@@ -42,9 +42,9 @@ public class Feature {
 
     public enum Type {
 
-        ADDED(1,'+'),
+        ADDED(1, '+'),
         REMOVED(2, '-'),
-        UPDATED(3,'*');
+        UPDATED(3, '*');
 
         private final int key;
         private final char symbol;

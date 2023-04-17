@@ -40,14 +40,14 @@ public class AbsentDateInformation {
 
     public boolean loadData(@Nullable DataObject data) {
 
-        if(data == null || !data.hasKey("freietage")) {
+        if (data == null || !data.hasKey("freietage")) {
             return false;
         }
 
         final DataArray absentDates = data.getObject("freietage").getArray("ft");
 
         // if the data did not change, we don't want to do anything
-        if(absentDates.toList().equals(this.data)) {
+        if (absentDates.toList().equals(this.data)) {
             return false;
         }
 
@@ -59,7 +59,7 @@ public class AbsentDateInformation {
     }
 
     private void checkPresence() {
-        if(dates == null) {
+        if (dates == null) {
             throw new IllegalStateException("The date information need to be loaded first.");
         }
     }

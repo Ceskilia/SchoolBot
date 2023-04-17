@@ -18,16 +18,19 @@ fun createTable(lessons: List<Timetable.Lesson>): String {
 
     lessons.forEach {
         with(it) {
-            builder.addRow(Row.Builder()
-                .addCell(course)
-                .addCell(hours)
-                .addCell(subject)
-                .addCell(teacher)
-                .addCell(room)
-                .addCell(Cell.Builder(information)
-                    .setStyle(informationCellStyle)
-                    .build())
-                .build()
+            builder.addRow(
+                Row.Builder()
+                    .addCell(course)
+                    .addCell(hours)
+                    .addCell(subject)
+                    .addCell(teacher)
+                    .addCell(room)
+                    .addCell(
+                        Cell.Builder(information)
+                            .setStyle(informationCellStyle)
+                            .build()
+                    )
+                    .build()
             )
         }
     }

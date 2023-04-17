@@ -5,9 +5,9 @@ import de.ceskilia.schoolbot.action.CompletableAction;
 import de.ceskilia.schoolbot.action.CompletableActionImpl;
 import de.ceskilia.schoolbot.school.timetable.post.TimetablePostManager;
 import de.ceskilia.schoolbot.school.timetable.post.TimetablePostManagerImpl;
+import de.ceskilia.schoolbot.school.timetable.ratelimit.RateLimit;
 import de.ceskilia.schoolbot.school.timetable.ratelimit.RateLimitException;
 import de.ceskilia.schoolbot.school.timetable.util.AbsentDateInformation;
-import de.ceskilia.schoolbot.school.timetable.ratelimit.RateLimit;
 import de.ceskilia.schoolbot.util.lang.JsonUtil;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.internal.utils.Checks;
@@ -19,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.CheckReturnValue;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class TimetableManagerImpl implements TimetableManager {

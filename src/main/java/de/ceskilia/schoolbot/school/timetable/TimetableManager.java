@@ -3,9 +3,9 @@ package de.ceskilia.schoolbot.school.timetable;
 import de.ceskilia.schoolbot.action.CompletableAction;
 import de.ceskilia.schoolbot.school.timetable.post.TimetablePost;
 import de.ceskilia.schoolbot.school.timetable.post.TimetablePostManager;
+import de.ceskilia.schoolbot.school.timetable.ratelimit.RateLimit;
 import de.ceskilia.schoolbot.school.timetable.ratelimit.RateLimitException;
 import de.ceskilia.schoolbot.school.timetable.util.AbsentDateInformation;
-import de.ceskilia.schoolbot.school.timetable.ratelimit.RateLimit;
 import de.ceskilia.schoolbot.util.lang.DateUtil;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.NotNull;
@@ -35,11 +35,10 @@ public interface TimetableManager {
     /**
      * Returns a set of all cached timetables. Timetables are cached after a request to the school website.
      *
+     * @return all cached timetables
      * @see #retrieveData(LocalDate)
      * @see #tryUpdateTimetable(LocalDate)
      * @see #retrieveTimetable(LocalDate)
-     *
-     * @return all cached timetables
      */
     @NotNull Set<Timetable> getTimetables();
 
@@ -55,13 +54,11 @@ public interface TimetableManager {
     }
 
     /**
-     *
      * Returns the cached {@link Timetable} with the specified {@link Timetable#getDate()}. Null if there is no match.
-     *
-     * @see #getTimetables()
      *
      * @param date the date of the timetable
      * @return the timetable with the specified date
+     * @see #getTimetables()
      */
     default @Nullable Timetable getTimetable(@NotNull LocalDate date) {
         return getTimetables().stream()
@@ -74,14 +71,12 @@ public interface TimetableManager {
      * Returns a {@link CompletableAction} containing the raw data of the timetable with the specified {@link Timetable#getDate() date}.
      * This caches a timetable based on the fetched data.
      *
-     * @throws IllegalArgumentException if the provided date is invalid for doing a request
-     * @throws RateLimitException if the global ratelimit is reached
-     *
-     * @see #isValidRequestDate(LocalDate)
-     * @see #getGlobalRateLimit()
-     *
      * @param date the date of the timetable
      * @return a completable action with the raw data of the timetable
+     * @throws IllegalArgumentException if the provided date is invalid for doing a request
+     * @throws RateLimitException       if the global ratelimit is reached
+     * @see #isValidRequestDate(LocalDate)
+     * @see #getGlobalRateLimit()
      */
     @CheckReturnValue
     @NotNull CompletableAction<DataObject> retrieveData(@NotNull LocalDate date);
@@ -92,14 +87,12 @@ public interface TimetableManager {
      * with the specified date exists. The fetched instance is cached.
      * Else, it returns the {@link #getTimetable(LocalDate) cached instance}.
      *
-     * @throws IllegalArgumentException if the provided date is invalid for doing a request
-     * @throws RateLimitException if the global ratelimit is reached
-     *
-     * @see #isValidRequestDate(LocalDate)
-     * @see #getGlobalRateLimit()
-     *
      * @param date the date of the timetable
      * @return a completable action with a timetable instance
+     * @throws IllegalArgumentException if the provided date is invalid for doing a request
+     * @throws RateLimitException       if the global ratelimit is reached
+     * @see #isValidRequestDate(LocalDate)
+     * @see #getGlobalRateLimit()
      */
     @CheckReturnValue
     @NotNull CompletableAction<Timetable> tryUpdateTimetable(@NotNull LocalDate date);
@@ -109,14 +102,12 @@ public interface TimetableManager {
      * This requests a new timetable, if no timetable with the specified date exists. The fetched instance is cached.
      * Else, it returns the {@link #getTimetable(LocalDate) cached instance}.
      *
-     * @throws IllegalArgumentException if the provided date is invalid for doing a request
-     * @throws RateLimitException if the global ratelimit is reached
-     *
-     * @see #isValidRequestDate(LocalDate)
-     * @see #getGlobalRateLimit()
-     *
      * @param date the date of the timetable
      * @return a completable action with a timetable instance
+     * @throws IllegalArgumentException if the provided date is invalid for doing a request
+     * @throws RateLimitException       if the global ratelimit is reached
+     * @see #isValidRequestDate(LocalDate)
+     * @see #getGlobalRateLimit()
      */
     @CheckReturnValue
     @NotNull CompletableAction<Timetable> retrieveTimetable(@NotNull LocalDate date);
@@ -127,15 +118,13 @@ public interface TimetableManager {
      * update the instance, the timetable is {@link Timetable#isUpdatable() updatable}. The fetched instance is cached.
      * Else, it returns the {@link #getTimetable(LocalDate) cached instance}.
      *
-     * @throws IllegalArgumentException if the provided date is invalid for doing a request
-     * @throws RateLimitException if the global ratelimit is reached
-     *
-     * @see #isValidRequestDate(LocalDate)
-     * @see #getGlobalRateLimit()
-     *
-     * @param date the date of the timetable
+     * @param date   the date of the timetable
      * @param update whether to potentially update the timetable instance
      * @return a completable action with a timetable instance
+     * @throws IllegalArgumentException if the provided date is invalid for doing a request
+     * @throws RateLimitException       if the global ratelimit is reached
+     * @see #isValidRequestDate(LocalDate)
+     * @see #getGlobalRateLimit()
      */
     @CheckReturnValue
     default @NotNull CompletableAction<Timetable> retrieveTimetable(@NotNull LocalDate date, boolean update) {
@@ -160,14 +149,13 @@ public interface TimetableManager {
     /**
      * Returns true if the provided date is noted as absent.
      *
-     * @see #getAbsentDateInformation()
-     *
      * @param date the date to check
      * @return true if the date is absent
+     * @see #getAbsentDateInformation()
      */
     default boolean isAbsentDate(@Nullable LocalDate date) {
 
-        if(date == null) {
+        if (date == null) {
             return false;
         }
 

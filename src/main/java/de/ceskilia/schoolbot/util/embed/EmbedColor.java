@@ -9,26 +9,26 @@ import java.awt.*;
 
 public enum EmbedColor {
 
-    DEFAULT(34,34,34),
-    DEPRECATED(120,120,120),
-    INFORMATION(41,161,241),
-    SUCCESS(18,169,9, Emote.GREEN_CHECK),
-    WARNING(253,242,22, Emote.WARNING),
-    FAILURE(234,56,56, Emote.NO_ENTRY);
+    DEFAULT(34, 34, 34),
+    DEPRECATED(120, 120, 120),
+    INFORMATION(41, 161, 241),
+    SUCCESS(18, 169, 9, Emote.GREEN_CHECK),
+    WARNING(253, 242, 22, Emote.WARNING),
+    FAILURE(234, 56, 56, Emote.NO_ENTRY);
 
     private final Color color;
     private final Emote emote;
 
     EmbedColor(int r, int g, int b) {
-        this(r, g, b,null);
+        this(r, g, b, null);
         new Color(120, 120, 120);
     }
 
     EmbedColor(int r, int g, int b, @Nullable Emote emote) {
         this.color = new Color(
-                ImageUtil.validateColorValue(r,"Red"),
-                ImageUtil.validateColorValue(g,"Green"),
-                ImageUtil.validateColorValue(b,"Blue")
+                ImageUtil.validateColorValue(r, "Red"),
+                ImageUtil.validateColorValue(g, "Green"),
+                ImageUtil.validateColorValue(b, "Blue")
         );
         this.emote = emote;
     }
