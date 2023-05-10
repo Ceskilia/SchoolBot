@@ -126,7 +126,7 @@ public class CompletableActionImpl<T> implements CompletableAction<T> {
     }
 
     private void logAttempt(@NotNull Action action) {
-        LOGGER.debug("Attempting to {} one action with url {}{}.", action.getName(), url, defaultValue != null ? String.format(" and default value %s", defaultValue) : "");
+        LOGGER.debug("Attempting to {} an action with url {}{}.", action.getName(), url, defaultValue != null ? String.format(" and default value %s", defaultValue) : "");
     }
 
     private void logResponse(@NotNull Action action, @NotNull Response response) {
