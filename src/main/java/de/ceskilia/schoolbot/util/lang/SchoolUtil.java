@@ -24,7 +24,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -64,11 +65,11 @@ public final class SchoolUtil {
 
         final String parent = FAILED_CREATION_IMAGE.getParent();
 
-        if(parent != null) {
+        if (parent != null) {
             new File(parent).mkdirs(); // use this to avoid checked exception handling as the path is valid
         }
 
-        if(!FAILED_CREATION_IMAGE.exists()) {
+        if (!FAILED_CREATION_IMAGE.exists()) {
             LOGGER.debug("No default image ({}) for a failed image creation is set. Using default failure action instead.", FAILED_CREATION_IMAGE_NAME);
         }
 
@@ -83,7 +84,7 @@ public final class SchoolUtil {
      *
      * <br> If an exception occurs, the {@link #FAILED_CREATION_IMAGE} or the {@link #FAILED_IMAGE_CREATION} is added instead.
      *
-     * @param hook the webhook to send the timetable embed to
+     * @param hook      the webhook to send the timetable embed to
      * @param timetable the timetable to create the embed from
      * @param requester the user that requests the timetable
      */
@@ -100,7 +101,7 @@ public final class SchoolUtil {
      * <br> The action actually needs to be sent to discord!
      * <br> If an exception occurs, the {@link #FAILED_CREATION_IMAGE} or the {@link #FAILED_IMAGE_CREATION} is added instead.
      *
-     * @param channel the channel to send the timetable embed to
+     * @param channel   the channel to send the timetable embed to
      * @param timetable the timetable to create the embed from
      * @param requester the user that requests the timetable
      * @return a completable future with a modified request
@@ -116,18 +117,18 @@ public final class SchoolUtil {
      * <br> The action actually needs to be sent to discord!
      * <br> If an exception occurs, the {@link #FAILED_CREATION_IMAGE} or the {@link #FAILED_IMAGE_CREATION} is added instead.
      *
-     * @param action the request action to add the image too
+     * @param action    the request action to add the image too
      * @param timetable the timetable to get the image from
-     * @param <T> the message request type
+     * @param <T>       the message request type
      * @return a completable future with a modified request
      */
     private static <T extends MessageCreateRequest<T>> @NotNull CompletableFuture<T> addTimetableImage(@NotNull T action, @NotNull Timetable timetable) {
-        if(!timetable.hasLessons())
+        if (!timetable.hasLessons())
             return CompletableFuture.completedFuture(action);
         return ImageUtil.createImageInput(timetable)
                 .thenApply(inputStream -> action.addFiles(FileUpload.fromData(inputStream, IMAGE_NAME)))
                 .exceptionally(throwable -> {
-                    if(!FAILED_CREATION_IMAGE.exists())
+                    if (!FAILED_CREATION_IMAGE.exists())
                         return action.setContent(FAILED_IMAGE_CREATION);
                     return action.addFiles(DEFAULT_IMAGE_UPLOAD);
                 });
@@ -141,7 +142,7 @@ public final class SchoolUtil {
      * <br> The action actually needs to be sent to discord!
      * <br> If an exception occurs, the {@link #FAILED_CREATION_IMAGE} or the {@link #FAILED_IMAGE_CREATION} is added instead.
      *
-     * @param channel the channel to send the timetable embed to
+     * @param channel   the channel to send the timetable embed to
      * @param messageId the message id of the message to edit
      * @param timetable the timetable to create the embed from
      * @param requester the user that requests the timetable
@@ -150,7 +151,7 @@ public final class SchoolUtil {
     public static @NotNull CompletableFuture<MessageEditAction> editTimetable(@NotNull MessageChannel channel, long messageId, @NotNull Timetable timetable, @NotNull User requester) {
         final MessageEditAction action = channel.editMessageEmbedsById(messageId, toEmbed(timetable, requester));
 
-        if(!timetable.hasLessons())
+        if (!timetable.hasLessons())
             return CompletableFuture.completedFuture(action);
         return ImageUtil.createImageInput(timetable)
                 .thenApply(inputStream -> action.setFiles(FileUpload.fromData(inputStream, IMAGE_NAME)))
@@ -180,13 +181,13 @@ public final class SchoolUtil {
         final List<String> changedClasses = timetable.getChangedClasses();
         final List<String> extraInformation = timetable.getExtraInformation();
 
-        if(!absentClasses.isEmpty())
-            builder.addField("Abwesende Klassen", compromiseClassData(absentClasses),false);
-        if(!changedClasses.isEmpty())
-            builder.addField("Klassen mit Änderung", compromiseClassData(changedClasses),false);
-        if(!extraInformation.isEmpty())
-            builder.addField("Zusätzliche Informationen",formatExtraInformation(extraInformation),false);
-        if(timetable.hasLessons())
+        if (!absentClasses.isEmpty())
+            builder.addField("Abwesende Klassen", compromiseClassData(absentClasses), false);
+        if (!changedClasses.isEmpty())
+            builder.addField("Klassen mit Änderung", compromiseClassData(changedClasses), false);
+        if (!extraInformation.isEmpty())
+            builder.addField("Zusätzliche Informationen", formatExtraInformation(extraInformation), false);
+        if (timetable.hasLessons())
             builder.setImage("attachment://" + IMAGE_NAME);
         return builder.build();
     }
@@ -202,7 +203,7 @@ public final class SchoolUtil {
      */
     private static @NotNull String compromiseClassData(@NotNull List<String> classes) {
         return IntStream.range(7, 13).mapToObj(String::valueOf).map(level -> { // go through all classes (7-12)
-            if(classes.stream().filter(c -> c.startsWith(level)).count() > 3) // if more than 3 values are present, just add the class itself
+            if (classes.stream().filter(c -> c.startsWith(level)).count() > 3) // if more than 3 values are present, just add the class itself
                 return level;
             return classes.stream().filter(c -> c.startsWith(level)).collect(Collectors.joining(", ")); // join up to 3 classes
         }).filter(c -> !c.isBlank()).collect(Collectors.joining(", "));
@@ -213,14 +214,13 @@ public final class SchoolUtil {
      *
      * <br> Blank headings and the heading "Achtung!" are excluded!
      *
-     * @see Timetable#getExtraInformation()
-     *
      * @param data the data to fetch the information from
      * @return a list with the extra information
+     * @see Timetable#getExtraInformation()
      */
     public static @NotNull List<String> fetchExtraInformation(@Nullable DataObject data) {
 
-        if(data == null || !data.hasKey("fuss")) {
+        if (data == null || !data.hasKey("fuss")) {
             return Collections.emptyList();
         }
 
@@ -257,18 +257,18 @@ public final class SchoolUtil {
 
         final StringBuilder result = new StringBuilder();
 
-        for(int i = 0; i < entry.length(); i++) {
+        for (int i = 0; i < entry.length(); i++) {
 
             char currentSymbol = entry.charAt(i);
             result.append(currentSymbol);
 
-            if(nextLineBreak(i)) {
+            if (nextLineBreak(i)) {
 
-                for(++i; i < entry.length(); i++) {
+                for (++i; i < entry.length(); i++) {
                     currentSymbol = entry.charAt(i);
 
                     // if the character is a whitespace -> add linebreak
-                    if(Character.isWhitespace(currentSymbol)) {
+                    if (Character.isWhitespace(currentSymbol)) {
                         break;
                     }
 
