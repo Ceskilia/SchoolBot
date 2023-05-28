@@ -126,28 +126,30 @@ public class CompletableActionImpl<T> implements CompletableAction<T> {
     }
 
     private void logAttempt(@NotNull Action action) {
-        LOGGER.debug("Attempting to {} an action with url {}{}.", action.getName(), url, defaultValue != null ? String.format(" and default value %s", defaultValue) : "");
+        LOGGER.debug("Attempting to {} an action with url {}{}.",
+                action.name().toLowerCase(),
+                url,
+                defaultValue != null ? String.format(" and default value %s", defaultValue) : ""
+        );
     }
 
     private void logResponse(@NotNull Action action, @NotNull Response response) {
-        LOGGER.debug("Received a response for a {} action with url {}. ({})", action.getMeaning(), url, response);
+        LOGGER.debug("Received a response for a {} action with url {}. ({})",
+                action.getMeaning(),
+                url,
+                response
+        );
     }
 
     private enum Action {
 
-        QUEUE("queue", "queued"),
-        COMPLETE("complete", "completed");
+        QUEUE("queued"),
+        COMPLETE("completed");
 
-        private final String name;
         private final String meaning;
 
-        Action(@NotNull String name, @NotNull String meaning) {
-            this.name = name;
+        Action(@NotNull String meaning) {
             this.meaning = meaning;
-        }
-
-        public @NotNull String getName() {
-            return name;
         }
 
         public @NotNull String getMeaning() {
