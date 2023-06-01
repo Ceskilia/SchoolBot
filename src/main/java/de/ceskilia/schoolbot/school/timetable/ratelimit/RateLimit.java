@@ -32,7 +32,7 @@ public class RateLimit {
         return duration;
     }
 
-    public void performRequest() {
+    public void registerRequest() {
 
         if (requests == 0) {
             queueReset();

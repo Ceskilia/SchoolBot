@@ -133,7 +133,7 @@ public class TimetableManagerImpl implements TimetableManager {
     }
 
     private @NotNull Timetable cacheTimetable(@NotNull Timetable timetable) {
-        this.rateLimit.performRequest();
+        this.rateLimit.registerRequest();
         this.timetables.removeIf(cachedTimetable -> cachedTimetable.getFormattedDate().equals(timetable.getFormattedDate()));
         this.timetables.add(timetable);
         LOGGER.debug("Cached one timetable with date {}.", timetable.getFormattedDate());
