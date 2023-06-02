@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +36,11 @@ public class AbsentDateInformation {
 
     public @NotNull List<LocalDate> getDates() {
         checkPresence();
-        return dates;
+        return Collections.unmodifiableList(dates);
+    }
+
+    public boolean containsDate(@Nullable LocalDate date) {
+        return dates.contains(date);
     }
 
     public boolean loadData(@Nullable DataObject data) {

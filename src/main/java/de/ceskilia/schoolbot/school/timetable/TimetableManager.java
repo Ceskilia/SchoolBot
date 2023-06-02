@@ -140,7 +140,7 @@ public interface TimetableManager {
     @NotNull RateLimit getGlobalRateLimit();
 
     /**
-     * Returns the absent date information. A date cannot be used for requesting, when it is noted as absent.
+     * Returns the absent date information. A date cannot be used for requesting when it is marked as absent.
      *
      * @return the absent date information
      */
@@ -161,7 +161,7 @@ public interface TimetableManager {
 
         final AbsentDateInformation information = getAbsentDateInformation();
 
-        return information.isPresent() && information.getDates().contains(date);
+        return information.isPresent() && information.containsDate(date);
     }
 
     /**
