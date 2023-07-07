@@ -121,13 +121,10 @@ public final class DateUtil {
         }
 
         final String[] data = input.split("\\.");
+        final int day = Integer.parseInt(data[0]);
+        final int maxDay = Month.of(Integer.parseInt(data[1])).maxLength();
 
-        // check if day is valid according to month
-        if (Month.of(Integer.parseInt(data[1])).maxLength() < Integer.parseInt(data[0])) {
-            return null;
-        }
-
-        return LocalDate.parse(input, GERMAN_DATE_FORMATTER);
+        return (maxDay < day) ? null : LocalDate.parse(input, GERMAN_DATE_FORMATTER);
     }
 
     public static @Nullable LocalTime toTime(@NotNull String text) {
