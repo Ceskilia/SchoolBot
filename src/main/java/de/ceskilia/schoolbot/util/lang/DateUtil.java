@@ -76,7 +76,7 @@ public final class DateUtil {
         int min = currentDay - 14;                                                 // assume the latest timetable is 2 weeks ago
         int max = currentDay + (5 - dayOfWeek) + (isUpdated(dayOfWeek) ? 7 : 0);   // assume update every thursday at ~ 6:30 am
         boolean lowerBound = min < 0;
-        boolean upperBound = currentDay > month.maxLength();
+        boolean upperBound = max > month.maxLength();
 
         if (lowerBound && upperBound) {
             throw new IllegalStateException(String.format("The range between the current day is invalid. (day=%s) (mix=%s) (max=%s)",
