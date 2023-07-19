@@ -24,6 +24,7 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.4.4'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0'
     implementation 'com.jakewharton.picnic:picnic:0.6.0'
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 }
 
 test {
