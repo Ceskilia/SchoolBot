@@ -2,6 +2,7 @@
 *.xml
 *.json
 *.png
+*.env
 !logback.xml
 
 #idea
