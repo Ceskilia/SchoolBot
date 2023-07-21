@@ -25,7 +25,6 @@ public final class ConfigUtil {
     }
 
     public static @NotNull String formatInformation(@NotNull SchoolBot bot) {
-
         final DefaultConfig settings = bot.getConfig();
         final VerificationManager verificationManager = bot.getVerificationManager();
         final DefaultConfig config = verificationManager.getConfig();
@@ -41,7 +40,6 @@ public final class ConfigUtil {
     }
 
     public static @NotNull String formatChannelInformation(@Nullable ChannelEntry entry, @Nullable TextChannel channel) {
-
         final StringBuilder builder = new StringBuilder()
                 .append(MarkdownUtil.quote("Channel - "));
 
