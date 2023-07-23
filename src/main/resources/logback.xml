@@ -6,9 +6,10 @@
         </encoder>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>latest.log</file>
-        <append>false</append> <!---overriding old log-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${application.home:-.}/logs/%d{yyyy-MM-dd_HH-mm-ss}.log</fileNamePattern>
+        </rollingPolicy>
         <encoder>
             <charset>UTF-8</charset>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level | %class{0} - %msg%n</pattern>
