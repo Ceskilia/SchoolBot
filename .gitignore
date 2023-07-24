@@ -5,6 +5,9 @@
 *.env
 !logback.xml
 
+#logs
+/logs
+
 #idea
 /.idea
 
