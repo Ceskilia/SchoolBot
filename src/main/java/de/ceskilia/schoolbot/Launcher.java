@@ -2,6 +2,7 @@ package de.ceskilia.schoolbot;
 
 import de.ceskilia.cutils.utils.lang.Action;
 import de.ceskilia.schoolbot.config.DefaultConfig;
+import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -14,10 +15,11 @@ public class Launcher {
     private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
 
     public static void main(@Nullable String[] args) {
+        final Dotenv dotenv = Dotenv.load();
 
         final DefaultConfig config = new DefaultConfig("config/settings.json", DataObject.empty()
                 .put("token", "<BOT-TOKEN HERE>")
-                .put("timetableURL", "https://ffg-dbr.de/plaene/vertretungsplan/vplan%s.xml")
+                .put("timetableURL", dotenv.get("TIMETABLE_URL"))
         );
 
         config.requestValue("token");
