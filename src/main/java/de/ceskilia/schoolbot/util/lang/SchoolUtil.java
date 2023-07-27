@@ -171,7 +171,6 @@ public final class SchoolUtil {
      * @return a message embed of the timetable
      */
     public static @NotNull MessageEmbed toEmbed(@NotNull Timetable timetable, @NotNull User requester) {
-
         final EmbedBuilder builder = EmbedUtil.withColor(timetable.isOld() ? EmbedColor.DEPRECATED : EmbedColor.INFORMATION)
                 .setTitle(timetable.getDate())
                 .setDescription(TimeFormat.DATE_TIME_LONG.format(timetable.getLastChange().toInstant(ZoneOffset.UTC)))
@@ -254,7 +253,6 @@ public final class SchoolUtil {
      * @return a formatted, lined entry
      */
     private static @NotNull String lineInformation(@NotNull String entry) {
-
         final StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < entry.length(); i++) {
