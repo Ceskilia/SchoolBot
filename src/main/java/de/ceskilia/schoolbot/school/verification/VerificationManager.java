@@ -80,7 +80,6 @@ public class VerificationManager {
     }
 
     public boolean updateUserBlacklist(long userId) {
-
         boolean blacklist = false;
 
         if (!this.blacklistedUsers.remove(userId)) {
@@ -93,7 +92,6 @@ public class VerificationManager {
     }
 
     public @NotNull String getCredentials() {
-
         final DataObject data = config.retrieveData();
 
         config.requestValue(USERNAME);
@@ -124,7 +122,6 @@ public class VerificationManager {
     }
 
     private @NotNull Set<Long> fetchUsers(@NotNull String key) {
-
         final DataObject data = config.getData();
 
         if (!data.hasKey(key))
