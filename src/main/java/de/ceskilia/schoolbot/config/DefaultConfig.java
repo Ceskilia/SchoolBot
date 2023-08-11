@@ -118,13 +118,13 @@ public class DefaultConfig implements Config<DataObject> {
         return false;
     }
 
-    public void requestValues() {
+    public void checkValues() {
         defaultData.toMap()
                 .keySet()
-                .forEach(this::requestValue);
+                .forEach(this::checkValue);
     }
 
-    public @NotNull String requestValue(@NotNull String key) {
+    public @NotNull String checkValue(@NotNull String key) {
         return !isSet(key) ? request(key) : getData().hasKey(key) ? getData().getString(key) : "";
     }
 
