@@ -1,5 +1,6 @@
 package de.ceskilia.schoolbot.school.verification;
 
+import de.ceskilia.schoolbot.config.Config;
 import de.ceskilia.schoolbot.config.DefaultConfig;
 import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
@@ -31,7 +32,7 @@ public class VerificationManager {
     private final Set<Long> blacklistedUsers;
 
     public VerificationManager() {
-        this.config = new DefaultConfig("config/verification.json", DataObject.empty()
+        this.config = Config.defaultConfig("config/verification.json", DataObject.empty()
                 .put("username", "<USERNAME HERE>")
                 .put("password", "<PASSWORD HERE>")
         );

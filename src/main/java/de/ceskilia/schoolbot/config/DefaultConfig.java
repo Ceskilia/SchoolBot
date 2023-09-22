@@ -27,15 +27,7 @@ public class DefaultConfig implements Config<DataObject> {
     private DataObject data;
     private long lastUpdate;
 
-    public DefaultConfig(@NotNull String path) {
-        this(path, null);
-    }
-
-    public DefaultConfig(@NotNull String path, @Nullable DataObject defaultData) {
-        this(path, defaultData, DEFAULT_UPDATE_INTERVAL, null);
-    }
-
-    public DefaultConfig(@NotNull String path,
+    protected DefaultConfig(@NotNull String path,
                          @Nullable DataObject defaultData,
                          long updateInterval,
                          @Nullable TimeUnit updateUnit) {

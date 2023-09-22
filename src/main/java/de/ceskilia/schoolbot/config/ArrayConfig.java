@@ -23,11 +23,7 @@ public class ArrayConfig implements Config<DataArray> {
     private DataArray data;
     private long lastUpdate;
 
-    public ArrayConfig(@NotNull String path) {
-        this(path, DEFAULT_UPDATE_INTERVAL, null);
-    }
-
-    public ArrayConfig(@NotNull String path, long updateInterval, @Nullable TimeUnit updateUnit) {
+    protected ArrayConfig(@NotNull String path, long updateInterval, @Nullable TimeUnit updateUnit) {
         this.file = new File(path);
         this.updateInterval = updateUnit != null ? updateUnit.toMillis(updateInterval) : updateInterval;
         readData();

@@ -3,6 +3,7 @@ package de.ceskilia.schoolbot.school.channel;
 import de.ceskilia.cutils.utils.util.ObjectUtil;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.config.ArrayConfig;
+import de.ceskilia.schoolbot.config.Config;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.utils.data.DataArray;
@@ -30,7 +31,7 @@ public class BroadcastChannelManager {
 
     public BroadcastChannelManager(@NotNull SchoolBot bot) {
         this.bot = bot;
-        this.config = new ArrayConfig("config/channels.json");
+        this.config = Config.arrayConfig("config/channels.json");
         this.channelEntries = fetchEntries();
     }
 
