@@ -37,7 +37,7 @@ public class TimetablePostManagerImpl implements TimetablePostManager {
         this.bot = bot;
         this.timetablePosts = new ArrayList<>();
         this.minutes = DateUtil.minutesOfDay(LocalTime.now());
-        this.scheduler = Executors.newSingleThreadScheduledExecutor(runnable -> ThreadUtil.toDaemon(new Thread(runnable, "Timetable-Post-Manager")));
+        this.scheduler = Executors.newSingleThreadScheduledExecutor(runnable -> ThreadUtil.asDaemon(new Thread(runnable, "Timetable-Post-Manager")));
         startScheduling();
     }
 
