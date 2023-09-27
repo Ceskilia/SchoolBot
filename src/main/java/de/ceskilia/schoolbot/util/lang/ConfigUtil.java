@@ -35,7 +35,7 @@ public final class ConfigUtil {
                 (!verificationManager.isAuthorized() ? Emote.WARNING : MessageUtil.isSet(config, VerificationManager.USERNAME)).append("Username") + "\n" +
                 (!verificationManager.isAuthorized() ? Emote.WARNING : MessageUtil.isSet(config, VerificationManager.PASSWORD)).append("Password") + "\n" +
                 MarkdownUtil.monospace(String.valueOf(config.retrieveData().getArray(VerificationManager.VERIFIED_USERS).length())) + " Verified User" + "\n" +
-                MarkdownUtil.monospace(channelManager.getChannelEntries().size() + "|" + channelManager.countInvalidChannels()) + " Broadcast-Channel"
+                MarkdownUtil.monospace(channelManager.getChannelEntries().size() + " (" + channelManager.countInvalidChannels()) + ") Broadcast-Channel"
         );
     }
 
@@ -48,9 +48,9 @@ public final class ConfigUtil {
             final Member selfMember = channel.getGuild().getSelfMember();
 
             builder.append(channel.getAsMention())
-                    .append(" [")
+                    .append(" [A: ")
                     .append(MessageUtil.check(selfMember.hasAccess(channel)).getUnicode())
-                    .append("|")
+                    .append(", P: ")
                     .append(MessageUtil.check(selfMember.hasPermission(channel, Permission.MESSAGE_SEND)).getUnicode())
                     .append("]");
         } else {
