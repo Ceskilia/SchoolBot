@@ -72,7 +72,6 @@ public final class ConfigUtil {
     }
 
     public static @NotNull MessageEmbed buildWithInformation(@NotNull EmbedBuilder builder, @NotNull SchoolBot bot) {
-
         final DataObject settings = bot.getConfig().retrieveData();
         final DataObject verification = bot.getVerificationManager().getConfig().retrieveData();
         final DataArray channels = bot.getChannelManager().getConfig().retrieveData();
