@@ -1,7 +1,7 @@
 package de.ceskilia.schoolbot.util.lang;
 
 import de.ceskilia.schoolbot.SchoolBot;
-import de.ceskilia.schoolbot.config.DefaultConfig;
+import de.ceskilia.config.DefaultConfig;
 import de.ceskilia.schoolbot.school.channel.BroadcastChannelManager;
 import de.ceskilia.schoolbot.school.channel.ChannelEntry;
 import de.ceskilia.schoolbot.school.timetable.TimetableManager;

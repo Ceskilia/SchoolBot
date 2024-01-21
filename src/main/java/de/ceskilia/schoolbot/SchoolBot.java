@@ -6,7 +6,7 @@ import de.ceskilia.cutils.utils.CUtilsInfo;
 import de.ceskilia.schoolbot.changelog.Changelog;
 import de.ceskilia.schoolbot.changelog.Feature;
 import de.ceskilia.schoolbot.command.*;
-import de.ceskilia.schoolbot.config.DefaultConfig;
+import de.ceskilia.config.DefaultConfig;
 import de.ceskilia.schoolbot.school.channel.BroadcastChannelManager;
 import de.ceskilia.schoolbot.school.timetable.TimetableManager;
 import de.ceskilia.schoolbot.school.timetable.TimetableManagerImpl;
@@ -87,8 +87,8 @@ public class SchoolBot extends DiscordBot {
         updateSlashCommands();
         setStatus(OnlineStatus.ONLINE);
         setActivity(Activity.watching("den Vertretungsplan an."));
-        getVerificationManager().getConfig().checkValue("username");
-        getVerificationManager().getConfig().checkValue("password");
+        getVerificationManager().getConfig().getValue("username");
+        getVerificationManager().getConfig().getValue("password");
         logStartInformation();
     }
 

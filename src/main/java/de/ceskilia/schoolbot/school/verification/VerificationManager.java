@@ -1,7 +1,7 @@
 package de.ceskilia.schoolbot.school.verification;
 
-import de.ceskilia.schoolbot.config.Config;
-import de.ceskilia.schoolbot.config.DefaultConfig;
+import de.ceskilia.config.Config;
+import de.ceskilia.config.DefaultConfig;
 import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import okhttp3.Credentials;
@@ -95,8 +95,8 @@ public class VerificationManager {
     public @NotNull String getCredentials() {
         final DataObject data = config.retrieveData();
 
-        config.checkValue(USERNAME);
-        config.checkValue(PASSWORD);
+        config.getValue(USERNAME);
+        config.getValue(PASSWORD);
 
         return Credentials.basic(data.getString(USERNAME), data.getString(PASSWORD));
     }

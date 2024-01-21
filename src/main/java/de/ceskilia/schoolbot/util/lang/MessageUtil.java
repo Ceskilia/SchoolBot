@@ -1,7 +1,7 @@
 package de.ceskilia.schoolbot.util.lang;
 
 import de.ceskilia.cutils.DiscordBot;
-import de.ceskilia.schoolbot.config.DefaultConfig;
+import de.ceskilia.config.DefaultConfig;
 import de.ceskilia.schoolbot.util.Emote;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.embed.EmbedUtil;
@@ -42,7 +42,7 @@ public final class MessageUtil {
     }
 
     public static @NotNull Emote isSet(@NotNull DefaultConfig config, @NotNull String key) {
-        return check(config.isSet(key));
+        return check(config.isValueSet(key));
     }
 
     public static @NotNull Emote isNotBlank(@NotNull DefaultConfig config, @NotNull String key) {
