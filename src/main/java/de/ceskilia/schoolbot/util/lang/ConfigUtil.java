@@ -1,5 +1,7 @@
 package de.ceskilia.schoolbot.util.lang;
 
+import de.ceskilia.config.internal.ConfigDataArray;
+import de.ceskilia.config.internal.ConfigDataObject;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.config.DefaultConfig;
 import de.ceskilia.schoolbot.school.channel.BroadcastChannelManager;
@@ -13,8 +15,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
-import net.dv8tion.jda.api.utils.data.DataArray;
-import net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,9 +72,9 @@ public final class ConfigUtil {
     }
 
     public static @NotNull MessageEmbed buildWithInformation(@NotNull EmbedBuilder builder, @NotNull SchoolBot bot) {
-        final DataObject settings = bot.getConfig().retrieveData();
-        final DataObject verification = bot.getVerificationManager().getConfig().retrieveData();
-        final DataArray channels = bot.getChannelManager().getConfig().retrieveData();
+        final ConfigDataObject settings = bot.getConfig().retrieveData();
+        final ConfigDataObject verification = bot.getVerificationManager().getConfig().retrieveData();
+        final ConfigDataArray channels = bot.getChannelManager().getConfig().retrieveData();
         final TimetableManager timetableManager = bot.getTimetableManager();
 
         return builder.addField("Website-URL", settings.getString("timetableURL"), false)

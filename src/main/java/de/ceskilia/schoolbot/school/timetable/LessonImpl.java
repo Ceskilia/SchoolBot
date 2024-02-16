@@ -1,8 +1,8 @@
 package de.ceskilia.schoolbot.school.timetable;
 
+import de.ceskilia.config.internal.ConfigDataObject;
+import de.ceskilia.config.internal.ConfigDataType;
 import de.ceskilia.schoolbot.util.lang.JsonUtil;
-import net.dv8tion.jda.api.utils.data.DataObject;
-import net.dv8tion.jda.api.utils.data.DataType;
 import org.jetbrains.annotations.NotNull;
 
 public class LessonImpl implements Timetable.Lesson {
@@ -17,13 +17,13 @@ public class LessonImpl implements Timetable.Lesson {
     private final String teacher;
     private final String room;
 
-    public LessonImpl(@NotNull DataObject data) {
+    public LessonImpl(@NotNull ConfigDataObject data) {
         this.course = data.getString("klasse");
         this.hours = data.getString("stunde");
         this.information = JsonUtil.safeToText(data, "info");
-        this.subject = data.isType("fach", DataType.OBJECT) ? fetchValue(data.getObject("fach"), "fageaendert") : data.getString("fach");
-        this.teacher = data.isType("lehrer", DataType.OBJECT) ? fetchValue(data.getObject("lehrer"), "legeaendert") : data.getString("lehrer");
-        this.room = data.isType("raum", DataType.OBJECT) ? fetchValue(data.getObject("raum"), "rageaendert") : data.getString("raum");
+        this.subject = data.isType("fach", ConfigDataType.OBJECT) ? fetchValue(data.getObject("fach"), "fageaendert") : data.getString("fach");
+        this.teacher = data.isType("lehrer", ConfigDataType.OBJECT) ? fetchValue(data.getObject("lehrer"), "legeaendert") : data.getString("lehrer");
+        this.room = data.isType("raum", ConfigDataType.OBJECT) ? fetchValue(data.getObject("raum"), "rageaendert") : data.getString("raum");
     }
 
     @Override
@@ -61,7 +61,7 @@ public class LessonImpl implements Timetable.Lesson {
         return subject.equals(CANCELLED);
     }
 
-    private @NotNull String fetchValue(@NotNull DataObject data, @NotNull String changedKey) {
+    private @NotNull String fetchValue(@NotNull ConfigDataObject data, @NotNull String changedKey) {
         return data.getString(changedKey).equals(CHANGED_VALUE) ? data.values().stream() // do this, because you can't parse "" as a key
                 .filter(o -> !o.equals(CHANGED_VALUE))
                 .findAny()

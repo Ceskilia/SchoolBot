@@ -2,9 +2,9 @@ package de.ceskilia.schoolbot;
 
 import de.ceskilia.config.Config;
 import de.ceskilia.config.DefaultConfig;
+import de.ceskilia.config.internal.ConfigDataObject;
 import de.ceskilia.cutils.utils.lang.Action;
 import io.github.cdimascio.dotenv.Dotenv;
-import net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ public class Launcher {
 
     public static void main(@Nullable String[] args) {
         final Dotenv dotenv = Dotenv.load();
-        final DefaultConfig config = Config.defaultConfig("config/settings.json", DataObject.empty()
+        final DefaultConfig config = Config.defaultConfig("config/settings.json", ConfigDataObject.empty()
                 .put("token", "<BOT-TOKEN HERE>")
                 .put("timetableURL", dotenv.get("TIMETABLE_URL"))
         );

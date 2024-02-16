@@ -2,8 +2,8 @@ package de.ceskilia.schoolbot.school.verification;
 
 import de.ceskilia.config.Config;
 import de.ceskilia.config.DefaultConfig;
-import net.dv8tion.jda.api.utils.data.DataArray;
-import net.dv8tion.jda.api.utils.data.DataObject;
+import de.ceskilia.config.internal.ConfigDataArray;
+import de.ceskilia.config.internal.ConfigDataObject;
 import okhttp3.Credentials;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +32,7 @@ public class VerificationManager {
     private final Set<Long> blacklistedUsers;
 
     public VerificationManager() {
-        this.config = Config.defaultConfig("config/verification.json", DataObject.empty()
+        this.config = Config.defaultConfig("config/verification.json", ConfigDataObject.empty()
                 .put("username", "<USERNAME HERE>")
                 .put("password", "<PASSWORD HERE>")
         );
@@ -58,13 +58,13 @@ public class VerificationManager {
             return VerificationResult.ALREADY_VERIFIED;
         }
 
-        final DataObject data = config.retrieveData();
+        final ConfigDataObject data = config.retrieveData();
         final boolean rightUsername = username.equals(data.getString(USERNAME));
         final boolean rightPassword = password.equals(data.getString(PASSWORD));
 
         if (rightUsername && rightPassword) {
             verifiedUsers.add(userId);
-            data.put(VERIFIED_USERS, DataArray.fromCollection(verifiedUsers));
+            data.put(VERIFIED_USERS, ConfigDataArray.fromCollection(verifiedUsers));
             config.save();
             return VerificationResult.SUCCEED;
         }
@@ -87,13 +87,13 @@ public class VerificationManager {
             blacklist = this.blacklistedUsers.add(userId);
         }
 
-        config.getData().put(BLACKLISTED_USERS, DataArray.fromCollection(blacklistedUsers));
+        config.getData().put(BLACKLISTED_USERS, ConfigDataArray.fromCollection(blacklistedUsers));
         config.save();
         return blacklist;
     }
 
     public @NotNull String getCredentials() {
-        final DataObject data = config.retrieveData();
+        final ConfigDataObject data = config.retrieveData();
 
         config.getValue(USERNAME);
         config.getValue(PASSWORD);
@@ -123,12 +123,12 @@ public class VerificationManager {
     }
 
     private @NotNull Set<Long> fetchUsers(@NotNull String key) {
-        final DataObject data = config.getData();
+        final ConfigDataObject data = config.getData();
 
         if (!data.hasKey(key))
             return new HashSet<>();
         return data.getArray(key)
-                .stream(DataArray::getLong)
+                .stream(ConfigDataArray::getLong)
                 .collect(Collectors.toSet());
     }
 

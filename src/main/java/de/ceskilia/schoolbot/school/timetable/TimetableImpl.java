@@ -1,12 +1,12 @@
 package de.ceskilia.schoolbot.school.timetable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import de.ceskilia.config.internal.ConfigDataArray;
+import de.ceskilia.config.internal.ConfigDataObject;
 import de.ceskilia.schoolbot.util.lang.DateUtil;
 import de.ceskilia.schoolbot.util.lang.ImageUtil;
 import de.ceskilia.schoolbot.util.lang.JsonUtil;
 import de.ceskilia.schoolbot.util.lang.SchoolUtil;
-import net.dv8tion.jda.api.utils.data.DataArray;
-import net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class TimetableImpl implements Timetable {
 
-    private final DataObject data;
+    private final ConfigDataObject data;
 
     private final String date;
     private final LocalDate formattedDate;
@@ -37,12 +37,12 @@ public class TimetableImpl implements Timetable {
         this(JsonUtil.convertXmlToJson(xml));
     }
 
-    public TimetableImpl(@NotNull DataObject data) {
+    public TimetableImpl(@NotNull ConfigDataObject data) {
         this.data = data;
 
-        final DataObject head = data.getObject("kopf");
-        final DataObject headInfo = head.optObject("kopfinfo").orElse(null);
-        final DataArray main = JsonUtil.safeToArray(data.optObject("haupt").orElse(null), "aktion");
+        final ConfigDataObject head = data.getObject("kopf");
+        final ConfigDataObject headInfo = head.optObject("kopfinfo").orElse(null);
+        final ConfigDataArray main = JsonUtil.safeToArray(data.optObject("haupt").orElse(null), "aktion");
 
         this.date = head.getString("titel").trim();
         this.formattedDate = DateUtil.timetableTitleToDate(this.date);
@@ -54,7 +54,7 @@ public class TimetableImpl implements Timetable {
         Collections.sort(absentClasses);
         Collections.sort(changedClasses);
 
-        this.lessons = main.stream(DataArray::getObject)
+        this.lessons = main.stream(ConfigDataArray::getObject)
                 .map(Lesson::create)
                 .toList();
         this.image = hasLessons() ? ImageUtil.createTimetableImage(lessons) : null;
@@ -107,7 +107,7 @@ public class TimetableImpl implements Timetable {
     }
 
     @Override
-    public @NotNull DataObject toData() {
+    public @NotNull ConfigDataObject toData() {
         return data;
     }
 

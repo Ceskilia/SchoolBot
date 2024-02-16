@@ -1,5 +1,7 @@
 package de.ceskilia.schoolbot.util.lang;
 
+import de.ceskilia.config.internal.ConfigDataArray;
+import de.ceskilia.config.internal.ConfigDataObject;
 import de.ceskilia.schoolbot.school.timetable.Timetable;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.embed.EmbedUtil;
@@ -13,8 +15,6 @@ import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.requests.restaction.WebhookMessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.api.utils.TimeFormat;
-import net.dv8tion.jda.api.utils.data.DataArray;
-import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.api.utils.messages.MessageCreateRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -217,15 +217,15 @@ public final class SchoolUtil {
      * @return a list with the extra information
      * @see Timetable#getExtraInformation()
      */
-    public static @NotNull List<String> fetchExtraInformation(@Nullable DataObject data) {
+    public static @NotNull List<String> fetchExtraInformation(@Nullable ConfigDataObject data) {
 
         if (data == null || !data.hasKey("fuss")) {
             return Collections.emptyList();
         }
 
-        final DataArray footer = JsonUtil.safeToArray(data.getObject("fuss"), "fusszeile");
+        final ConfigDataArray footer = JsonUtil.safeToArray(data.getObject("fuss"), "fusszeile");
 
-        return footer.stream(DataArray::getObject)
+        return footer.stream(ConfigDataArray::getObject)
                 .map(info -> info.getString("fussinfo"))
                 .map(String::trim)
                 .filter(text -> !text.isBlank())

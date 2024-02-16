@@ -1,8 +1,8 @@
 package de.ceskilia.schoolbot.school.timetable;
 
+import de.ceskilia.config.internal.ConfigDataObject;
+import de.ceskilia.config.internal.SerializableConfigData;
 import de.ceskilia.schoolbot.util.lang.ImageUtil;
-import net.dv8tion.jda.api.utils.data.DataObject;
-import net.dv8tion.jda.api.utils.data.SerializableData;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public interface Timetable extends SerializableData {
+public interface Timetable extends SerializableConfigData {
 
     /**
      * The pattern of a timetable {@link #getDate() title/date}.
@@ -137,7 +137,7 @@ public interface Timetable extends SerializableData {
          * @param data the data to build the lesson with
          * @return a new lesson implementation
          */
-        static @NotNull Timetable.Lesson create(@NotNull DataObject data) {
+        static @NotNull Timetable.Lesson create(@NotNull ConfigDataObject data) {
             return new LessonImpl(data);
         }
 

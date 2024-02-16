@@ -1,11 +1,11 @@
 package de.ceskilia.schoolbot.school.channel;
 
+import de.ceskilia.config.internal.ConfigDataArray;
+import de.ceskilia.config.internal.ConfigDataObject;
+import de.ceskilia.config.internal.SerializableConfigData;
 import de.ceskilia.schoolbot.util.lang.JsonUtil;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.utils.data.DataArray;
-import net.dv8tion.jda.api.utils.data.DataObject;
-import net.dv8tion.jda.api.utils.data.SerializableData;
 import net.dv8tion.jda.internal.utils.Checks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ChannelEntry implements SerializableData {
+public class ChannelEntry implements SerializableConfigData {
 
     public static final long MINIMUM_TIME_INTERVAL = 1_800_000; //30min
 
@@ -44,11 +44,11 @@ public class ChannelEntry implements SerializableData {
         this.updateTimes = updateTimes != null ? new HashSet<>(updateTimes) : new HashSet<>();
     }
 
-    public ChannelEntry(@NotNull DataObject json) {
+    public ChannelEntry(@NotNull ConfigDataObject json) {
         this.guildId = json.getLong(GUILD_ID);
         this.channelId = json.getLong(CHANNEL_ID);
         this.updateTimes = json.hasKey(UPDATE_TIMES) ? json.getArray(UPDATE_TIMES)
-                .stream(DataArray::getString)
+                .stream(ConfigDataArray::getString)
                 .map(value -> LocalTime.parse(value, DateTimeFormatter.ISO_LOCAL_TIME))
                 .collect(Collectors.toCollection(HashSet::new)) : new HashSet<>();
     }
@@ -110,11 +110,11 @@ public class ChannelEntry implements SerializableData {
         return jda.getGuildById(guildId) != null && MessageUtil.canSendMessage(jda.getTextChannelById(channelId));
     }
 
-    protected @NotNull DataObject fillObject(@NotNull DataObject object) {
+    protected @NotNull ConfigDataObject fillObject(@NotNull ConfigDataObject object) {
 
         if (object.hasKey(UPDATE_TIMES)) {
 
-            final DataArray array = object.getArray(UPDATE_TIMES);
+            final ConfigDataArray array = object.getArray(UPDATE_TIMES);
 
             array.addAll(streamUpdateTimes()
                     .filter(element -> !JsonUtil.containsElement(array, element))
@@ -128,11 +128,11 @@ public class ChannelEntry implements SerializableData {
     }
 
     @Override
-    public @NotNull DataObject toData() {
-        return DataObject.empty()
+    public @NotNull ConfigDataObject toData() {
+        return ConfigDataObject.empty()
                 .put(GUILD_ID, guildId)
                 .put(CHANNEL_ID, channelId)
-                .put(UPDATE_TIMES, DataArray.fromCollection(streamUpdateTimes().toList()));
+                .put(UPDATE_TIMES, ConfigDataArray.fromCollection(streamUpdateTimes().toList()));
     }
 
     @Override

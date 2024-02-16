@@ -1,13 +1,13 @@
 package de.ceskilia.schoolbot.school.channel;
 
+import de.ceskilia.config.internal.ConfigDataArray;
+import de.ceskilia.config.internal.ConfigDataObject;
 import de.ceskilia.cutils.utils.util.ObjectUtil;
 import de.ceskilia.schoolbot.SchoolBot;
-import de.ceskilia.schoolbot.config.ArrayConfig;
-import de.ceskilia.schoolbot.config.Config;
+import de.ceskilia.config.ArrayConfig;
+import de.ceskilia.config.Config;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.utils.data.DataArray;
-import net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -61,7 +61,11 @@ public class BroadcastChannelManager {
     }
 
     public @Nullable TextChannel getChannelOf(long guildId) {
-        return ObjectUtil.requireNonNullOrElse(getEntry(guildId), null, entry -> bot.getJDA().getTextChannelById(entry.getChannelId()));
+        return ObjectUtil.requireNonNullOrElse(
+                getEntry(guildId),
+                null,
+                entry -> bot.getJDA().getTextChannelById(entry.getChannelId())
+        );
     }
 
     public int countInvalidChannels() {
@@ -120,12 +124,12 @@ public class BroadcastChannelManager {
                 .findAny();
     }
 
-    public @Nullable DataObject getConfigEntry(long guildId) {
+    public @Nullable ConfigDataObject getConfigEntry(long guildId) {
         return optConfigEntry(guildId).orElse(null);
     }
 
-    public @NotNull Optional<DataObject> optConfigEntry(long guildId) {
-        return config.getData().stream(DataArray::getObject)
+    public @NotNull Optional<ConfigDataObject> optConfigEntry(long guildId) {
+        return config.getData().stream(ConfigDataArray::getObject)
                 .filter(element -> element.getLong("guildId") == guildId)
                 .findAny();
     }
@@ -144,7 +148,7 @@ public class BroadcastChannelManager {
     }
 
     private @NotNull Set<ChannelEntry> fetchEntries() {
-        return config.getData().stream(DataArray::getObject)
+        return config.getData().stream(ConfigDataArray::getObject)
                 .map(ChannelEntry::new)
                 .collect(Collectors.toCollection(HashSet::new));
     }

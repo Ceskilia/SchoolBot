@@ -1,8 +1,8 @@
 package de.ceskilia.schoolbot.school.timetable.util;
 
+import de.ceskilia.config.internal.ConfigDataArray;
+import de.ceskilia.config.internal.ConfigDataObject;
 import de.ceskilia.schoolbot.util.SystemInfo;
-import net.dv8tion.jda.api.utils.data.DataArray;
-import net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,11 +22,11 @@ public class AbsentDateInformation {
         return fromData(null);
     }
 
-    public static @NotNull AbsentDateInformation fromData(@Nullable DataObject data) {
+    public static @NotNull AbsentDateInformation fromData(@Nullable ConfigDataObject data) {
         return new AbsentDateInformation(data);
     }
 
-    private AbsentDateInformation(@Nullable DataObject data) {
+    private AbsentDateInformation(@Nullable ConfigDataObject data) {
         loadData(data);
     }
 
@@ -43,13 +43,13 @@ public class AbsentDateInformation {
         return dates.contains(date);
     }
 
-    public boolean loadData(@Nullable DataObject data) {
+    public boolean loadData(@Nullable ConfigDataObject data) {
 
         if (data == null || !data.hasKey("freietage")) {
             return false;
         }
 
-        final DataArray absentDates = data.getObject("freietage").getArray("ft");
+        final ConfigDataArray absentDates = data.getObject("freietage").getArray("ft");
 
         // if the data did not change, we don't want to do anything
         if (absentDates.toList().equals(this.data)) {
@@ -57,7 +57,7 @@ public class AbsentDateInformation {
         }
 
         this.data = absentDates.toList();
-        this.dates = absentDates.stream(DataArray::getString)
+        this.dates = absentDates.stream(ConfigDataArray::getString)
                 .map(date -> LocalDate.parse(SystemInfo.currentYearsPrefix() + date, DateTimeFormatter.BASIC_ISO_DATE))
                 .collect(Collectors.toCollection(LinkedList::new));
         return true;

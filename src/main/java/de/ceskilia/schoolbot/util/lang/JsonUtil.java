@@ -2,8 +2,7 @@ package de.ceskilia.schoolbot.util.lang;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import net.dv8tion.jda.api.exceptions.ParsingException;
-import net.dv8tion.jda.api.utils.data.*;
+import de.ceskilia.config.internal.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,15 +29,15 @@ public final class JsonUtil {
         return XML_MAPPER.readValue(xml, tClass);
     }
 
-    public static @NotNull DataObject convertXmlToJson(@NotNull String xml) throws JsonProcessingException {
-        return DataObject.fromJson(XML_MAPPER.readTree(xml).toString());
+    public static @NotNull ConfigDataObject convertXmlToJson(@NotNull String xml) throws JsonProcessingException {
+        return ConfigDataObject.fromJson(XML_MAPPER.readTree(xml).toString());
     }
 
-    public static @NotNull DataObject tryReadObject(@NotNull File file,
-                                                    @NotNull Supplier<? extends DataObject> fallback,
+    public static @NotNull ConfigDataObject tryReadObject(@NotNull File file,
+                                                    @NotNull Supplier<? extends ConfigDataObject> fallback,
                                                     @Nullable Consumer<Exception> failure) {
         try (final FileInputStream inputStream = new FileInputStream(file)) {
-            return DataObject.fromJson(inputStream);
+            return ConfigDataObject.fromJson(inputStream);
         } catch (final IOException | ParsingException exception) {
             if (failure != null)
                 failure.accept(exception);
@@ -46,11 +45,11 @@ public final class JsonUtil {
         }
     }
 
-    public static @NotNull DataArray tryReadArray(@NotNull File file,
-                                                  @NotNull Supplier<? extends DataArray> fallback,
-                                                  @Nullable Consumer<Exception> failure) {
+    public static @NotNull ConfigDataArray tryReadArray(@NotNull File file,
+                                                        @NotNull Supplier<? extends ConfigDataArray> fallback,
+                                                        @Nullable Consumer<Exception> failure) {
         try (final FileInputStream inputStream = new FileInputStream(file)) {
-            return DataArray.fromJson(inputStream);
+            return ConfigDataArray.fromJson(inputStream);
         } catch (final IOException | ParsingException exception) {
             if (failure != null)
                 failure.accept(exception);
@@ -58,7 +57,7 @@ public final class JsonUtil {
         }
     }
 
-    public static boolean containsElement(@NotNull DataArray array, @Nullable Object element) {
+    public static boolean containsElement(@NotNull ConfigDataArray array, @Nullable Object element) {
 
         if (element == null) {
             return false;
@@ -78,44 +77,44 @@ public final class JsonUtil {
 
     public static @NotNull String toPrettyText(@NotNull Object object) {
         String result =
-                (object instanceof SerializableData data) ? data.toData().toString() :
-                        (object instanceof SerializableArray array) ? array.toDataArray().stream(DataArray::getString)
+                (object instanceof SerializableConfigData data) ? data.toData().toString() :
+                        (object instanceof SerializableConfigArray array) ? array.toDataArray().stream(ConfigDataArray::getString)
                                 .collect(Collectors.joining(", "))
                                 :
                                 object.toString();
         return result.isBlank() ? "-" : result;
     }
 
-    public static @NotNull String safeToText(@Nullable DataObject data, @NotNull String key) {
+    public static @NotNull String safeToText(@Nullable ConfigDataObject data, @NotNull String key) {
         return data == null ? "" : data.hasKey(key) ? data.getString(key) : "";
     }
 
-    public static @NotNull List<String> safeToList(@Nullable DataObject data, @NotNull String key) {
+    public static @NotNull List<String> safeToList(@Nullable ConfigDataObject data, @NotNull String key) {
         return data == null ? Collections.emptyList() : data.hasKey(key) ? Arrays.asList(data.getString(key).split(", ")) : Collections.emptyList();
     }
 
-    public static @NotNull DataArray safeToArray(@Nullable DataObject data, @NotNull String key) {
+    public static @NotNull ConfigDataArray safeToArray(@Nullable ConfigDataObject data, @NotNull String key) {
         return safeToArray(data, key, null);
     }
 
-    public static DataArray safeToArray(@Nullable DataObject data, @NotNull String key, @Nullable Supplier<DataArray> fallback) {
+    public static ConfigDataArray safeToArray(@Nullable ConfigDataObject data, @NotNull String key, @Nullable Supplier<ConfigDataArray> fallback) {
 
         if (data == null || !data.hasKey(key)) {
-            return fallback != null ? fallback.get() : DataArray.empty();
+            return fallback != null ? fallback.get() : ConfigDataArray.empty();
         }
 
-        if (data.isType(key, DataType.OBJECT)) {
-            return DataArray.fromCollection(Collections.singleton(data.getObject(key)));
+        if (data.isType(key, ConfigDataType.OBJECT)) {
+            return ConfigDataArray.fromCollection(Collections.singleton(data.getObject(key)));
         }
 
-        if (data.isType(key, DataType.ARRAY)) {
+        if (data.isType(key, ConfigDataType.ARRAY)) {
             return data.getArray(key);
         }
 
-        return fallback != null ? fallback.get() : DataArray.empty();
+        return fallback != null ? fallback.get() : ConfigDataArray.empty();
     }
 
-    public static DataObject safeToObject(@Nullable DataObject data, @NotNull String key, @Nullable Supplier<DataObject> fallback) {
+    public static ConfigDataObject safeToObject(@Nullable ConfigDataObject data, @NotNull String key, @Nullable Supplier<ConfigDataObject> fallback) {
         return data == null ?
                 fallback != null ? fallback.get() : null
                 :

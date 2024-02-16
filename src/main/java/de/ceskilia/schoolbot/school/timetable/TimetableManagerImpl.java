@@ -1,5 +1,6 @@
 package de.ceskilia.schoolbot.school.timetable;
 
+import de.ceskilia.config.internal.ConfigDataObject;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.action.CompletableAction;
 import de.ceskilia.schoolbot.action.CompletableActionImpl;
@@ -9,7 +10,6 @@ import de.ceskilia.schoolbot.school.timetable.ratelimit.RateLimit;
 import de.ceskilia.schoolbot.school.timetable.ratelimit.RateLimitException;
 import de.ceskilia.schoolbot.school.timetable.util.AbsentDateInformation;
 import de.ceskilia.schoolbot.util.lang.JsonUtil;
-import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.internal.utils.Checks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -62,7 +62,7 @@ public class TimetableManagerImpl implements TimetableManager {
 
     @Override
     @CheckReturnValue
-    public @NotNull CompletableAction<DataObject> retrieveData(@NotNull LocalDate date) {
+    public @NotNull CompletableAction<ConfigDataObject> retrieveData(@NotNull LocalDate date) {
         Checks.check(isValidRequestDate(date), "The provided date is invalid. (%s)".formatted(date));
         checkRateLimit();
         this.totalRequests++;
@@ -71,7 +71,7 @@ public class TimetableManagerImpl implements TimetableManager {
                 null,
                 response -> {
                     try {
-                        final DataObject data = JsonUtil.convertXmlToJson(response.body().string());
+                        final ConfigDataObject data = JsonUtil.convertXmlToJson(response.body().string());
 
                         updateAbsentDates(data);
                         cacheTimetable(data);
@@ -128,7 +128,7 @@ public class TimetableManagerImpl implements TimetableManager {
         return absentDateInformation;
     }
 
-    private @NotNull Timetable cacheTimetable(@NotNull DataObject object) {
+    private @NotNull Timetable cacheTimetable(@NotNull ConfigDataObject object) {
         return cacheTimetable(new TimetableImpl(object));
     }
 
@@ -144,7 +144,7 @@ public class TimetableManagerImpl implements TimetableManager {
         return String.format(bot.getConfig().retrieveData().getString("timetableURL"), date);
     }
 
-    private void updateAbsentDates(@NotNull DataObject data) {
+    private void updateAbsentDates(@NotNull ConfigDataObject data) {
         if (absentDateInformation.loadData(data)) {
             LOGGER.debug("Updated absent dates successfully.");
         }

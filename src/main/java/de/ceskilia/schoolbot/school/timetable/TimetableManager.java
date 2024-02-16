@@ -1,5 +1,6 @@
 package de.ceskilia.schoolbot.school.timetable;
 
+import de.ceskilia.config.internal.ConfigDataObject;
 import de.ceskilia.schoolbot.action.CompletableAction;
 import de.ceskilia.schoolbot.school.timetable.post.TimetablePost;
 import de.ceskilia.schoolbot.school.timetable.post.TimetablePostManager;
@@ -7,7 +8,6 @@ import de.ceskilia.schoolbot.school.timetable.ratelimit.RateLimit;
 import de.ceskilia.schoolbot.school.timetable.ratelimit.RateLimitException;
 import de.ceskilia.schoolbot.school.timetable.util.AbsentDateInformation;
 import de.ceskilia.schoolbot.util.lang.DateUtil;
-import net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -79,7 +79,7 @@ public interface TimetableManager {
      * @see #getGlobalRateLimit()
      */
     @CheckReturnValue
-    @NotNull CompletableAction<DataObject> retrieveData(@NotNull LocalDate date);
+    @NotNull CompletableAction<ConfigDataObject> retrieveData(@NotNull LocalDate date);
 
     /**
      * Returns a {@link CompletableAction} containing the timetable with the specified {@link Timetable#getDate() date}.
