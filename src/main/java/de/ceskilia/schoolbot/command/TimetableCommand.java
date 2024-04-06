@@ -6,7 +6,7 @@ import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
 import de.ceskilia.cutils.command.slashcommand.option.Option;
 import de.ceskilia.cutils.event.command.slash.GuildSlashCommandExecuteEvent;
 import de.ceskilia.cutils.event.command.slash.SlashCommandExecuteEvent;
-import de.ceskilia.cutils.utils.util.ObjectUtil;
+import de.ceskilia.cutils.util.lang.ObjectUtil;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.action.ErrorResponseException;
 import de.ceskilia.schoolbot.school.verification.VerificationManager;

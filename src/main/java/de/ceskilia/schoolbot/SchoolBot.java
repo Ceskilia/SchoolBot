@@ -2,7 +2,7 @@ package de.ceskilia.schoolbot;
 
 import de.ceskilia.cutils.DiscordBot;
 import de.ceskilia.cutils.essential.Author;
-import de.ceskilia.cutils.utils.CUtilsInfo;
+import de.ceskilia.cutils.util.CUtilsInfo;
 import de.ceskilia.schoolbot.changelog.Changelog;
 import de.ceskilia.schoolbot.changelog.Feature;
 import de.ceskilia.schoolbot.command.*;
@@ -42,7 +42,7 @@ public class SchoolBot extends DiscordBot {
                 "Schoolbot",
                 "1.0-ALPHA",
                 "s!",
-                new Author(363332011454103555L)
+                Author.fromId(363332011454103555L)
         );
 
         this.config = config;
@@ -87,8 +87,8 @@ public class SchoolBot extends DiscordBot {
         updateSlashCommands();
         setStatus(OnlineStatus.ONLINE);
         setActivity(Activity.watching("den Vertretungsplan an."));
-        getVerificationManager().getConfig().getValue("username");
-        getVerificationManager().getConfig().getValue("password");
+        getVerificationManager().getConfig().verifyValue("username");
+        getVerificationManager().getConfig().verifyValue("password");
         logStartInformation();
     }
 

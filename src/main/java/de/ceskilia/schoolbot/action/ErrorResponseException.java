@@ -1,6 +1,6 @@
 package de.ceskilia.schoolbot.action;
 
-import de.ceskilia.cutils.utils.util.NumberUtil;
+import de.ceskilia.cutils.util.lang.NumberUtil;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 

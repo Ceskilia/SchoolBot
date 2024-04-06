@@ -1,6 +1,6 @@
 package de.ceskilia.schoolbot.school.timetable.post;
 
-import de.ceskilia.cutils.utils.util.ThreadUtil;
+import de.ceskilia.cutils.util.lang.ThreadUtil;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.school.timetable.Timetable;
 import de.ceskilia.schoolbot.util.lang.DateUtil;

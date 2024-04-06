@@ -1,6 +1,6 @@
 package de.ceskilia.schoolbot.util.lang;
 
-import de.ceskilia.cutils.utils.util.NumberUtil;
+import de.ceskilia.cutils.util.lang.NumberUtil;
 import de.ceskilia.schoolbot.school.timetable.Timetable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
