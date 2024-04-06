@@ -178,14 +178,14 @@ public final class SchoolUtil {
                 .setTimestamp(Instant.ofEpochMilli(timetable.getCreationTime()));
         final List<String> absentClasses = timetable.getAbsentClasses();
         final List<String> changedClasses = timetable.getChangedClasses();
-        final List<String> extraInformation = timetable.getExtraInformation();
+        final String extraInformation = String.join("\n", timetable.getExtraInformation());
 
         if (!absentClasses.isEmpty())
             builder.addField("Abwesende Klassen", compromiseClassData(absentClasses), false);
         if (!changedClasses.isEmpty())
             builder.addField("Klassen mit Änderung", compromiseClassData(changedClasses), false);
         if (!extraInformation.isEmpty())
-            builder.addField("Zusätzliche Informationen", formatExtraInformation(extraInformation), false);
+            builder.addField("Zusätzliche Informationen", extraInformation, false);
         if (timetable.hasLessons())
             builder.setImage("attachment://" + IMAGE_NAME);
         return builder.build();
@@ -239,6 +239,7 @@ public final class SchoolUtil {
      * @param information the information to line and combine
      * @return a combined, formatted, lined string
      */
+    @Deprecated
     private static @NotNull String formatExtraInformation(@NotNull List<String> information) {
         return information.stream()
                 .map(SchoolUtil::lineInformation)
@@ -252,6 +253,7 @@ public final class SchoolUtil {
      * @param entry the string/entry to format
      * @return a formatted, lined entry
      */
+    @Deprecated
     private static @NotNull String lineInformation(@NotNull String entry) {
         final StringBuilder result = new StringBuilder();
 
@@ -281,6 +283,7 @@ public final class SchoolUtil {
         return result.toString();
     }
 
+    @Deprecated
     private static boolean nextLineBreak(int index) {
         // new linebreak every 40 chars (index starts at 0)
         return index != 0 && index % (MAX_INFORMATION_LENGTH - 1) == 0;
