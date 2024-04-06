@@ -1,7 +1,7 @@
 package de.ceskilia.schoolbot.util.lang;
 
-import de.ceskilia.cutils.DiscordBot;
 import de.ceskilia.config.DefaultConfig;
+import de.ceskilia.cutils.DiscordBot;
 import de.ceskilia.schoolbot.util.Emote;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.embed.EmbedUtil;

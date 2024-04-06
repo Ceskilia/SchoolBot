@@ -1,11 +1,11 @@
 package de.ceskilia.schoolbot.school.channel;
 
+import de.ceskilia.config.ArrayConfig;
+import de.ceskilia.config.Config;
 import de.ceskilia.config.data.ConfigDataArray;
 import de.ceskilia.config.data.ConfigDataObject;
 import de.ceskilia.cutils.util.lang.ObjectUtil;
 import de.ceskilia.schoolbot.SchoolBot;
-import de.ceskilia.config.ArrayConfig;
-import de.ceskilia.config.Config;
 import de.ceskilia.schoolbot.util.lang.CollectionUtil;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;

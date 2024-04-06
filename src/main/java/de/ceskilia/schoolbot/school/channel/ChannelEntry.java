@@ -3,7 +3,6 @@ package de.ceskilia.schoolbot.school.channel;
 import de.ceskilia.config.data.ConfigDataArray;
 import de.ceskilia.config.data.ConfigDataObject;
 import de.ceskilia.config.data.SerializableConfigData;
-import de.ceskilia.schoolbot.util.lang.JsonUtil;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.internal.utils.Checks;
