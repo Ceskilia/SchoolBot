@@ -1,7 +1,7 @@
 package de.ceskilia.schoolbot.command;
 
+import de.ceskilia.cutils.command.CommandConfiguration;
 import de.ceskilia.cutils.command.CommandDiscriptor;
-import de.ceskilia.cutils.command.Configuration;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
 import de.ceskilia.cutils.command.slashcommand.option.Option;
 import de.ceskilia.cutils.event.command.slash.GuildSlashCommandExecuteEvent;
@@ -27,7 +27,7 @@ import java.time.LocalDate;
 public class TimetableCommand implements CommandDiscriptor<GuildSlashCommandExecuteEvent> {
 
     @Override
-    public @NotNull Configuration<GuildSlashCommandExecuteEvent> buildConfiguration() {
+    public @NotNull CommandConfiguration<GuildSlashCommandExecuteEvent> buildConfiguration() {
         return SlashCommandConfiguration.guildOnly("timetable", "Zeigt den Vertretungsplan an")
                 .option(Option.ofString("date", "Das Datum des Vertretungsplans"))
                 .option(Option.ofBoolean("update", "Den angefragten Vertretungsplan aktualisieren"))

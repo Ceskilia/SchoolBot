@@ -1,7 +1,7 @@
 package de.ceskilia.schoolbot.command;
 
+import de.ceskilia.cutils.command.CommandConfiguration;
 import de.ceskilia.cutils.command.CommandDiscriptor;
-import de.ceskilia.cutils.command.Configuration;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
 import de.ceskilia.cutils.command.slashcommand.option.Option;
 import de.ceskilia.cutils.event.command.slash.GuildSlashCommandExecuteEvent;
@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteEvent> {
 
     @Override
-    public @NotNull Configuration<GuildSlashCommandExecuteEvent> buildConfiguration() {
+    public @NotNull CommandConfiguration<GuildSlashCommandExecuteEvent> buildConfiguration() {
         return SlashCommandConfiguration.guildOnly("setup", "Einstellungen für den Broadcast-Channel")
                 .option(Option.ofChannel("channel", "Der neue Broadcast-Channel"))
                 .option(Option.ofString("time", "Die Zeit zum Updaten der Nachricht"))

@@ -1,20 +1,20 @@
 package de.ceskilia.schoolbot.command;
 
 import de.ceskilia.cutils.DiscordBot;
+import de.ceskilia.cutils.command.CommandConfiguration;
 import de.ceskilia.cutils.command.CommandDiscriptor;
-import de.ceskilia.cutils.command.Configuration;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
 import de.ceskilia.cutils.event.command.slash.GuildSlashCommandExecuteEvent;
-import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.Emote;
+import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.embed.EmbedUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class InfoCommand implements CommandDiscriptor<GuildSlashCommandExecuteEvent> {
 
     @Override
-    public @NotNull Configuration<GuildSlashCommandExecuteEvent> buildConfiguration() {
-        return SlashCommandConfiguration.guildOnly("info","Zeigt informationen über den Bot")
+    public @NotNull CommandConfiguration<GuildSlashCommandExecuteEvent> buildConfiguration() {
+        return SlashCommandConfiguration.guildOnly("info", "Zeigt informationen über den Bot")
                 .build(this);
     }
 
@@ -27,8 +27,8 @@ public class InfoCommand implements CommandDiscriptor<GuildSlashCommandExecuteEv
 
         event.replyEmbeds(EmbedUtil.withColor(EmbedColor.INFORMATION)
                         .setTitle(Emote.INFORMATION.append("| Informationen"))
-                        .addField("Version", bot.getVersion(),false)
-                        .addField("Autoren",null,false) // todo: Autor#getAsHyperlink
+                        .addField("Version", bot.getVersion(), false)
+                        .addField("Autoren", null, false) // todo: Autor#getAsHyperlink
                         .build())
                 .queue();
     }

@@ -1,12 +1,12 @@
 package de.ceskilia.schoolbot;
 
+import de.ceskilia.config.DefaultConfig;
 import de.ceskilia.cutils.DiscordBot;
 import de.ceskilia.cutils.essential.Author;
 import de.ceskilia.cutils.util.CUtilsInfo;
 import de.ceskilia.schoolbot.changelog.Changelog;
 import de.ceskilia.schoolbot.changelog.Feature;
 import de.ceskilia.schoolbot.command.*;
-import de.ceskilia.config.DefaultConfig;
 import de.ceskilia.schoolbot.school.channel.BroadcastChannelManager;
 import de.ceskilia.schoolbot.school.timetable.TimetableManager;
 import de.ceskilia.schoolbot.school.timetable.TimetableManagerImpl;
@@ -41,7 +41,6 @@ public class SchoolBot extends DiscordBot {
         super(config.getData().getString("token"),
                 "Schoolbot",
                 "1.0-ALPHA",
-                "s!",
                 Author.fromId(363332011454103555L)
         );
 

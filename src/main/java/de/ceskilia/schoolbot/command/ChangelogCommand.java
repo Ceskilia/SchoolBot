@@ -1,7 +1,7 @@
 package de.ceskilia.schoolbot.command;
 
+import de.ceskilia.cutils.command.CommandConfiguration;
 import de.ceskilia.cutils.command.CommandDiscriptor;
-import de.ceskilia.cutils.command.Configuration;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
 import de.ceskilia.cutils.event.command.slash.GuildSlashCommandExecuteEvent;
 import de.ceskilia.schoolbot.SchoolBot;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class ChangelogCommand implements CommandDiscriptor<GuildSlashCommandExecuteEvent> {
 
     @Override
-    public @NotNull Configuration<GuildSlashCommandExecuteEvent> buildConfiguration() {
+    public @NotNull CommandConfiguration<GuildSlashCommandExecuteEvent> buildConfiguration() {
         return SlashCommandConfiguration.guildOnly("changelog", "Zeigt die letzten Änderungen an")
                 .build(this);
     }
