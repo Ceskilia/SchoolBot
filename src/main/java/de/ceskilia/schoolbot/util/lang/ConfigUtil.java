@@ -1,7 +1,7 @@
 package de.ceskilia.schoolbot.util.lang;
 
-import de.ceskilia.config.internal.ConfigDataArray;
-import de.ceskilia.config.internal.ConfigDataObject;
+import de.ceskilia.config.data.ConfigDataArray;
+import de.ceskilia.config.data.ConfigDataObject;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.config.DefaultConfig;
 import de.ceskilia.schoolbot.school.channel.BroadcastChannelManager;
@@ -34,7 +34,7 @@ public final class ConfigUtil {
                 MessageUtil.isNotBlank(settings, "timetableURL").append("Website-URL") + "\n" +
                 (!verificationManager.isAuthorized() ? Emote.WARNING : MessageUtil.isSet(config, VerificationManager.USERNAME)).append("Username") + "\n" +
                 (!verificationManager.isAuthorized() ? Emote.WARNING : MessageUtil.isSet(config, VerificationManager.PASSWORD)).append("Password") + "\n" +
-                MarkdownUtil.monospace(String.valueOf(config.retrieveData().getArray(VerificationManager.VERIFIED_USERS).length())) + " Verified User" + "\n" +
+                MarkdownUtil.monospace(String.valueOf(config.getData().getArray(VerificationManager.VERIFIED_USERS).length())) + " Verified User" + "\n" +
                 MarkdownUtil.monospace(channelManager.getChannelEntries().size() + " (" + channelManager.countInvalidChannels()) + ") Broadcast-Channel"
         );
     }
@@ -72,9 +72,9 @@ public final class ConfigUtil {
     }
 
     public static @NotNull MessageEmbed buildWithInformation(@NotNull EmbedBuilder builder, @NotNull SchoolBot bot) {
-        final ConfigDataObject settings = bot.getConfig().retrieveData();
-        final ConfigDataObject verification = bot.getVerificationManager().getConfig().retrieveData();
-        final ConfigDataArray channels = bot.getChannelManager().getConfig().retrieveData();
+        final ConfigDataObject settings = bot.getConfig().getData();
+        final ConfigDataObject verification = bot.getVerificationManager().getConfig().getData();
+        final ConfigDataArray channels = bot.getChannelManager().getConfig().getData();
         final TimetableManager timetableManager = bot.getTimetableManager();
 
         return builder.addField("Website-URL", settings.getString("timetableURL"), false)

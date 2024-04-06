@@ -1,6 +1,6 @@
 package de.ceskilia.schoolbot.school.timetable;
 
-import de.ceskilia.config.internal.ConfigDataObject;
+import de.ceskilia.config.data.ConfigDataObject;
 import de.ceskilia.schoolbot.action.CompletableAction;
 import de.ceskilia.schoolbot.school.timetable.post.TimetablePost;
 import de.ceskilia.schoolbot.school.timetable.post.TimetablePostManager;

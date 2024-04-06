@@ -2,7 +2,7 @@ package de.ceskilia.schoolbot.util.lang;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import de.ceskilia.config.internal.*;
+import de.ceskilia.config.data.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

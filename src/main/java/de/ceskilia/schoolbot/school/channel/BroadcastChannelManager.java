@@ -1,11 +1,12 @@
 package de.ceskilia.schoolbot.school.channel;
 
-import de.ceskilia.config.internal.ConfigDataArray;
-import de.ceskilia.config.internal.ConfigDataObject;
-import de.ceskilia.cutils.utils.util.ObjectUtil;
+import de.ceskilia.config.data.ConfigDataArray;
+import de.ceskilia.config.data.ConfigDataObject;
+import de.ceskilia.cutils.util.lang.ObjectUtil;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.config.ArrayConfig;
 import de.ceskilia.config.Config;
+import de.ceskilia.schoolbot.util.lang.CollectionUtil;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +34,8 @@ public class BroadcastChannelManager {
         this.bot = bot;
         this.config = Config.arrayConfig("config/channels.json");
         this.channelEntries = fetchEntries();
+
+        this.config.subscribe(() -> CollectionUtil.replaceElements(channelEntries, fetchEntries()));
     }
 
     public @NotNull ArrayConfig getConfig() {
@@ -138,7 +141,7 @@ public class BroadcastChannelManager {
 
         if (entry != null) {
             optConfigEntry(entry.getGuildId()).ifPresentOrElse(
-                    entry::fillObject,
+                    it -> it.replaceWith(entry.toData()), // TODO: BETTER WAY
                     () -> config.getData().add(entry.toData())
             );
             LOGGER.debug("Upserted one channel entry of guild {}.", entry.getGuildId());

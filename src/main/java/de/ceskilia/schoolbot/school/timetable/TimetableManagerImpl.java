@@ -1,6 +1,6 @@
 package de.ceskilia.schoolbot.school.timetable;
 
-import de.ceskilia.config.internal.ConfigDataObject;
+import de.ceskilia.config.data.ConfigDataObject;
 import de.ceskilia.schoolbot.SchoolBot;
 import de.ceskilia.schoolbot.action.CompletableAction;
 import de.ceskilia.schoolbot.action.CompletableActionImpl;
@@ -141,7 +141,7 @@ public class TimetableManagerImpl implements TimetableManager {
     }
 
     private @NotNull String formatUrl(@NotNull LocalDate date) {
-        return String.format(bot.getConfig().retrieveData().getString("timetableURL"), date);
+        return String.format(bot.getConfig().getData().getString("timetableURL"), date);
     }
 
     private void updateAbsentDates(@NotNull ConfigDataObject data) {

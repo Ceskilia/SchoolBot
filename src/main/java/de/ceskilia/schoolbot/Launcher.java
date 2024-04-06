@@ -2,8 +2,8 @@ package de.ceskilia.schoolbot;
 
 import de.ceskilia.config.Config;
 import de.ceskilia.config.DefaultConfig;
-import de.ceskilia.config.internal.ConfigDataObject;
-import de.ceskilia.cutils.utils.lang.Action;
+import de.ceskilia.config.data.ConfigDataObject;
+import de.ceskilia.cutils.util.internal.Action;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class Launcher {
                 .put("timetableURL", dotenv.get("TIMETABLE_URL"))
         );
 
-        config.getValue("token");
+        config.verifyValue("token");
         Action.create(() -> new SchoolBot(config))
                 .onSuccess(bot -> LOGGER.info("Successfully built {} @ {}", bot.getName(), new Date()))
                 .onFailure(throwable -> {

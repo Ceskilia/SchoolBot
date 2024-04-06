@@ -46,7 +46,7 @@ public final class MessageUtil {
     }
 
     public static @NotNull Emote isNotBlank(@NotNull DefaultConfig config, @NotNull String key) {
-        return check(config.retrieveData().hasKey(key));
+        return check(config.getData().hasKey(key));
     }
 
     public static boolean canSendMessage(@Nullable GuildChannel channel) {

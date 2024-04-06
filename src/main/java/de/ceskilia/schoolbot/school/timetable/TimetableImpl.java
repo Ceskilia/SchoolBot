@@ -1,8 +1,8 @@
 package de.ceskilia.schoolbot.school.timetable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import de.ceskilia.config.internal.ConfigDataArray;
-import de.ceskilia.config.internal.ConfigDataObject;
+import de.ceskilia.config.data.ConfigDataArray;
+import de.ceskilia.config.data.ConfigDataObject;
 import de.ceskilia.schoolbot.util.lang.DateUtil;
 import de.ceskilia.schoolbot.util.lang.ImageUtil;
 import de.ceskilia.schoolbot.util.lang.JsonUtil;

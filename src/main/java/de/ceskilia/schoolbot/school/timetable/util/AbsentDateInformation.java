@@ -1,7 +1,7 @@
 package de.ceskilia.schoolbot.school.timetable.util;
 
-import de.ceskilia.config.internal.ConfigDataArray;
-import de.ceskilia.config.internal.ConfigDataObject;
+import de.ceskilia.config.data.ConfigDataArray;
+import de.ceskilia.config.data.ConfigDataObject;
 import de.ceskilia.schoolbot.util.SystemInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

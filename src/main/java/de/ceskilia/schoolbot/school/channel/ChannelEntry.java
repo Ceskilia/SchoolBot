@@ -1,8 +1,8 @@
 package de.ceskilia.schoolbot.school.channel;
 
-import de.ceskilia.config.internal.ConfigDataArray;
-import de.ceskilia.config.internal.ConfigDataObject;
-import de.ceskilia.config.internal.SerializableConfigData;
+import de.ceskilia.config.data.ConfigDataArray;
+import de.ceskilia.config.data.ConfigDataObject;
+import de.ceskilia.config.data.SerializableConfigData;
 import de.ceskilia.schoolbot.util.lang.JsonUtil;
 import de.ceskilia.schoolbot.util.lang.MessageUtil;
 import net.dv8tion.jda.api.JDA;
@@ -13,13 +13,11 @@ import org.jetbrains.annotations.Nullable;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@SuppressWarnings("UnusedReturnValue")
 public class ChannelEntry implements SerializableConfigData {
 
     public static final long MINIMUM_TIME_INTERVAL = 1_800_000; //30min
@@ -30,7 +28,7 @@ public class ChannelEntry implements SerializableConfigData {
 
     private final long guildId;
     private long channelId;
-    private final Set<LocalTime> updateTimes;
+    private final SortedSet<LocalTime> updateTimes;
 
     public ChannelEntry(long guildId) {
         this(guildId, 0, null);
@@ -41,7 +39,7 @@ public class ChannelEntry implements SerializableConfigData {
         if (channelId != 0) Checks.isSnowflake(String.valueOf(channelId), "ChannelID");
         this.guildId = guildId;
         this.channelId = channelId;
-        this.updateTimes = updateTimes != null ? new HashSet<>(updateTimes) : new HashSet<>();
+        this.updateTimes = updateTimes != null ? new TreeSet<>(updateTimes) : new TreeSet<>();
     }
 
     public ChannelEntry(@NotNull ConfigDataObject json) {
@@ -50,7 +48,7 @@ public class ChannelEntry implements SerializableConfigData {
         this.updateTimes = json.hasKey(UPDATE_TIMES) ? json.getArray(UPDATE_TIMES)
                 .stream(ConfigDataArray::getString)
                 .map(value -> LocalTime.parse(value, DateTimeFormatter.ISO_LOCAL_TIME))
-                .collect(Collectors.toCollection(HashSet::new)) : new HashSet<>();
+                .collect(Collectors.toCollection(TreeSet::new)) : new TreeSet<>();
     }
 
     public long getGuildId() {
@@ -86,12 +84,14 @@ public class ChannelEntry implements SerializableConfigData {
 
         for (final LocalTime time : this.updateTimes) {
             if (time.equals(updateTime)) {
-                this.updateTimes.remove(time);
+                updateTimes.remove(time);
                 return TimeModifyResult.TIME_REMOVED;
             }
         }
 
-        return canAdd(updateTime) && this.updateTimes.add(updateTime) ? TimeModifyResult.TIME_ADDED : TimeModifyResult.FAILED;
+        final boolean success = canAdd(updateTime) && updateTimes.add(updateTime);
+
+        return success ? TimeModifyResult.TIME_ADDED : TimeModifyResult.FAILED;
     }
 
     private boolean canAdd(@Nullable LocalTime time) {
@@ -108,23 +108,6 @@ public class ChannelEntry implements SerializableConfigData {
 
     public boolean isValid(@NotNull JDA jda) {
         return jda.getGuildById(guildId) != null && MessageUtil.canSendMessage(jda.getTextChannelById(channelId));
-    }
-
-    protected @NotNull ConfigDataObject fillObject(@NotNull ConfigDataObject object) {
-
-        if (object.hasKey(UPDATE_TIMES)) {
-
-            final ConfigDataArray array = object.getArray(UPDATE_TIMES);
-
-            array.addAll(streamUpdateTimes()
-                    .filter(element -> !JsonUtil.containsElement(array, element))
-                    .toList()
-            );
-
-        }
-
-        return object.put(GUILD_ID, guildId)
-                .put(CHANNEL_ID, channelId);
     }
 
     @Override

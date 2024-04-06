@@ -2,8 +2,9 @@ package de.ceskilia.schoolbot.school.verification;
 
 import de.ceskilia.config.Config;
 import de.ceskilia.config.DefaultConfig;
-import de.ceskilia.config.internal.ConfigDataArray;
-import de.ceskilia.config.internal.ConfigDataObject;
+import de.ceskilia.config.data.ConfigDataArray;
+import de.ceskilia.config.data.ConfigDataObject;
+import de.ceskilia.schoolbot.util.lang.CollectionUtil;
 import okhttp3.Credentials;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,6 +39,11 @@ public class VerificationManager {
         );
         this.verifiedUsers = fetchUsers(VERIFIED_USERS);
         this.blacklistedUsers = fetchUsers(BLACKLISTED_USERS);
+
+        this.config.subscribe(() -> {
+            CollectionUtil.replaceElements(verifiedUsers, fetchUsers(VERIFIED_USERS));
+            CollectionUtil.replaceElements(blacklistedUsers, fetchUsers(BLACKLISTED_USERS));
+        });
     }
 
     public @NotNull DefaultConfig getConfig() {
@@ -54,11 +60,11 @@ public class VerificationManager {
 
     public @NotNull VerificationResult tryVerify(long userId, @NotNull String username, @NotNull String password) {
 
-        if (verifiedUsers.contains(userId)) {
+        if (isVerified(userId)) {
             return VerificationResult.ALREADY_VERIFIED;
         }
 
-        final ConfigDataObject data = config.retrieveData();
+        final ConfigDataObject data = config.getData();
         final boolean rightUsername = username.equals(data.getString(USERNAME));
         final boolean rightPassword = password.equals(data.getString(PASSWORD));
 
@@ -93,10 +99,10 @@ public class VerificationManager {
     }
 
     public @NotNull String getCredentials() {
-        final ConfigDataObject data = config.retrieveData();
+        final ConfigDataObject data = config.getData();
 
-        config.getValue(USERNAME);
-        config.getValue(PASSWORD);
+        config.verifyValue(USERNAME);
+        config.verifyValue(PASSWORD);
 
         return Credentials.basic(data.getString(USERNAME), data.getString(PASSWORD));
     }

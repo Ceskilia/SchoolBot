@@ -1,7 +1,7 @@
 package de.ceskilia.schoolbot.util.lang;
 
-import de.ceskilia.config.internal.ConfigDataArray;
-import de.ceskilia.config.internal.ConfigDataObject;
+import de.ceskilia.config.data.ConfigDataArray;
+import de.ceskilia.config.data.ConfigDataObject;
 import de.ceskilia.schoolbot.school.timetable.Timetable;
 import de.ceskilia.schoolbot.util.embed.EmbedColor;
 import de.ceskilia.schoolbot.util.embed.EmbedUtil;
