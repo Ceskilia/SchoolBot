@@ -129,16 +129,16 @@ public class SchoolBot extends DiscordBot {
     }
 
     private void logStartInformation() {
-        LOGGER.info("Account:               " + getJDA().getSelfUser());
-        LOGGER.info("Java Version:          " + SystemInfo.getJavaVersion());
-        LOGGER.info("JDA Version:           " + JDAInfo.VERSION);
-        LOGGER.info("JDA-CUtils Version:    " + CUtilsInfo.VERSION);
-        LOGGER.info(getName() + " Version:     " + getVersion());
-        LOGGER.info("Operating System:      " + SystemInfo.getOperatingSystemName());
-        LOGGER.info("Java Vendor:           " + SystemInfo.getVendorName());
-        LOGGER.info("Java Home:             " + SystemInfo.getJavaHome());
-        LOGGER.info("JDA-CUtils Info:       " + CUtilsInfo.VERSION_DESCRIPTION);
-        LOGGER.info("Startup Time:          " + (System.currentTimeMillis() - getStartTime()) + " ms");
+        LOGGER.info("Account:               {}", getJDA().getSelfUser());
+        LOGGER.info("Java Version:          {}", SystemInfo.getJavaVersion());
+        LOGGER.info("JDA Version:           {}", JDAInfo.VERSION);
+        LOGGER.info("JDA-CUtils Version:    {}", CUtilsInfo.VERSION);
+        LOGGER.info("{} Version:     {}", getName(), getVersion());
+        LOGGER.info("Operating System:      {}", SystemInfo.getOperatingSystemName());
+        LOGGER.info("Java Vendor:           {}", SystemInfo.getVendorName());
+        LOGGER.info("Java Home:             {}", SystemInfo.getJavaHome());
+        LOGGER.info("JDA-CUtils Info:       {}", CUtilsInfo.VERSION_DESCRIPTION);
+        LOGGER.info("Startup Time:          {} ms", System.currentTimeMillis() - getStartTime());
     }
 
 }
