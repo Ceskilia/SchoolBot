@@ -44,15 +44,25 @@ public final class ConfigUtil {
                 .append(MarkdownUtil.quote("Channel - "));
 
         if (channel != null) {
-
             final Member selfMember = channel.getGuild().getSelfMember();
+            final boolean hasAccess = selfMember.hasAccess(channel);
+            final boolean hasPermission = selfMember.hasPermission(channel, Permission.MESSAGE_SEND);
 
-            builder.append(channel.getAsMention())
-                    .append(" [A: ")
-                    .append(MessageUtil.check(selfMember.hasAccess(channel)).getUnicode())
-                    .append(", P: ")
-                    .append(MessageUtil.check(selfMember.hasPermission(channel, Permission.MESSAGE_SEND)).getUnicode())
-                    .append("]");
+            builder.append(channel.getAsMention());
+
+            if (!hasAccess) {
+                builder.append(Emote.RED_CROSS.append("access"));
+
+                if(!hasPermission) {
+                    builder.append(", ");
+                }
+
+            }
+
+            if (!hasPermission) {
+                builder.append(Emote.RED_CROSS.append("permission"));
+            }
+
         } else {
             builder.append(MarkdownUtil.monospace("/"));
         }
@@ -60,10 +70,11 @@ public final class ConfigUtil {
         builder.append("\n").append(MarkdownUtil.quote("Update Zeiten - "));
 
         if (entry != null && !entry.getUpdateTimes().isEmpty()) {
-            builder.append(String.join(", ", entry.streamUpdateTimes()
+            final String times = String.join(", ", entry.streamUpdateTimes()
                     .map(MarkdownUtil::monospace)
-                    .toList())
-            );
+                    .toList());
+
+            builder.append(times);
         } else {
             builder.append(MarkdownUtil.monospace("/"));
         }
