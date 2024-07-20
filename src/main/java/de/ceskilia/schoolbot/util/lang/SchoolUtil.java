@@ -54,7 +54,7 @@ public final class SchoolUtil {
     /**
      * The image representing that a timetable image creation failed.
      */
-    private static final File FAILED_CREATION_IMAGE = new File("pics/" + FAILED_CREATION_IMAGE_NAME);
+    private static final File FAILED_CREATION_IMAGE = new File("./util/" + FAILED_CREATION_IMAGE_NAME);
     /**
      * The {@link FileUpload} that combines the {@link #FAILED_CREATION_IMAGE} with the {@link #IMAGE_NAME} so the image
      * can be added and uploaded as the attachment to the sent message.
