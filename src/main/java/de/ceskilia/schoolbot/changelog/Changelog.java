@@ -2,6 +2,9 @@ package de.ceskilia.schoolbot.changelog;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,7 +12,22 @@ import java.util.List;
 
 public class Changelog {
 
+    private static final String COMMENT = "///";
+
     private final List<Feature> features;
+
+    public static @NotNull Changelog fromFile(@NotNull String fileName) {
+        try {
+            return new Changelog(Files.readAllLines(Paths.get(fileName)).stream()
+                    .filter(line -> !line.isBlank())
+                    .filter(line -> !line.startsWith(COMMENT))
+                    .map(Feature::parseFeature)
+                    .toList()
+            );
+        } catch (final IOException e) {
+            throw new RuntimeException("Could not parse file: " + fileName, e);
+        }
+    }
 
     public Changelog(@NotNull List<Feature> features) {
         this.features = Collections.unmodifiableList(features);

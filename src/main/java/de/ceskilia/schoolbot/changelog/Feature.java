@@ -9,6 +9,25 @@ public class Feature {
     private final String message;
     private final Type type;
 
+    public static @NotNull Feature parseFeature(@NotNull String line) {
+
+        if (line.isBlank()) {
+            throw new IllegalArgumentException("Blank line cannot be parsed.");
+        }
+
+        final Type type = Type.fromSymbol(line.trim().charAt(0));
+        final String message = line.trim().substring(line.indexOf(type.symbol) + 1).trim();
+
+        if (message.isBlank()) {
+            throw new IllegalArgumentException("Blank message cannot be parsed.");
+        }
+
+        return new Feature(
+                message,
+                type
+        );
+    }
+
     public Feature(@NotNull String message, @NotNull Type type) {
         this.message = message;
         this.type = type;
@@ -48,6 +67,16 @@ public class Feature {
 
         private final int key;
         private final char symbol;
+
+        public static @NotNull Type fromSymbol(char symbol) {
+            for (final Type type : Type.values()) {
+                if (type.symbol == symbol) {
+                    return type;
+                }
+            }
+
+            throw new IllegalArgumentException("Could not parse symbol: " + symbol);
+        }
 
         Type(int key, char symbol) {
             this.key = key;
