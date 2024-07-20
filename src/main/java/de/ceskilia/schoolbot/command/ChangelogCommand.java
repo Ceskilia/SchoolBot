@@ -1,5 +1,6 @@
 package de.ceskilia.schoolbot.command;
 
+import de.ceskilia.cutils.DiscordBot;
 import de.ceskilia.cutils.command.CommandConfiguration;
 import de.ceskilia.cutils.command.CommandDiscriptor;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class ChangelogCommand implements CommandDiscriptor<GuildSlashCommandExecuteEvent> {
 
     @Override
-    public @NotNull CommandConfiguration<GuildSlashCommandExecuteEvent> buildConfiguration() {
+    public @NotNull CommandConfiguration<GuildSlashCommandExecuteEvent> buildConfiguration(@NotNull DiscordBot unused) {
         return SlashCommandConfiguration.guildOnly("changelog", "Zeigt die letzten Änderungen an")
                 .build(this);
     }

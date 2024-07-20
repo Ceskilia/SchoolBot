@@ -1,5 +1,6 @@
 package de.ceskilia.schoolbot.command;
 
+import de.ceskilia.cutils.DiscordBot;
 import de.ceskilia.cutils.command.CommandConfiguration;
 import de.ceskilia.cutils.command.CommandDiscriptor;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
@@ -27,7 +28,7 @@ import java.util.Arrays;
 public class OwnerCommand implements CommandDiscriptor<GuildSlashCommandExecuteEvent> {
 
     @Override
-    public @NotNull CommandConfiguration<GuildSlashCommandExecuteEvent> buildConfiguration() {
+    public @NotNull CommandConfiguration<GuildSlashCommandExecuteEvent> buildConfiguration(@NotNull DiscordBot unused) {
         return SlashCommandConfiguration.guildOnly("owner", "Einstellungen für den Bot")
                 .subcommand(new SubcommandData("info", "Zeigt Informationen über aktuelle Einstellungen"))
                 .subcommand(new SubcommandData("permission", "Verändert die Interaktionsrechte eines Benutzer")

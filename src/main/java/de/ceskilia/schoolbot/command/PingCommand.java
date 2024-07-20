@@ -1,5 +1,6 @@
 package de.ceskilia.schoolbot.command;
 
+import de.ceskilia.cutils.DiscordBot;
 import de.ceskilia.cutils.command.CommandConfiguration;
 import de.ceskilia.cutils.command.CommandDiscriptor;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class PingCommand implements CommandDiscriptor<SlashCommandExecuteEvent> {
 
     @Override
-    public @NotNull CommandConfiguration<SlashCommandExecuteEvent> buildConfiguration() {
+    public @NotNull CommandConfiguration<SlashCommandExecuteEvent> buildConfiguration(@NotNull DiscordBot unused) {
         return SlashCommandConfiguration.global("ping", "Zeit zwischen Request und Antwort")
                 .build(this);
     }

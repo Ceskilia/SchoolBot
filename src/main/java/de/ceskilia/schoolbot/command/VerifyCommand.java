@@ -1,5 +1,6 @@
 package de.ceskilia.schoolbot.command;
 
+import de.ceskilia.cutils.DiscordBot;
 import de.ceskilia.cutils.command.CommandConfiguration;
 import de.ceskilia.cutils.command.CommandDiscriptor;
 import de.ceskilia.cutils.command.slashcommand.SlashCommandConfiguration;
@@ -20,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public class VerifyCommand implements CommandDiscriptor<GuildSlashCommandExecuteEvent> {
 
     @Override
-    public @NotNull CommandConfiguration<GuildSlashCommandExecuteEvent> buildConfiguration() {
+    public @NotNull CommandConfiguration<GuildSlashCommandExecuteEvent> buildConfiguration(@NotNull DiscordBot unused) {
         return SlashCommandConfiguration.guildOnly("verify", "Verifiziert den aktuellen Account")
                 .option(Option.ofString("username", "Der Benutzername für den Login").setRequired(true))
                 .option(Option.ofString("password", "Das Password für den Login").setRequired(true))

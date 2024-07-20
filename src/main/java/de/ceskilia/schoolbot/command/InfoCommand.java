@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class InfoCommand implements CommandDiscriptor<GuildSlashCommandExecuteEvent> {
 
     @Override
-    public @NotNull CommandConfiguration<GuildSlashCommandExecuteEvent> buildConfiguration() {
+    public @NotNull CommandConfiguration<GuildSlashCommandExecuteEvent> buildConfiguration(@NotNull DiscordBot unused) {
         return SlashCommandConfiguration.guildOnly("info", "Zeigt informationen über den Bot")
                 .build(this);
     }

@@ -23,7 +23,7 @@ public class Launcher {
         );
 
         config.verifyValue("token");
-        Action.create(() -> new SchoolBot(config))
+        Action.create(() -> new SchoolBot(config).load())
                 .onSuccess(bot -> LOGGER.info("Successfully built {} @ {}", bot.getName(), new Date()))
                 .onFailure(throwable -> {
                     LOGGER.error("An exception occurred. Could not launch the application.", throwable);

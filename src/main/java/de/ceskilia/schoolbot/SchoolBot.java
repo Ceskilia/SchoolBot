@@ -12,6 +12,7 @@ import de.ceskilia.schoolbot.school.timetable.TimetableManager;
 import de.ceskilia.schoolbot.school.timetable.TimetableManagerImpl;
 import de.ceskilia.schoolbot.school.verification.VerificationManager;
 import de.ceskilia.schoolbot.util.SystemInfo;
+import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -45,7 +46,7 @@ public class SchoolBot extends DiscordBot {
         );
 
         this.config = config;
-        this.changelog = new Changelog(features());
+        this.changelog = Changelog.fromFile("./util/changelog.log");
         this.verificationManager = new VerificationManager();
         this.channelManager = new BroadcastChannelManager(this);
         this.timetableManager = new TimetableManagerImpl(this);
@@ -64,11 +65,9 @@ public class SchoolBot extends DiscordBot {
     }
 
     @Override
-    protected void onLoad() {
-        configureBuilderOptions(builder -> builder
-                .setActivity(Activity.playing("starte..."))
-                .setStatus(OnlineStatus.DO_NOT_DISTURB)
-        );
+    protected void onLoad(@NotNull JDABuilder builder) {
+        builder.setActivity(Activity.playing("starte..."))
+                .setStatus(OnlineStatus.DO_NOT_DISTURB);
     }
 
     @Override
