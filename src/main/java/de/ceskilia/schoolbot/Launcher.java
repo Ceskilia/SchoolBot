@@ -5,6 +5,7 @@ import de.ceskilia.config.DefaultConfig;
 import de.ceskilia.config.data.ConfigDataObject;
 import de.ceskilia.cutils.util.internal.Action;
 import io.github.cdimascio.dotenv.Dotenv;
+import net.dv8tion.jda.api.exceptions.InvalidTokenException;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +23,16 @@ public class Launcher {
                 .put("timetableURL", dotenv.get("TIMETABLE_URL"))
         );
 
-        config.verifyValue("token");
+        config.verifyValue("token", () -> "Please provide a token:");
         Action.create(() -> new SchoolBot(config).load())
                 .onSuccess(bot -> LOGGER.info("Successfully built {} @ {}", bot.getName(), new Date()))
                 .onFailure(throwable -> {
                     LOGGER.error("An exception occurred. Could not launch the application.", throwable);
+
+                    if (throwable instanceof InvalidTokenException) {
+                        config.restoreDefault();
+                    }
+
                     System.exit(1);
                 })
                 .perform();
