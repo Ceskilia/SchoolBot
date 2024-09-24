@@ -1,6 +1,8 @@
 package de.ceskilia.schoolbot.changelog;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,6 +14,7 @@ import java.util.List;
 
 public class Changelog {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Changelog.class);
     private static final String COMMENT = "///";
 
     private final List<Feature> features;
@@ -25,7 +28,8 @@ public class Changelog {
                     .toList()
             );
         } catch (final IOException e) {
-            throw new RuntimeException("Could not parse file: " + fileName, e);
+            LOGGER.warn("Error reading changelog file {}. Using empty changelog.", fileName);
+            return new Changelog();
         }
     }
 
