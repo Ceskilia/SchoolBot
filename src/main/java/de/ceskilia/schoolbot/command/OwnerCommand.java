@@ -39,10 +39,9 @@ public class OwnerCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
 
     @Override
     public void execute(@NotNull GuildSlashCommandExecuteEvent event) {
-
         final SchoolBot bot = event.getBot().cast(SchoolBot.class);
 
-        if (Arrays.stream(bot.getAuthors()).noneMatch(author -> author.getId() == event.getUser().getIdLong())) {
+        if (!bot.isAuthor(event.getUser().getIdLong())) {
             event.reply(MarkdownUtil.quote("Dafür hast du keine Berechtigung."))
                     .setEphemeral(true)
                     .queue();
@@ -67,7 +66,6 @@ public class OwnerCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
                     .queueBuild(bot)
             ).setEphemeral(true).queue();
             case "permission" -> {
-
                 final EmbedBuilder builder = EmbedUtil.withColor(EmbedColor.SUCCESS);
                 final VerificationManager verificationManager = bot.getVerificationManager();
                 final User target = event.getRequiredOption("target", OptionMapping::getAsUser);

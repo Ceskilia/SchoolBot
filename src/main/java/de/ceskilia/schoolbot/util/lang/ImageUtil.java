@@ -55,7 +55,10 @@ public final class ImageUtil {
         Checks.notEmpty(lessons, "Lessons");
 
         final String[] text = TableCreatorKt.createTable(lessons).split("\n");
-        final BufferedImage image = new BufferedImage(text[0].length() * 17 - 14, text.length * 18 - 15, BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage image = new BufferedImage(
+                text[0].length() * 17 - 14,
+                text.length * 18 - 15, BufferedImage.TYPE_INT_ARGB
+        );
 
         final Graphics2D graphics = image.createGraphics();
         graphics.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 28));
@@ -70,7 +73,12 @@ public final class ImageUtil {
         return image;
     }
 
-    public static void fillArea(@NotNull Graphics2D graphics, int width, int height, @NotNull Color color) {
+    public static void fillArea(
+            @NotNull Graphics2D graphics,
+            int width,
+            int height,
+            @NotNull Color color
+    ) {
         graphics.setColor(color);
         graphics.fillRect(0, 0, width, height);
     }

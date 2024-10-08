@@ -20,7 +20,6 @@ public class InfoCommand implements CommandDiscriptor<GuildSlashCommandExecuteEv
 
     @Override
     public void execute(@NotNull GuildSlashCommandExecuteEvent event) {
-
         final DiscordBot bot = event.getBot();
 
         // TODO: do this fancy with inline: true and things like that

@@ -43,7 +43,6 @@ public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
 
     @Override
     public void execute(@NotNull GuildSlashCommandExecuteEvent event) {
-
         final SchoolBot bot = event.getBot().cast(SchoolBot.class);
         final BroadcastChannelManager channelManager = bot.getChannelManager();
 
@@ -95,7 +94,6 @@ public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
     }
 
     private @NotNull MessageEmbed channelRespond(@NotNull BroadcastChannelManager channelManager, @NotNull OptionMapping option, long guildId) {
-
         final GuildChannel channel = option.getAsChannel().asGuildMessageChannel();
         final EmbedBuilder builder = new EmbedBuilder();
 
@@ -112,7 +110,6 @@ public class SetupCommand implements CommandDiscriptor<GuildSlashCommandExecuteE
     }
 
     private @NotNull MessageEmbed timeRespond(@NotNull BroadcastChannelManager channelManager, @NotNull OptionMapping option, long guildId) {
-
         final LocalTime time = DateUtil.toTime(option.getAsString());
         final EmbedBuilder builder = new EmbedBuilder();
 

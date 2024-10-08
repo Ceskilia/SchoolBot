@@ -37,13 +37,12 @@ public class TimetableCommand implements CommandDiscriptor<GuildSlashCommandExec
 
     @Override
     public void execute(@NotNull GuildSlashCommandExecuteEvent event) {
-
         final SchoolBot bot = event.getBot().cast(SchoolBot.class);
         final VerificationManager verificationManager = bot.getVerificationManager();
         final User user = event.getUser();
 
         if (verificationManager.isBlacklisted(user.getIdLong())) {
-            respondFailure(event, null, "Du wurdest geschwarzelistet.", EmbedColor.FAILURE);
+            respondFailure(event, null, "Du wurdest ausgeschlossen.", EmbedColor.FAILURE);
             return;
         }
 

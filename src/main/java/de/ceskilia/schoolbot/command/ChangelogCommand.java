@@ -21,7 +21,6 @@ public class ChangelogCommand implements CommandDiscriptor<GuildSlashCommandExec
 
     @Override
     public void execute(@NotNull GuildSlashCommandExecuteEvent event) {
-
         final SchoolBot bot = event.getBot().cast(SchoolBot.class);
 
         event.replyEmbeds(MessageUtil.embed(

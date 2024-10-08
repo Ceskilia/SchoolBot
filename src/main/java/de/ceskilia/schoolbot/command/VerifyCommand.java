@@ -30,11 +30,11 @@ public class VerifyCommand implements CommandDiscriptor<GuildSlashCommandExecute
 
     @Override
     public void execute(@NotNull GuildSlashCommandExecuteEvent event) {
-
         final SchoolBot bot = event.getBot().cast(SchoolBot.class);
         final String username = event.getRequiredOption("username", OptionMapping::getAsString);
         final String password = event.getRequiredOption("password", OptionMapping::getAsString);
-        final VerificationResult result = bot.getVerificationManager().tryVerify(event.getUser().getIdLong(), username, password);
+        final VerificationResult result = bot.getVerificationManager()
+                .tryVerify(event.getUser().getIdLong(), username, password);
 
         event.replyEmbeds(buildInformation(bot, username, password, result, event.getGuild().getIdLong()))
                 .setEphemeral(true)

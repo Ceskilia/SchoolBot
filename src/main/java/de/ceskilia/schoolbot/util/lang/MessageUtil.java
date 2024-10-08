@@ -24,7 +24,9 @@ public final class MessageUtil {
     public static void notifyAuthor(@NotNull DiscordBot bot, @NotNull String message) {
         RestAction.allOf(Arrays.stream(bot.getAuthors())
                 .map(author -> author.toUser(bot.getJDA()))
-                .map(restAction -> restAction.flatMap(user -> user.openPrivateChannel().flatMap(channel -> channel.sendMessage(message))))
+                .map(restAction -> restAction.flatMap(user ->
+                        user.openPrivateChannel().flatMap(channel -> channel.sendMessage(message)))
+                )
                 .toList()
         ).queue();
     }
@@ -32,7 +34,9 @@ public final class MessageUtil {
     public static void notifyAuthor(@NotNull DiscordBot bot, @NotNull MessageEmbed embed) {
         RestAction.allOf(Arrays.stream(bot.getAuthors())
                 .map(author -> author.toUser(bot.getJDA()))
-                .map(restAction -> restAction.flatMap(user -> user.openPrivateChannel().flatMap(channel -> channel.sendMessageEmbeds(embed))))
+                .map(restAction -> restAction.flatMap(user ->
+                        user.openPrivateChannel().flatMap(channel -> channel.sendMessageEmbeds(embed)))
+                )
                 .toList()
         ).queue();
     }

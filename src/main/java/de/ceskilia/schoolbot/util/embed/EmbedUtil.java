@@ -18,7 +18,6 @@ public final class EmbedUtil {
     }
 
     public static @NotNull EmbedBuilder combineFields(@NotNull MessageEmbed... embeds) {
-
         final EmbedBuilder builder = new EmbedBuilder();
         Color color = null;
 
