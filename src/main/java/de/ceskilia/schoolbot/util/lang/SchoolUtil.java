@@ -62,7 +62,6 @@ public final class SchoolUtil {
     private static final FileUpload DEFAULT_IMAGE_UPLOAD = FileUpload.fromData(FAILED_CREATION_IMAGE, IMAGE_NAME);
 
     static {
-
         final String parent = FAILED_CREATION_IMAGE.getParent();
 
         if (parent != null) {
@@ -70,7 +69,10 @@ public final class SchoolUtil {
         }
 
         if (!FAILED_CREATION_IMAGE.exists()) {
-            LOGGER.debug("No default image ({}) for a failed image creation is set. Using default failure action instead.", FAILED_CREATION_IMAGE_NAME);
+            LOGGER.debug(
+                    "No default image ({}) for a failed image creation is set. Using default failure action instead.",
+                    FAILED_CREATION_IMAGE_NAME
+            );
         }
 
     }
@@ -88,7 +90,11 @@ public final class SchoolUtil {
      * @param timetable the timetable to create the embed from
      * @param requester the user that requests the timetable
      */
-    public static void sendTimetable(@NotNull InteractionHook hook, @NotNull Timetable timetable, @NotNull User requester) {
+    public static void sendTimetable(
+            @NotNull InteractionHook hook,
+            @NotNull Timetable timetable,
+            @NotNull User requester
+    ) {
         addTimetableImage(hook.sendMessageEmbeds(toEmbed(timetable, requester)), timetable)
                 .thenAccept(WebhookMessageCreateAction::queue);
     }
@@ -106,7 +112,11 @@ public final class SchoolUtil {
      * @param requester the user that requests the timetable
      * @return a completable future with a modified request
      */
-    public static @NotNull CompletableFuture<MessageCreateAction> sendTimetable(@NotNull MessageChannel channel, @NotNull Timetable timetable, @NotNull User requester) {
+    public static @NotNull CompletableFuture<MessageCreateAction> sendTimetable(
+            @NotNull MessageChannel channel,
+            @NotNull Timetable timetable,
+            @NotNull User requester
+    ) {
         return addTimetableImage(channel.sendMessageEmbeds(toEmbed(timetable, requester)), timetable);
     }
 
@@ -122,7 +132,10 @@ public final class SchoolUtil {
      * @param <T>       the message request type
      * @return a completable future with a modified request
      */
-    private static <T extends MessageCreateRequest<T>> @NotNull CompletableFuture<T> addTimetableImage(@NotNull T action, @NotNull Timetable timetable) {
+    private static <T extends MessageCreateRequest<T>> @NotNull CompletableFuture<T> addTimetableImage(
+            @NotNull T action,
+            @NotNull Timetable timetable
+    ) {
         if (!timetable.hasLessons())
             return CompletableFuture.completedFuture(action);
         return ImageUtil.createImageInput(timetable)
@@ -148,7 +161,12 @@ public final class SchoolUtil {
      * @param requester the user that requests the timetable
      * @return a completable future with a modified request
      */
-    public static @NotNull CompletableFuture<MessageEditAction> editTimetable(@NotNull MessageChannel channel, long messageId, @NotNull Timetable timetable, @NotNull User requester) {
+    public static @NotNull CompletableFuture<MessageEditAction> editTimetable(
+            @NotNull MessageChannel channel,
+            long messageId,
+            @NotNull Timetable timetable,
+            @NotNull User requester
+    ) {
         final MessageEditAction action = channel.editMessageEmbedsById(messageId, toEmbed(timetable, requester));
 
         if (!timetable.hasLessons())
