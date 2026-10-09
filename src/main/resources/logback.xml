@@ -16,7 +16,7 @@
         </encoder>
     </appender>
 
-    <root level="DEBUG">
+    <root level="DEBUG">   <!-- adjust log level here -->
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
     </root>

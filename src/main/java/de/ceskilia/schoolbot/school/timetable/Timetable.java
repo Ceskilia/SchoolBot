@@ -19,7 +19,7 @@ public interface Timetable extends SerializableConfigData {
     Pattern TITLE_PATTERN = Pattern.compile(".+, \\d{1,2}. .+ \\d{4} \\(.+\\)");
 
     /**
-     * The creation time in milliseconds a timetable needs to be updatable.
+     * The time interval in milliseconds for a timetable to be updatable after initial creation.
      */
     long UPDATE_INTERVAL = 600_000; // 10min
 
